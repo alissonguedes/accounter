@@ -59,6 +59,7 @@ export class DashboardComponent {
 
 			let data = [];
 			let categories = [];
+			let line = [];
 
 			let entradas = [];
 			let saidas = [];
@@ -72,15 +73,13 @@ export class DashboardComponent {
 
 				categories.push(mes);
 				data.push(num);
+				line.push(Math.random() * 100);
 
 			}
 
 			var options = {
 				chart: {
 					type: 'line',
-					stroke: {
-						curve: 'smooth',
-					}
 				},
 				series: [{
 					type: 'line',
@@ -93,7 +92,7 @@ export class DashboardComponent {
 				}, {
 					type: 'line',
 					name: 'other',
-					data: data,
+					data: line,
 				}],
 				xaxis: {
 					show: false,
