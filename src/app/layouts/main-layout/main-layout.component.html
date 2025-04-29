@@ -1,0 +1,57 @@
+<header>
+	<nav class="navbar-main navbar-fixed z-depth-0">
+		<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+		<!-- <h1 class="logo-wrapper">
+			<a class="brand-logo darken-1" href="#">
+				<span class="logo-text hide-on-med-and-down">Materialize</span>
+			</a>
+			<a class="navbar-toggler" href="#">
+				<i class="material-icons">radio_button_checked</i>
+			</a>
+		</h1> -->
+
+		<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
+		<ul class="navbar-list right">
+			<li><button (click)="app.logout()">Sair</button></li>
+		</ul>
+		<div id="progress" class="progress" *ngIf="app.preloaderService.isLoading()">
+			<div class="indeterminate"></div>
+		</div>
+	</nav>
+</header>
+
+<aside>
+	<ul id="slide-out" class="sidenav sidenav-fixed">
+		<li>
+			<a routerLink="/dashboard" routerLinkActive="active" class="waves-effect">
+				<i class="material-icons">dashboard</i>
+				<span>Dashboard</span>
+			</a>
+		</li>
+		<li>
+			<a routerLink="/pacientes" routerLinkActive="active" class="waves-effect">
+				<i class="material-icons">group</i>
+				<span>Pacientes</span>
+			</a>
+		</li>
+	</ul>
+</aside>
+
+<main id="main">
+
+	<ng-container *ngIf="app.pageHeaderService.header() as template">
+		<div class="page-header">
+			<ng-container *ngTemplateOutlet="template"></ng-container>
+		</div>
+	</ng-container>
+
+	<div class="row">
+		<div class="col s12">
+			<div class="container">
+				<router-outlet />
+			</div>
+		</div>
+	</div>
+
+</main>

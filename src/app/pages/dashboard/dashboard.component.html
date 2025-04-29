@@ -1,0 +1,100 @@
+<ng-container ngTitle="Dashboard" />
+<ng-container *ngHeader=""></ng-container>
+
+<div id="card-stats" class="row">
+	<div class="col s12 m6 l3">
+		<div class="card animate z-depth-2 fadeLeft">
+			<div class="card-content cyan white-text">
+				<p class="card-stats-title"><i class="material-icons">download</i> Entradas</p>
+				<h4 class="card-stats-number white-text">R$ 566,00</h4>
+				<p class="card-stats-compare">
+					<i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span>
+				</p>
+			</div>
+			<div class="card-action cyan">
+				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+			</div>
+		</div>
+	</div>
+	<div class="col s12 m6 l3">
+		<div class="card animate z-depth-2 fadeLeft">
+			<div class="card-content red accent-2 white-text">
+				<p class="card-stats-title"><i class="material-icons">upload</i> Saídas</p>
+				<h4 class="card-stats-number white-text">566</h4>
+				<p class="card-stats-compare">
+					<i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span>
+				</p>
+			</div>
+			<div class="card-action red accent-2">
+				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+			</div>
+		</div>
+	</div>
+	<div class="col s12 m6 l3">
+		<div class="card animate z-depth-2 fadeLeft">
+			<div class="card-content orange lighten-1 white-text">
+				<p class="card-stats-title"><i class="material-icons">money_bag</i> Investimentos</p>
+				<h4 class="card-stats-number white-text">566</h4>
+				<p class="card-stats-compare">
+					<i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span>
+				</p>
+			</div>
+			<div class="card-action orange lighten-1">
+				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+			</div>
+		</div>
+	</div>
+	<div class="col s12 m6 l3">
+		<div class="card animate z-depth-2 fadeLeft">
+			<div class="card-content green lighten-1 white-text">
+				<p class="card-stats-title"><i class="material-icons">savings</i> Caixa Emergencial</p>
+				<h4 class="card-stats-number white-text">566</h4>
+				<p class="card-stats-compare">
+					<i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span>
+				</p>
+			</div>
+			<div class="card-action green lighten-1">
+				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col s12">
+		<div class="card z-depth-0">
+			<div class="card-title left-align grey-text uppercase">Resumo Mensal</div>
+		</div>
+	</div>
+</div>
+<div id="resumo-mensal" class="row">
+	<div class="col s12 m6">
+		<div class="card z-depth-0 transparent">
+			<div class="card-content">
+				<div class="row" *ngFor="let m of resumo">
+					<div class="col s12 m6">
+						<div class="meses" *ngFor="let mes of m.e">
+							<span>{{ mes.mes }}</span>
+							<span>{{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</span>
+						</div>
+					</div>
+					<div class="col s12 m6">
+						<div class="meses" *ngFor="let mes of m.d">
+							<span>{{ mes.mes }}</span>
+							<span>{{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="grafico-stats" class="col s12 m6">
+		<div class="card">
+			<div class="card-content">asdf</div>
+		</div>
+	</div>
+</div>

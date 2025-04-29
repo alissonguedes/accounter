@@ -1,0 +1,171 @@
+<ng-container ngTitle="Pacientes" />
+
+
+<ng-container *ngHeader>
+	<div class="left">
+		<div class="input-field" style="position: relative;">
+			<i class="material-icons" style="position: absolute; top: 12px; left: 20px; margin-right: 10px; z-index: -1;">search</i>
+			<input type="search" id="search" style="padding-left: 50px;" placeholder="Pesquisar" autocomplete="off">
+		</div>
+	</div>
+	<div class="right">
+		<button data-target="modal-pacientes" class="btn btn-floating green right modal-trigger waves-effect" (click)="edit()">
+			<i class="material-icons">add</i>
+		</button>
+	</div>
+</ng-container>
+
+
+<!-- <div class="row">
+	<div class="col s12">
+		<div class="toolbar-main">
+			<div class="toolbar">
+				<div class="left">asdf</div>
+				<div class="right">
+					<button data-target="modal-pacientes" class="btn btn-floating green right modal-trigger waves-effect" (click)="edit()">
+						<i class="material-icons">add</i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> -->
+<div class="content">
+
+	<div class="row">
+		<div class="col s12">
+			<div *ngIf="pacientes.length > 0 else results">
+				<div class="row">
+					<div class="col s4">
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<table>
+							<thead>
+								<tr>
+									<th>Nome</th>
+									<th>Convênio</th>
+									<th>Ação</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let i of pacientes">
+									<td>{{ i.nome }}</td>
+									<td></td>
+									<td><button (click)="edit(i.id)">Editar Paciente</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ng-template #results>
+			<div *ngIf="app.preloaderService.isLoading() else noResults">
+				<div id="preloader">
+					<div class="preloader-wrapper active">
+						<div class="spinner-layer spinner-blue-only">
+							<div class="circle-clipper left">
+								<div class="circle"></div>
+							</div>
+							<div class="gap-patch">
+								<div class="circle"></div>
+							</div>
+							<div class="circle-clipper right">
+								<div class="circle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ng-template #noResults>
+				Nenhum registro encontrado.
+			</ng-template>
+		</ng-template>
+	</div>
+
+	<div class="row">
+		<div class="col s8">
+			<form [formGroup]="form" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
+				<div id="modal-pacientes" class="modal modal-fixed-footer">
+					<div id="preloader-modal" class="progress">
+						<div class="indeterminate blue"></div>
+					</div>
+					<div class="modal-header">
+						<div class="modal-nav">
+							<ul class="tabs">
+								<li class="tab"><a href="#dados-pessoais">Dados</a></li>
+								<li class="tab"><a href="#endereco">Endereço</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="modal-content">
+						<div id="dados-pessoais" class="row">
+							<div class="col s12">
+								<div class="row">
+									<div class="col s8">
+										<div class="input-field">
+											<label for="nome" class="active">Nome</label>
+											<input type="text" formControlName="nome" id="nome" required="required">
+											<div class="error" *ngIf="this.form.get('nome')?.touched && form.get('nome')?.invalid">
+												<small *ngIf="form.get('nome')?.errors?.['required']">Campo nome é obrigatório</small>
+											</div>
+										</div>
+									</div>
+									<div class="col s4">
+										<div class="input-field">
+											<label for="codigo" class="active">Código</label>
+											<input type="text" formControlName="codigo" id="codigo" readonly="readonly" value="12345" placeholder="Se vazio, o código será gerado">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s12 m4 l3">
+										<div class="input-field">
+											<label for="data-nascimento" class="active">Data de Nascimento</label>
+											<input type="text" formControlName="data-nascimento" id="data-nascimento" placeholder="dd/mm/yyyy">
+										</div>
+									</div>
+									<div class="col s12 m4 l3">
+										<div class="input-field">
+											<label for="cpf" class="active">CPF</label>
+											<input type="text" formControlName="cpf" id="cpf" placeholder="xxx.xxx.xxx-xx">
+											<div class="error" *ngIf="form.get('cpf')?.touched && form.get('cpf')?.invalid">
+												<small *ngIf="form.get('cpf')?.errors?.['required']">Campo CPF é obrigatório</small>
+											</div>
+										</div>
+									</div>
+									<div class="col s12 m4 l3">
+										<div class="input-field">
+											<label for="rg" class="active">RG</label>
+											<input type="text" formControlName="rg" id="rg" placeholder="XXX-XX-XXX">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="endereco" class="row">
+							<div class="col s12">
+								<div class="row">
+									<div class="col s12">
+										<div class="input-field">
+											<label for="endereco">Endereço</label>
+											<input type="text" name="endereco">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn green waves-effect">
+							<i class="material-icons">save</i>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
