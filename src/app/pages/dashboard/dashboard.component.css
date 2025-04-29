@@ -2,7 +2,7 @@
 	padding: 10px 14px;
 }
 
-.card-content,
+/* .card-content, */
 .chart-revenue,
 .icon-bg-color,
 .sidenav li a i {
@@ -38,18 +38,27 @@
 	margin-right: 10px;
 }
 
-.card-stats-compare {
-	font-size: .8rem;
-}
-
 .card-stats-number {
 	font-size: 36px;
 	font-weight: 600;
+	margin: 24px;
 }
 
-.card-stats-compare i {
+.card-stats-compare {
+	font-size: 1.2rem;
+	padding: 10px 24px;
+	display: block;
+	padding-bottom: 24px !important;
+}
+
+.card-stats-compare small {
 	position: relative;
-	top: 8px;
+	display: block;
+	text-align: left;
+}
+
+.card-stats-compare .valor {
+	min-width: 80px;
 }
 
 .card {
@@ -66,15 +75,6 @@
 
 .card-action {
 	border: none;
-}
-
-
-#resumo-mensal {
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
 }
 
 #resumo-mensal .meses {

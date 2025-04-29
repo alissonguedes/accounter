@@ -8,11 +8,13 @@
 				<p class="card-stats-title"><i class="material-icons">download</i> Entradas</p>
 				<h4 class="card-stats-number white-text">R$ 566,00</h4>
 				<p class="card-stats-compare">
-					<i class="material-icons">keyboard_arrow_up</i> 15%
-					<span class="">from yesterday</span>
+					<!-- <i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span> -->
+					<small class="bold uppercase">Média de receita por dia</small>
+					<small class="bold valor">R$ <span class=""> -</span></small>
 				</p>
 			</div>
-			<div class="card-action cyan">
+			<div class="card-action cyan darken-1">
 				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
 			</div>
 		</div>
@@ -23,11 +25,13 @@
 				<p class="card-stats-title"><i class="material-icons">upload</i> Saídas</p>
 				<h4 class="card-stats-number white-text">566</h4>
 				<p class="card-stats-compare">
-					<i class="material-icons">keyboard_arrow_up</i> 15%
-					<span class="">from yesterday</span>
+					<!-- <i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span> -->
+					<small class="bold uppercase">Média de despesas por dia</small>
+					<small class="bold valor">R$ <span class=""> -</span></small>
 				</p>
 			</div>
-			<div class="card-action red accent-2">
+			<div class="card-action red">
 				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
 			</div>
 		</div>
@@ -38,11 +42,13 @@
 				<p class="card-stats-title"><i class="material-icons">money_bag</i> Investimentos</p>
 				<h4 class="card-stats-number white-text">566</h4>
 				<p class="card-stats-compare">
-					<i class="material-icons">keyboard_arrow_up</i> 15%
-					<span class="">from yesterday</span>
+					<!-- <i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span> -->
+					<small class="bold uppercase">Média dos Investimentos por dia</small>
+					<small class="bold valor">R$ <span class=""> -</span></small>
 				</p>
 			</div>
-			<div class="card-action orange lighten-1">
+			<div class="card-action orange">
 				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
 			</div>
 		</div>
@@ -53,11 +59,13 @@
 				<p class="card-stats-title"><i class="material-icons">savings</i> Caixa Emergencial</p>
 				<h4 class="card-stats-number white-text">566</h4>
 				<p class="card-stats-compare">
-					<i class="material-icons">keyboard_arrow_up</i> 15%
-					<span class="">from yesterday</span>
+					<!-- <i class="material-icons">keyboard_arrow_up</i> 15%
+					<span class="">from yesterday</span> -->
+					<small class="bold uppercase">Média de cx. emergencial por dia</small>
+					<small class="bold valor">R$ <span class=""> -</span></small>
 				</p>
 			</div>
-			<div class="card-action green lighten-1">
+			<div class="card-action green">
 				<div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
 			</div>
 		</div>
@@ -67,14 +75,15 @@
 <div class="row">
 	<div class="col s12">
 		<div class="card z-depth-0">
-			<div class="card-title left-align grey-text uppercase">Resumo Mensal</div>
+
 		</div>
 	</div>
 </div>
-<div id="resumo-mensal" class="row">
-	<div class="col s12 m6">
-		<div class="card z-depth-0 transparent">
+<div class="row">
+	<div id="resumo-mensal" class="col s12 m6">
+		<div class="card z-depth-0 transparent no-margin">
 			<div class="card-content">
+				<div class="card-title left-align grey-text uppercase">Resumo Mensal</div>
 				<div class="row" *ngFor="let m of resumo">
 					<div class="col s12 m6">
 						<div class="meses" *ngFor="let mes of m.e">
@@ -93,8 +102,11 @@
 		</div>
 	</div>
 	<div id="grafico-stats" class="col s12 m6">
-		<div class="card">
-			<div class="card-content">asdf</div>
+		<div class="card z-depth-0 transparent no-margin">
+			<div class="card-content">
+				<div class="card-title left-align grey-text uppercase">Análise</div>
+				<div id="chart"></div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -10,6 +10,10 @@
 	text-transform: uppercase !important;
 }
 
+.bold {
+	font-weight: bold !important;
+}
+
 header {
 	height: 64px;
 	z-index: 999;
@@ -76,7 +80,7 @@ nav .sidenav-trigger i {
 }
 
 .sidenav {
-	padding-top: 68px;
+	padding-top: 64px;
 	z-index: 998;
 	transform: translateX(0px);
 }
