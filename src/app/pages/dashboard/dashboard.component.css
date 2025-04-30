@@ -75,6 +75,7 @@
 
 .card-action {
 	border: none;
+	padding-top: 0px;
 }
 
 #resumo-mensal .meses {

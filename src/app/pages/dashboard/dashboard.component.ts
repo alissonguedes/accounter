@@ -1,15 +1,40 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule, formatNumber } from '@angular/common';
 import { TitleDirective } from '../../directives/title/title.directive';
-declare const ApexCharts: any;
+import {
+	NgApexchartsModule,
+	ApexAxisChartSeries,
+	ApexChart,
+	ApexXAxis,
+	ApexTitleSubtitle,
+	ApexGrid,
+	ApexDataLabels,
+	ApexYAxis
+} from 'ng-apexcharts';
+
+declare const document: any;
+
+export type ChartOptions = {
+	series: ApexAxisChartSeries,
+	chart: ApexChart,
+	xaxis: ApexXAxis,
+	yaxis: ApexYAxis,
+	title: ApexTitleSubtitle,
+	grid: ApexGrid,
+	dataLabels: ApexDataLabels
+};
 
 @Component({
 	selector: 'app-dashboard',
-	imports: [CommonModule, TitleDirective],
+	imports: [CommonModule, TitleDirective, NgApexchartsModule],
 	templateUrl: './dashboard.component.html',
 	styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
+
+	// @ViewChild("chart") chart!: ChartComponent;
+	public chartOptions: any = null;
+	// public chartOptions: ChartOptions;
 
 	public categorias = [];
 
@@ -27,7 +52,8 @@ export class DashboardComponent {
 
 	constructor() {
 		this.getResumoMensal();
-		this.getChart();
+		this.getChartAnalises();
+		this.getChartCategoria();
 	}
 
 	getResumoMensal(): void {
@@ -54,69 +80,281 @@ export class DashboardComponent {
 
 	}
 
-	getChart() {
-		setTimeout(() => {
+	getChartAnalises() {
 
-			let data = [];
-			let categories = [];
-			let line = [];
+		let categorias: {
+			entradas: number[],
+			saidas: number[],
+			investimentos: number[],
+			caixa_emergencial: number[]
+		} = {
+			entradas: [],
+			saidas: [],
+			investimentos: [],
+			caixa_emergencial: []
+		};
 
-			let entradas = [];
-			let saidas = [];
-			let investimentos = [];
-			let caixa_emercial = [];
+		// Series/Dados dos gráficos
+		let series = [];
 
-			for (let i = 0; i < this.meses.length; i++) {
+		// Gerando dados fictícios para cada mês
+		for (let mes of this.mesesAbr) {
+			// Simulação de valores aleatórios
+			categorias.entradas.push(Math.floor(Math.random() * 1000));
+			categorias.saidas.push(Math.floor(Math.random() * 1000));
+			categorias.investimentos.push(Math.floor(Math.random() * 1000));
+			categorias.caixa_emergencial.push(Math.floor(Math.random() * 1000));
+		}
 
-				let mes = this.mesesAbr[i].toUpperCase();
-				let num = Math.random() * 100;
+		// Montando séries para gráfico
+		series.push({
+			name: 'Entradas',
+			type: 'line',
+			data: categorias.entradas,
+		});
+		series.push({
+			name: 'Saídas',
+			type: 'line',
+			data: categorias.saidas,
+		});
+		series.push({
+			name: 'Investimentos',
+			type: 'line',
+			data: categorias.investimentos
+		});
+		series.push({
+			name: 'Caixa Emergencial',
+			type: 'line',
+			data: categorias.caixa_emergencial
+		});
 
-				categories.push(mes);
-				data.push(num);
-				line.push(Math.random() * 100);
-
-			}
-
-			var options = {
-				chart: {
-					type: 'line',
-				},
-				series: [{
-					type: 'line',
-					name: 'sales',
-					data: data,
-				}, {
-					type: 'column',
-					name: 'sales',
-					data: data,
-				}, {
-					type: 'line',
-					name: 'other',
-					data: line,
-				}],
-				xaxis: {
+		this.chartOptions = {
+			title: {},
+			chart: {
+				type: 'line',
+				height: '350px',
+				toolbar: {
 					show: false,
-					categories: categories
 				},
-				dataLabels: {
-					enabled: false,
-					formatter: function (value: any, { seriesIndex, dataPointIndex, w }: any) {
-						return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-					}
-				},
-				yaxis: {
-					show: true,
-					decimalsInFloat: 2,
-					labels: {
-						formatter: function (value: any, { seriesIndex, dataPointIndex, w }: any) {
-							return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+				zoom: {
+					enabled: true,
+					type: 'x',
+					autoScaleYaxis: false,
+					allowMouseWheelZoom: true,
+					zoomedArea: {
+						fill: {
+							color: '#90CAF9',
+							opacity: 0.4
+						},
+						stroke: {
+							color: '#0D47A1',
+							opacity: 0.4,
+							width: 1
 						}
 					}
 				}
+			},
+			series: series,
+			// colors: [cores[cat]],
+			xaxis: {
+				labels: {
+					show: true,
+					// formatter: (value: any) => value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+				},
+				decimalsInFloat: 2,
+				categories: this.mesesAbr
+			},
+			yaxis: {
+				decimalsInFloat: 2,
+				labels: {
+					show: true,
+					formatter: (value: any) => value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+				}
+			},
+			grid: {
+				show: true,
+				borderColor: '#90A4AE',
+				strokeDashArray: 0,
+				position: 'back',
+				// xaxis: {
+				// 	lines: {
+				// 		show: false,
+				// 	}
+				// },
+				// yaxis: {
+				// 	lines: {
+				// 		show: false
+				// 	}
+				// },
+				// row: {
+				// 	colors: undefined,
+				// 	opacity: 0,
+				// },
+				// padding: {
+				// 	top: 0,
+				// 	right: 0,
+				// 	left: 0,
+				// 	bottom: 0
+				// }
+			},
+			dataLabels: {
+				show: true,
+				enabled: true,
+				formatter: (value: any) =>
+					value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }
+					)
+			},
+			// yaxis: {
+			// 	decimalsInFloat: 2,
+			// 	labels: {
+			// 		show: false,
+			// 		formatter: (value: any) =>
+			// 			value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+			// 	}
+			// }
+			// series: [
+			// 	{
+			// 		name: "My-series",
+			// 		data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+			// 	}
+			// ],
+			// chart: {
+			// 	height: 350,
+			// 	type: "bar"
+			// },
+			// title: {
+			// 	text: "My First Angular Chart"
+			// },
+			// xaxis: {
+			// 	categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
+			// }
+		};
+
+	}
+
+	getChartCategoria() {
+
+		setTimeout(() => {
+
+			let spark = document.querySelector('#sparkline');
+			console.log(spark);
+
+			// spark.sparkline([70, 80, 65, 78, 58, 80, 78, 80, 70, 50, 75, 65, 80, 70, 65, 90, 65, 80, 70, 65, 90], { type: "bar", height: "25", barWidth: 7, barSpacing: 4, barColor: "#b2ebf2", negBarColor: "#81d4fa", zeroColor: "#81d4fa" });
+
+			// Dados para cada categoria
+			const categorias: {
+				[key: string]: number[]
+			} = {
+				entradas: [],
+				saidas: [],
+				investimentos: [],
+				caixa_emergencial: []
+			};
+
+			// Preencher dados aleatórios por mês
+			for (let i = 0; i < this.mesesAbr.length; i++) {
+				categorias['entradas'].push(Math.floor(Math.random() * 1000));
+				categorias['saidas'].push(Math.floor(Math.random() * 1000));
+				categorias['investimentos'].push(Math.floor(Math.random() * 1000));
+				categorias['caixa_emergencial'].push(Math.floor(Math.random() * 1000));
 			}
-			var chart = new ApexCharts(document.querySelector("#chart"), options);
-			chart.render();
+
+			// Paleta de cores para os gráficos
+			const cores: { [key: string]: string } = {
+				entradas: '#00bcd4',
+				saidas: '#ff5252',
+				investimentos: '#ffa726',
+				caixa_emergencial: '#66BB6A'
+			};
+
+			// Gerar gráfico por categoria
+			for (let cat in categorias) {
+				const series = [{
+					name: cat.charAt(0).toUpperCase() + cat.slice(1),
+					type: 'column',
+					data: categorias[cat]
+				}];
+
+				const options = {
+					chart: {
+						type: 'line',
+						height: '80px',
+						toolbar: {
+							show: false,
+						},
+						zoom: {
+							enabled: true,
+							type: 'x',
+							autoScaleYaxis: false,
+							allowMouseWheelZoom: true,
+							zoomedArea: {
+								fill: {
+									color: '#90CAF9',
+									opacity: 0.4
+								},
+								stroke: {
+									color: '#0D47A1',
+									opacity: 0.4,
+									width: 1
+								}
+							}
+						}
+					},
+					series: series,
+					colors: [cores[cat]],
+					xaxis: {
+						labels: {
+							show: false,
+						},
+						categories: this.mesesAbr
+					},
+					grid: {
+						show: true,
+						borderColor: '#90A4AE',
+						strokeDashArray: 0,
+						position: 'back',
+						xaxis: {
+							lines: {
+								show: false,
+							}
+						},
+						yaxis: {
+							lines: {
+								show: false
+							}
+						},
+						row: {
+							colors: undefined,
+							opacity: 0,
+						},
+						padding: {
+							top: 0,
+							right: 0,
+							left: 0,
+							bottom: 0
+						}
+					},
+					dataLabels: {
+						show: false,
+						enabled: false,
+						formatter: (value: any) =>
+							value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+					},
+					yaxis: {
+						decimalsInFloat: 2,
+						labels: {
+							show: false,
+							formatter: (value: any) =>
+								value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+						}
+					}
+				};
+
+				const chart = new ApexCharts(document.querySelector(`#${cat}`), options);
+				chart.render();
+			}
 		});
+
 	}
 
 }

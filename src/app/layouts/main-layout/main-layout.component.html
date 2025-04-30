@@ -1,41 +1,40 @@
 <header>
-	<nav class="navbar-main navbar-fixed z-depth-0">
-		<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-
-		<!-- <h1 class="logo-wrapper">
-			<a class="brand-logo darken-1" href="#">
-				<span class="logo-text hide-on-med-and-down">Materialize</span>
-			</a>
-			<a class="navbar-toggler" href="#">
-				<i class="material-icons">radio_button_checked</i>
-			</a>
-		</h1> -->
-
-		<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
-		<ul class="navbar-list right">
-			<li><button (click)="app.logout()">Sair</button></li>
-		</ul>
+	<nav class="navbar-main navbar-fixed navbar-color nav-collapsible sideNav-lock navbar-dark z-depth-0">
+		<div class="nav-wrapper">
+			<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+			<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
+			<div class="navbar-list right">
+				<div class="lancamentos">
+					<h4>Lançamentos: <span data-target="modal-periodo" data-value="">Mai/2025</span></h4>
+					<input type="hidden" name="periodo" value="">
+				</div>
+			</div>
+		</div>
 		<div id="progress" class="progress" *ngIf="app.preloaderService.isLoading()">
 			<div class="indeterminate"></div>
 		</div>
 	</nav>
 </header>
 
-<aside>
-	<ul id="slide-out" class="sidenav sidenav-fixed">
-		<li>
-			<a routerLink="/dashboard" routerLinkActive="active" class="waves-effect">
-				<i class="material-icons">dashboard</i>
-				<span>Dashboard</span>
-			</a>
+<aside id="slide-out" class="sidenav sidenav-fixed">
+	<ul>
+		<li class="user-view">
+			<button data-href="#user" class="user"></button>
+			<button data-href="#name"><span class="name">John Doe</span></button>
+			<button data-href="#email"><span class="email">jdandturk&#64;gmail.com</span></button>
 		</li>
-		<li>
-			<a routerLink="/pacientes" routerLinkActive="active" class="waves-effect">
-				<i class="material-icons">group</i>
-				<span>Pacientes</span>
-			</a>
-		</li>
+		<li routerLinkActive="active"> <button routerLink="dashboard" class="waves-effect">Dashboard</button> </li>
+		<li routerLinkActive="active"> <button routerLink="pacientes" class="waves-effect">Entradas</button> </li>
+		<li routerLinkActive="active"> <button routerLink="saidas" class="waves-effect">Saídas</button> </li>
+		<li routerLinkActive="active"> <button routerLink="aplicativos" class="waves-effect">Aplicativos</button> </li>
+		<li routerLinkActive="active"> <button routerLink="patrimonio" class="waves-effect">Patrimônio</button> </li>
 	</ul>
+	<div class="sidenav-footer">
+		<a class="btn waves-effect waves-light" href="#"><span class="material-icons">finance</span></a>
+		<a class="btn waves-effect waves-light" routerLink="#"><span class="material-icons">savings</span></a>
+		<a class="btn waves-effect waves-light" routerLink="configuracoes"><span class="material-icons">settings</span></a>
+		<a class="btn waves-effect waves-light" data-href="#"><span class="material-icons" (click)="app.logout()">logout</span></a>
+	</div>
 </aside>
 
 <main id="main">
