@@ -1,5 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { CommonModule, formatNumber } from '@angular/common';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TitleDirective } from '../../directives/title/title.directive';
 import {
 	NgApexchartsModule,
@@ -28,7 +28,8 @@ export type ChartOptions = {
 	selector: 'app-dashboard',
 	imports: [CommonModule, TitleDirective, NgApexchartsModule],
 	templateUrl: './dashboard.component.html',
-	styleUrl: './dashboard.component.css'
+	styleUrl: './dashboard.component.css',
+	encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent {
 
@@ -132,7 +133,7 @@ export class DashboardComponent {
 			title: {},
 			chart: {
 				type: 'line',
-				height: '350px',
+				height: '310px',
 				toolbar: {
 					show: false,
 				},

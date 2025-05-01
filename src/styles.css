@@ -116,29 +116,25 @@ nav .sidenav-trigger i {
 	border: 2px solid rgba(255, 0, 0, 0.9) !important
 }
 
-.sidenav {
+.sidenav-main {
 	transform: translateX(0px);
 	height: 100%;
 	overflow: hidden;
 	background-color: var(--blue-grey);
 }
 
-.sidenav {
+.sidenav-main {
 	background-color: var(--blue-grey) !important;
 }
 
-.sidenav ul {
+.sidenav-main ul {
 	height: inherit;
 	overflow: auto;
 	margin: 0;
 }
 
-.sidenav li.user-view .user {
-	background-image: url(../public/assets/icons/dashboard.png);
-}
-
-.sidenav li.user-view .user {
-	background-image: url(../public/assets/icons/dashboard.png);
+.sidenav-main li.user-view .user {
+	background-image: url(/assets/icons/fluxo-de-caixa.png);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-color: transparent;
@@ -147,13 +143,13 @@ nav .sidenav-trigger i {
 	margin: auto;
 }
 
-.sidenav li.user-view button {
+.sidenav-main li.user-view button {
 	text-transform: none;
 	border: none;
 }
 
-.sidenav li>a,
-.sidenav li>button {
+.sidenav-main li>a,
+.sidenav-main li>button {
 	display: block;
 	font-size: 14px;
 	font-weight: 500;
@@ -199,19 +195,19 @@ nav .sidenav-trigger i {
 
 
 
-.sidenav .user-view {
+.sidenav-main .user-view {
 	position: relative;
 	padding: 32px 32px 0;
 	margin-bottom: 8px;
 }
 
-.sidenav li:not(.user-view) {
+.sidenav-main li:not(.user-view) {
 	margin: 10px 20px;
 	background-color: transparent;
 }
 
-.sidenav li>a,
-.sidenav li>button {
+.sidenav-main li>a,
+.sidenav-main li>button {
 	display: block;
 	font-size: 14px;
 	font-weight: 500;
@@ -231,21 +227,21 @@ nav .sidenav-trigger i {
 	color: #000;
 }
 
-.sidenav li:not(.user-view) a,
-.sidenav li:not(.user-view) button {
+.sidenav-main li:not(.user-view) a,
+.sidenav-main li:not(.user-view) button {
 	background-color: transparent;
 	border-radius: 24px;
 	text-transform: uppercase;
 	border-color: #3c50b6;
 }
 
-.sidenav li.active a,
-.sidenav li.active button {
+.sidenav-main li.active a,
+.sidenav-main li.active button {
 	background-color: var(--blue-grey);
 	border-color: transparent;
 }
 
-.sidenav li.active button {
+.sidenav-main li.active button {
 	background-color: var(--blue-grey-transparent);
 	border-color: transparent;
 	color: #fff;
@@ -270,22 +266,26 @@ nav .sidenav-trigger i {
 	height: inherit;
 }
 
+.sidenav-footer .btn.active {
+	background: rgba(0, 0, 0, 0.8);
+}
+
 .sidenav-footer .btn .material-icons {
 	margin: 0;
 }
 
-.sidenav li .active {
+.sidenav-main li .active {
 	background-color: rgba(0, 0, 0, 0.05);
 }
 
-.sidenav li>a {
+.sidenav-main li>a {
 	padding: 0 20px;
 }
 
-.sidenav li>a>i,
-.sidenav li>a>[class^=mdi-],
-.sidenav li>a li>a>[class*=mdi-],
-.sidenav li>a>i.material-icons {
+.sidenav-main li>a>i,
+.sidenav-main li>a>[class^=mdi-],
+.sidenav-main li>a li>a>[class*=mdi-],
+.sidenav-main li>a>i.material-icons {
 	margin: 0 20px 0 0;
 }
 
@@ -299,6 +299,10 @@ nav .sidenav-trigger i {
 
 .row {
 	margin-bottom: 0;
+}
+
+.row>.col>.modal {
+	width: inherit;
 }
 
 .row .modal.fullscreen {
@@ -411,7 +415,10 @@ body:has(#login-page) #preloader {
 	margin: 46px 0 0rem 0;
 	overflow: hidden;
 	z-index: 999999;
-	/* display: none; */
+}
+
+.modal:not(:has(.modal-header)) .progress#preloader-modal {
+	margin: 0;
 }
 
 .modal.loading::before {

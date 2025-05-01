@@ -1,3 +1,7 @@
+.sidenav li.user-view .user {
+	background-image: url(/assets/icons/dashboard.png);
+}
+
 .card .card-content {
 	padding: 10px 14px;
 }
@@ -114,5 +118,4 @@
 	text-align: right;
 	display: inline-block;
 	color: inherit;
-	float: right;
 }

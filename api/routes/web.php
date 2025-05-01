@@ -1,8 +1,6 @@
 <?php
 
 // use App\Http\Controllers\AuthController;
-// use Illuminate\Support\Facades\Request;
-// use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
 // 	// $secret = env('JWT_SECRET');
@@ -25,5 +23,21 @@
 // 	Route::middleware('auth:api')->get('/user', function (Request $request) {
 // 		return $request->user();
 // 	});
+
+// });
+
+// Route::get('/categorias', function (Request $request) {
+
+// 	$id = request('id') ?? null;
+
+// 	$categorias = DB::connection('medicus')->table('tb_categoria')->get();
+
+// 	return response()->json($categorias, 200);
+
+// 	if (!$id) {
+
+// 	} else {
+
+// 	}
 
 // });

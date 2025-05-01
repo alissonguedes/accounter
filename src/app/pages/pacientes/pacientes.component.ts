@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { PacientesService } from './pacientes.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,7 +16,8 @@ declare const document: any;
 	selector: 'app-pacientes',
 	imports: [CommonModule, ReactiveFormsModule, TitleDirective, HeaderDirective],
 	templateUrl: './pacientes.component.html',
-	styleUrl: './pacientes.component.css'
+	styleUrl: './pacientes.component.css',
+	encapsulation: ViewEncapsulation.None
 })
 export class PacientesComponent implements OnInit {
 

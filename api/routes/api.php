@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,55 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 		return response()->json($pacientes, 200);
 	});
 	// });
+
+	Route::get('/categorias', function (Request $request) {
+
+		$id            = request('id') ?? null;
+		$db            = new DB('clinica');
+		$allCategorias = [];
+
+		$getCategorias = DB::connection('medicus')->table('tb_categoria');
+
+		if ($id) {
+			$categoria = $getCategorias->where('id', $id)->first();
+			$titulo    = DB::connection('medicus')->table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
+			return [
+				'id'          => $categoria->id,
+				'titulo'      => $titulo->titulo,
+				'titulo_slug' => $titulo->titulo,
+				'descricao'   => $titulo->descricao,
+				'id_parent'   => $categoria->id_parent,
+				'status'      => $categoria->status,
+				'ordem'       => $categoria->ordem,
+				'imagem'      => $categoria->imagem,
+				'color'       => $categoria->color,
+				'text_color'  => $categoria->text_color,
+			];
+		}
+
+		$categorias = $getCategorias->get();
+
+		if ($categorias->count() > 0) {
+			foreach ($categorias as $categoria) {
+				$titulo          = DB::connection('medicus')->table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
+				$allCategorias[] = [
+					'id'          => $categoria->id,
+					'titulo'      => $titulo->titulo,
+					'titulo_slug' => $titulo->titulo,
+					'descricao'   => $titulo->descricao,
+					'id_parent'   => $categoria->id_parent,
+					'status'      => $categoria->status,
+					'ordem'       => $categoria->ordem,
+					'imagem'      => $categoria->imagem,
+					'color'       => $categoria->color,
+					'text_color'  => $categoria->text_color,
+				];
+			}
+		}
+
+		return response()->json($allCategorias, 200);
+
+	});
 
 });
 

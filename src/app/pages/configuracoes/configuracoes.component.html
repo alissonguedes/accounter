@@ -1,0 +1,52 @@
+<ng-container ngTitle="Configurações"></ng-container>
+
+<div class="sidebar-left sidebar-fixed">
+	<div class="sidebar">
+		<div class="sidebar-content">
+			<div class="sidebar-header">
+				<div class="sidebar-details">
+					<!-- <h5 class="m-0 sidebar-title"><i class="material-icons app-header-icon text-top">mail_outline</i> Mailbox</h5> -->
+					<div class="row valign-wrapper mt-10 pt-2 animate fadeLeft">
+						<!-- <div class="col s3 media-image">
+							<img src="../../../app-assets/images/user/2.jpg" alt="" class="circle z-depth-2 responsive-img">
+						</div>
+						<div class="col s9">
+							<p class="m-0 subtitle font-weight-700">Lawrence Collins</p>
+							<p class="m-0 text-muted">lawrence.collins&#64;xyz.com</p>
+						</div> -->
+					</div>
+				</div>
+			</div>
+			<div id="sidebar-list" class="sidebar-menu list-group position-relative animate fadeLeft ps ps--active-y">
+				<div class="sidebar-list-padding app-sidebar" id="email-sidenav">
+					<ul class="email-list display-grid">
+						<li routerLinkActive="active">
+							<a routerLink="/configuracoes/categorias" class="text-sub"><i class="material-icons mr-2"> category </i> Categorias </a>
+						</li>
+						<li routerLinkActive="active">
+							<a routerLink="/configuracoes/carteiras-digitais" class="text-sub"><i class="material-icons mr-2"> account_balance_wallet </i> Carteiras Digitais </a>
+						</li>
+						<li routerLinkActive="active">
+							<a routerLink="/configuracoes/cartoes-credito" class="text-sub"><i class="material-icons mr-2"> credit_card </i> Cartões de Crédito</a>
+						</li>
+						<li routerLinkActive="active">
+							<a routerLink="/configuracoes/aplicativos" class="text-sub"><i class="material-icons mr-2"> redeem </i> Apps de Recompensa</a>
+						</li>
+						<li routerLinkActive="active">
+							<a routerLink="/configuracoes/sistema" class="text-sub"><i class="material-icons mr-2"> settings </i> Sistema</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<a href="#" data-target="email-sidenav" class="sidenav-trigger hide-on-large-only"><i class="material-icons">menu</i></a>
+		</div>
+	</div>
+</div>
+
+<div class="app-email">
+	<div class="content-area content-right">
+		<div class="app-wrapper">
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+</div>

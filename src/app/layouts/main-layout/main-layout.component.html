@@ -16,24 +16,24 @@
 	</nav>
 </header>
 
-<aside id="slide-out" class="sidenav sidenav-fixed">
+<aside id="slide-out" class="sidenav sidenav-main sidenav-fixed">
 	<ul>
 		<li class="user-view">
 			<button data-href="#user" class="user"></button>
 			<button data-href="#name"><span class="name">John Doe</span></button>
 			<button data-href="#email"><span class="email">jdandturk&#64;gmail.com</span></button>
 		</li>
-		<li routerLinkActive="active"> <button routerLink="dashboard" class="waves-effect">Dashboard</button> </li>
-		<li routerLinkActive="active"> <button routerLink="pacientes" class="waves-effect">Entradas</button> </li>
-		<li routerLinkActive="active"> <button routerLink="saidas" class="waves-effect">Saídas</button> </li>
-		<li routerLinkActive="active"> <button routerLink="aplicativos" class="waves-effect">Aplicativos</button> </li>
-		<li routerLinkActive="active"> <button routerLink="patrimonio" class="waves-effect">Patrimônio</button> </li>
+		<li routerLinkActive="active"> <button routerLink="/dashboard" class="waves-effect">Dashboard</button> </li>
+		<li routerLinkActive="active"> <button routerLink="/entradas" class="waves-effect">Entradas</button> </li>
+		<li routerLinkActive="active"> <button routerLink="/saidas" class="waves-effect">Saídas</button> </li>
+		<li routerLinkActive="active"> <button routerLink="/aplicativos" class="waves-effect">Aplicativos</button> </li>
+		<li routerLinkActive="active"> <button routerLink="/patrimonio" class="waves-effect">Patrimônio</button> </li>
 	</ul>
 	<div class="sidenav-footer">
-		<a class="btn waves-effect waves-light" href="#"><span class="material-icons">finance</span></a>
-		<a class="btn waves-effect waves-light" routerLink="#"><span class="material-icons">savings</span></a>
-		<a class="btn waves-effect waves-light" routerLink="configuracoes"><span class="material-icons">settings</span></a>
-		<a class="btn waves-effect waves-light" data-href="#"><span class="material-icons" (click)="app.logout()">logout</span></a>
+		<a class="btn waves-effect" routerLinkActive="active" routerLink="projecao"><span class="material-icons">finance</span></a>
+		<a class="btn waves-effect" routerLinkActive="active" routerLink="planejamento"><span class="material-icons">savings</span></a>
+		<a class="btn waves-effect" routerLinkActive="active" routerLink="configuracoes"><span class="material-icons">settings</span></a>
+		<a class="btn waves-effect" data-href="#"><span class="material-icons" (click)="app.logout()">logout</span></a>
 	</div>
 </aside>
 

@@ -1,0 +1,139 @@
+<div class="card card card-default border-radius-6 fixed-width" style="overflow: hidden;">
+	<div class="email-header" style="padding: 20px 20px 10px">
+		<div class="left-icons">
+			<div class="app-search">
+				<i class="material-icons mr-2 search-icon">search</i>
+				<input type="text" id="search" placeholder="Pesquisar" class="app-filter" id="email_filter" [formControl]="categoriaForm.searchControl">
+			</div>
+		</div>
+		<div class="list-content"></div>
+		<div class="email-action">
+			<button class="btn btn-floating waves-effect green" (click)="openModal()"><i class="material-icons white-text">add</i></button>
+		</div>
+	</div>
+	<div class="card-content p-0 pb-2" style="min-height: calc(100vh - 260px)">
+		<div class="collection" *ngIf="categorias.length > 0 else results">
+			<div *ngFor="let cat of categorias">
+				{{ cat.id }} - {{ cat.titulo }} - <button (click)="openModal(cat.id)">Editar</button>
+			</div>
+		</div>
+		<ng-template #results>
+			<div *ngIf="app.preloaderService.isLoading() else noResults">
+				<div id="preloader">
+					<div class="preloader-wrapper active">
+						<div class="spinner-layer spinner-blue-only">
+							<div class="circle-clipper left">
+								<div class="circle"></div>
+							</div>
+							<div class="gap-patch">
+								<div class="circle"></div>
+							</div>
+							<div class="circle-clipper right">
+								<div class="circle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template #noResults>
+			<p>Nenhum resultado encontrado</p>
+		</ng-template>
+	</div>
+</div>
+
+<form [formGroup]="categoriaForm.getForm()" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
+	<div class="row">
+		<div class="col s12 m6 l4">
+			<div id="modal-categoria" class="modal modal-fixed-footer">
+
+
+				<div id="preloader-modal" class="progress">
+					<div class="indeterminate blue"></div>
+				</div>
+
+				<div class="modal-content">
+
+					<input type="hidden" formControlName="id">
+
+					<!-- BEGIN título -->
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="titulo">Título</label>
+								<input type="text" formControlName="titulo" id="titulo" autofocus="autofocus">
+							</div>
+						</div>
+					</div>
+					<!-- END título -->
+
+					<!-- BEGIN título -->
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="titulo_slug">Rótulo do campo</label>
+								<input type="text" formControlName="titulo_slug" id="titulo_slug">
+							</div>
+						</div>
+					</div>
+					<!-- END título -->
+
+					<!-- BEGIN título -->
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="titulo_slug">Categoria</label>
+
+								<select formControlName="id_parent" id="id_parent">
+									<option value="" selected>Sem categoria</option>
+									<option value="">Teste</option>
+								</select>
+
+							</div>
+						</div>
+					</div>
+					<!-- END título -->
+
+					<!-- BEGIN descrição -->
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="descricao">Descrição</label>
+								<input type="text" formControlName="descricao" id="descricao">
+							</div>
+						</div>
+					</div>
+					<!-- END descrição -->
+
+					<!-- BEGIN status -->
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field">
+								<label for="status" class="">Ativo</label>
+								<div class="switch">
+									<label>
+										Não
+										<input type="checkbox" formControlName="status" id="status" value="1">
+										<span class="lever"></span>
+										Sim
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END status -->
+				</div>
+				<div class="modal-footer">
+					<button type="reset" class="btn waves-effect white black-text left modal-close">
+						<i class="material-icons left">cancel</i>
+						<span>Cancelar</span>
+					</button>
+					<button type="submit" class="btn waves-effect green">
+						<i class="material-icons left">save</i>
+						<span>Salvar</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
