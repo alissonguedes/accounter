@@ -6,8 +6,8 @@ import { PreloaderService } from '../../../services/preloader/preloader.service'
 import { CategoriaForm } from './categoria-form';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NestableComponent } from './nestable/nestable.component';
-import { ItemNode } from './nestable/item-node.model';
+import { NestableComponent } from '../../../shared/nestable/nestable.component';
+import { ItemNode } from '../../../shared/nestable/item-node.model';
 
 declare const M: any;
 declare const document: any;
