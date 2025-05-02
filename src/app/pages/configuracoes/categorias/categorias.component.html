@@ -29,24 +29,7 @@
 
 		<ng-template #noResults>
 			<!-- <p>Nenhum resultado encontrado</p> -->
-			<!-- <div *ngFor="let node of tree" class="node-block">
-				<div class="parent">
-					{{ node.name }}
-				</div>
-
-				<div cdkDropList [cdkDropListData]="node.children" class="child-list" (cdkDropListDropped)="drop($event)">
-					<div *ngFor="let child of node.children" cdkDrag class="child-item">
-						{{ child.name }}
-					</div>
-				</div>
-			</div> -->
-			<div cdkDropList [cdkDropListData]="nodes" (cdkDropListDropped)="drop($event)" class="node-container">
-				<div *ngFor="let node of nodes" cdkDrag class="node">
-					<div class="node-label">{{ node.name }}</div>
-
-					<div *ngIf="node.children?.length" [nodes]="node.children"></div>
-				</div>
-			</div>
+			<app-nestable [items]="treeData"></app-nestable>
 		</ng-template>
 
 	</div>

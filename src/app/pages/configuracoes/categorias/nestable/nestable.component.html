@@ -1,0 +1,14 @@
+<div cdkDropListGroup class="nestable-list">
+
+	<div *ngFor="let item of items; let i = index" cdkDropList [cdkDropListData]="items" (cdkDropListDropped)="drop($event)" class="nestable-node">
+
+		<div cdkDrag class="drag-item">
+			{{ item.name }}
+		</div>
+
+		<div class="nestable-children" cdkDropList [cdkDropListData]="item.children" (cdkDropListDropped)="drop($event, item)">
+			<app-nestable *ngIf="item.children?.length" [items]="item.children"></app-nestable>
+		</div>
+
+	</div>
+</div>

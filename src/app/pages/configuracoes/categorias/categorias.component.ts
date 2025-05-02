@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CategoriaService } from './categoria.service';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from '../../../app.component';
@@ -7,55 +6,41 @@ import { PreloaderService } from '../../../services/preloader/preloader.service'
 import { CategoriaForm } from './categoria-form';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { NestableComponent } from './nestable/nestable.component';
+import { ItemNode } from './nestable/item-node.model';
 
 declare const M: any;
 declare const document: any;
 
-interface ItemNode {
-  name: string;
-  children?: ItemNode[];
-}
-
 @Component({
 	selector: 'app-categorias',
-	imports: [CommonModule, ReactiveFormsModule, DragDropModule],
+	imports: [CommonModule, ReactiveFormsModule, NestableComponent ],
 	templateUrl: './categorias.component.html',
 	styleUrl: './categorias.component.css',
 })
 export class CategoriasComponent implements OnInit {
-// tree: ItemNode[] = [
-//     {
-//       name: 'Item 1',
-//       children: [
-//         { name: 'Item 1.1' },
-//         { name: 'Item 1.2' }
-//       ]
-//     },
-//     {
-//       name: 'Item 2',
-//       children: [
-//         { name: 'Item 2.1' }
-//       ]
-//     }
-//   ];
- treeData = [
+
+	treeData: ItemNode[] = [
     {
-      name: 'Item 1',
+      id: 1,
+      name: 'Eletrônicos',
       children: [
-        {
-          name: 'Item 1.1',
-          children: [
-            { name: 'Item 1.1.1', children: [] }
-          ]
-        },
-        { name: 'Item 1.2', children: [] }
+        { id: 2, name: 'Celulares', children: [{
+			id: 6, name: 'SmartPhone', children: []
+		}] },
+        { id: 3, name: 'TVs', children: [] }
       ]
     },
     {
-      name: 'Item 2',
-      children: []
+      id: 4,
+      name: 'Móveis',
+      children: [
+        { id: 5, name: 'Sofás', children: [] }
+      ]
     }
   ];
+
+
 	public categorias: any = [];
 	protected searchControl = new FormControl();
 
@@ -69,32 +54,6 @@ export class CategoriasComponent implements OnInit {
 		this.categoriaForm.init();
 
 	}
-
-// drop(event: CdkDragDrop<ItemNode[]>, parent?: ItemNode) {
-//     if (event.previousContainer === event.container) {
-//       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-//     } else {
-//       transferArrayItem(event.previousContainer.data,
-//                         event.container.data,
-//                         event.previousIndex,
-//                         event.currentIndex);
-//     }
-//   }
-
- @Input() nodes: any[] = [];
-
-  drop(event: CdkDragDrop<any[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
-  }
 
 	ngOnInit(): void {
 		this.categoriaService.getCategorias().subscribe(
