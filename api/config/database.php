@@ -35,7 +35,7 @@ return [
 
 	'connections' => [
 
-		'sqlite'  => [
+		'sqlite'              => [
 			'driver'                  => 'sqlite',
 			'url'                     => env('DATABASE_URL'),
 			'database'                => env('DB_DATABASE', database_path('database.sqlite')),
@@ -43,7 +43,7 @@ return [
 			'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
 		],
 
-		'site'    => [
+		'site'                => [
 			'driver'         => 'mysql',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_SITE_HOST', '127.0.0.1'),
@@ -64,7 +64,7 @@ return [
 			]) : [],
 		],
 
-		'medicus' => [
+		'medicus'             => [
 			'driver'         => 'mysql',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_CLINICA_HOST', '127.0.0.1'),
@@ -85,7 +85,28 @@ return [
 			]) : [],
 		],
 
-		'system'  => [
+		'controle-financeiro' => [
+			'driver'         => 'mysql',
+			'url'            => env('DATABASE_URL'),
+			'host'           => env('DB_CONTROLE_FINANCEIRO_HOST', '127.0.0.1'),
+			'port'           => env('DB_CONTROLE_FINANCEIRO_PORT', '3306'),
+			'database'       => env('DB_CONTROLE_FINANCEIRO_DATABASE', 'forge'),
+			'username'       => env('DB_CONTROLE_FINANCEIRO_USERNAME', 'forge'),
+			'password'       => env('DB_CONTROLE_FINANCEIRO_PASSWORD', ''),
+			'unix_socket'    => env('DB_CLINICA_SOCKET', ''),
+			'charset'        => 'utf8mb4',
+			'collation'      => 'utf8mb4_unicode_ci',
+			'prefix'         => '',
+			'prefix_indexes' => true,
+			'strict'         => false,
+			'engine'         => null,
+			'options'        => extension_loaded('pdo_mysql') ? array_filter([
+				PDO::MYSQL_ATTR_SSL_CA     => env('MYSQL_ATTR_SSL_CA'),
+				PDO::ATTR_EMULATE_PREPARES => true,
+			]) : [],
+		],
+
+		'system'              => [
 			'driver'         => 'mysql',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_SYSTEM_HOST', '127.0.0.1'),
@@ -106,7 +127,7 @@ return [
 			]) : [],
 		],
 
-		'tickets' => [
+		'tickets'             => [
 			'driver'         => 'mysql',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_TICKETS_HOST', '127.0.0.1'),
@@ -127,7 +148,7 @@ return [
 			]) : [],
 		],
 
-		'laravel' => [
+		'laravel'             => [
 			'driver'         => 'mysql',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_LARAVEL_HOST', '127.0.0.1'),
@@ -148,7 +169,7 @@ return [
 			]) : [],
 		],
 
-		'pgsql'   => [
+		'pgsql'               => [
 			'driver'         => 'pgsql',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_HOST', '127.0.0.1'),
@@ -163,7 +184,7 @@ return [
 			'sslmode'        => 'prefer',
 		],
 
-		'sqlsrv'  => [
+		'sqlsrv'              => [
 			'driver'         => 'sqlsrv',
 			'url'            => env('DATABASE_URL'),
 			'host'           => env('DB_HOST', 'localhost'),

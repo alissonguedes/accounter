@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { TokenService } from '../../../services/auth/token.service';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { Observable, catchError, debounceTime, distinctUntilChanged, filter, map, of, switchMap } from 'rxjs';
 
 declare const M: any;
 declare const document: any;
@@ -30,6 +30,19 @@ export function confirmPasswordValidator(controlName: string, matchingControlNam
 	};
 }
 
+export function checkEmailExists() {
+	let authService = inject(AuthService);
+	return (control: AbstractControl): Observable<ValidationErrors | null> => {
+		if (!control.value) return of(null);
+		return authService.checkEmail(control.value).pipe(
+			debounceTime(500),
+			distinctUntilChanged(),
+			map(res => res.existe ? { emailExists: true } : null),
+			catchError(() => of(null))
+		)
+	}
+}
+
 @Component({
 	selector: 'app-login',
 	standalone: true,
@@ -39,7 +52,6 @@ export function confirmPasswordValidator(controlName: string, matchingControlNam
 })
 export class CadastroComponent {
 
-	emailControl = new FormControl();
 	emailExiste = false;
 	signinForm: FormGroup;
 
@@ -52,29 +64,17 @@ export class CadastroComponent {
 
 		this.signinForm = this.fb.group({
 			name: ['', [Validators.required]],
-			email: ['', [Validators.required, Validators.email]],
+			email: ['', [Validators.required, Validators.email], [checkEmailExists()]],
 			password: ['', [Validators.required, Validators.minLength(6)]],
 			confirmPassword: ['', [Validators.required]]
 		}, {
-			validators: confirmPasswordValidator('password', 'confirmPassword')
+			validators: confirmPasswordValidator('password', 'confirmPassword'),
 		});
 
 		if (this.authService.isAuthenticated()) {
 			this.router.navigate(['/dashboard']);
 		}
 
-		this.checkEmailExists();
-
-	}
-
-	checkEmailExists() {
-		this.emailControl.valueChanges.pipe(
-			debounceTime(500),
-			filter(() => this.emailControl.valid),
-			switchMap(email => this.authService.checkEmail(email))
-		).subscribe(response => {
-			this.emailExiste = response.existe;
-		})
 	}
 
 	onSubmit(): void {

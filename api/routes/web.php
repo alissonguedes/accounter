@@ -30,7 +30,7 @@
 
 // 	$id = request('id') ?? null;
 
-// 	$categorias = DB::connection('medicus')->table('tb_categoria')->get();
+// 	$categorias = DB::table('tb_categoria')->get();
 
 // 	return response()->json($categorias, 200);
 

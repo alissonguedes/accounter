@@ -14,6 +14,17 @@
 	font-weight: bold !important;
 }
 
+.btn {
+	display: inline-flex;
+	place-content: center;
+	align-items: center;
+}
+
+.btn i,
+.btn span {
+	margin: 0 10px;
+}
+
 header {
 	height: 80px;
 	line-height: 80px;
