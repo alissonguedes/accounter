@@ -13,6 +13,11 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 	Route::post('/login', [AuthController::class, 'login']);
 	Route::post('/register', [AuthController::class, 'register']);
+	Route::get('/mailcheck', function () {
+		$email  = request('query');
+		$existe = \App\Models\User::where('email', $email)->exists();
+		return response()->json(['existe' => $existe]);
+	});
 	Route::get('/status', [AuthController::class, 'me']);
 
 	// Route::middleware(['auth:sanctum'])->group(function () {

@@ -30,6 +30,10 @@ export class AuthService {
 		return this.http.post('register', { name, email, password, confirmPassword });
 	}
 
+	checkEmail(email: string): Observable<{ existe: boolean }> {
+		return this.http.get<{ existe: boolean }>('mailcheck', { query: encodeURIComponent(email) });
+	}
+
 	isAuthenticated(): boolean {
 		return !!this.token.getToken();
 	}

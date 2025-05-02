@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { TokenService } from '../../../services/auth/token.service';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 
 declare const M: any;
 declare const document: any;
@@ -37,6 +38,9 @@ export function confirmPasswordValidator(controlName: string, matchingControlNam
 	styleUrl: '../login/login.component.css',
 })
 export class CadastroComponent {
+
+	emailControl = new FormControl();
+	emailExiste = false;
 	signinForm: FormGroup;
 
 	constructor(
@@ -58,6 +62,19 @@ export class CadastroComponent {
 		if (this.authService.isAuthenticated()) {
 			this.router.navigate(['/dashboard']);
 		}
+
+		this.checkEmailExists();
+
+	}
+
+	checkEmailExists() {
+		this.emailControl.valueChanges.pipe(
+			debounceTime(500),
+			filter(() => this.emailControl.valid),
+			switchMap(email => this.authService.checkEmail(email))
+		).subscribe(response => {
+			this.emailExiste = response.existe;
+		})
 	}
 
 	onSubmit(): void {

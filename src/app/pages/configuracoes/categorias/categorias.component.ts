@@ -19,7 +19,7 @@ declare const document: any;
 export class CategoriasComponent implements OnInit {
 
 	public categorias: any = [];
-	protected searchControl = new FormControl();;
+	protected searchControl = new FormControl();
 
 	constructor(
 		protected app: AppComponent,

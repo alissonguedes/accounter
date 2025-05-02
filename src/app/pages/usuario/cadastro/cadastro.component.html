@@ -37,8 +37,9 @@
 					<div class="col s12">
 						<div class="input-field">
 							<label for="email">Email</label>
-							<input type="email" id="email" formControlName="email">
+							<input type="email" id="email" formControlName="email" [formControl]="emailControl">
 							<div class="error" *ngIf="signinForm.get('email')?.touched && signinForm.get('email')?.invalid">
+								<small *ngIf="emailExiste">Este e-mail já está cadastrado.</small>
 								<small *ngIf="signinForm.get('email')?.errors?.['required']">Email é obrigatório.</small>
 								<small *ngIf="signinForm.get('email')?.errors?.['email']">Email inválido.</small>
 							</div>
