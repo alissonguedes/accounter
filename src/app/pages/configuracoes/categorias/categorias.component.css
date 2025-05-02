@@ -25,3 +25,23 @@
 	border-radius: 4px;
 	cursor: move;
 }
+
+.node-container {
+	padding-left: 20px;
+	border-left: 2px dashed #ccc;
+	margin-bottom: 10px;
+	min-height: 40px;
+}
+
+.node {
+	margin: 5px 0;
+	padding: 6px 10px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	cursor: move;
+}
+
+.node-label {
+	font-weight: bold;
+}

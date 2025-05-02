@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CategoriaService } from './categoria.service';
 import { CommonModule } from '@angular/common';
@@ -23,19 +23,37 @@ interface ItemNode {
 	styleUrl: './categorias.component.css',
 })
 export class CategoriasComponent implements OnInit {
-tree: ItemNode[] = [
+// tree: ItemNode[] = [
+//     {
+//       name: 'Item 1',
+//       children: [
+//         { name: 'Item 1.1' },
+//         { name: 'Item 1.2' }
+//       ]
+//     },
+//     {
+//       name: 'Item 2',
+//       children: [
+//         { name: 'Item 2.1' }
+//       ]
+//     }
+//   ];
+ treeData = [
     {
       name: 'Item 1',
       children: [
-        { name: 'Item 1.1' },
-        { name: 'Item 1.2' }
+        {
+          name: 'Item 1.1',
+          children: [
+            { name: 'Item 1.1.1', children: [] }
+          ]
+        },
+        { name: 'Item 1.2', children: [] }
       ]
     },
     {
       name: 'Item 2',
-      children: [
-        { name: 'Item 2.1' }
-      ]
+      children: []
     }
   ];
 	public categorias: any = [];
@@ -52,14 +70,29 @@ tree: ItemNode[] = [
 
 	}
 
-drop(event: CdkDragDrop<ItemNode[]>, parent?: ItemNode) {
+// drop(event: CdkDragDrop<ItemNode[]>, parent?: ItemNode) {
+//     if (event.previousContainer === event.container) {
+//       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+//     } else {
+//       transferArrayItem(event.previousContainer.data,
+//                         event.container.data,
+//                         event.previousIndex,
+//                         event.currentIndex);
+//     }
+//   }
+
+ @Input() nodes: any[] = [];
+
+  drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     }
   }
 
