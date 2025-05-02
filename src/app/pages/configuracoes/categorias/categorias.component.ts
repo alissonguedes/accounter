@@ -19,7 +19,7 @@ declare const document: any;
 export class CategoriasComponent implements OnInit {
 
 	public categorias: any = [];
-	protected searchControl: any;
+	protected searchControl = new FormControl();;
 
 	constructor(
 		protected app: AppComponent,
@@ -38,7 +38,9 @@ export class CategoriasComponent implements OnInit {
 				this.categorias = result;
 			}
 		);
-		this.categoriaForm.search(() => { alert('teste') });
+
+		this.search();
+
 	}
 
 	openModal(id?: number) {
@@ -67,13 +69,23 @@ export class CategoriasComponent implements OnInit {
 
 	}
 
-	// private pesquisar(valor: string) {
-	// 	return this.categoriaService.getCategorias(valor).subscribe(
-	// 		results => {
-	// 			console.log(results);
-	// 			this.preloaderService.hide();
-	// 		}
-	// 	);
-	// }
+	private search() {
+		this.searchControl.valueChanges.pipe(
+			debounceTime(300),
+			distinctUntilChanged(),
+		).subscribe(valor => {
+			this.preloaderService.show();
+			this.pesquisar(valor);
+		})
+	}
+
+	private pesquisar(valor: string) {
+		return this.categoriaService.getCategorias(valor).subscribe(
+			results => {
+				this.categorias = results;
+				this.preloaderService.hide();
+			}
+		);
+	}
 
 }

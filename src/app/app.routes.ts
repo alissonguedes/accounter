@@ -2,7 +2,8 @@ import { Route, Routes } from '@angular/router';
 
 import { authGuard } from './auth.guard';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { LoginComponent } from './pages/login/login.component';
+import { LoginComponent } from './pages/usuario/login/login.component';
+import { CadastroComponent } from './pages/usuario/cadastro/cadastro.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { EntradasComponent } from './pages/entradas/entradas.component';
@@ -50,6 +51,7 @@ export const routes: Routes = [
 		component: AuthLayoutComponent,
 		children: [
 			{ path: 'login', component: LoginComponent },
+			{ path: 'signin', component: CadastroComponent}
 		]
 	},
 	{

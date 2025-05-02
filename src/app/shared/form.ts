@@ -1,7 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { PreloaderService } from "../services/preloader/preloader.service";
-import { debounceTime, distinctUntilChanged, Observable } from "rxjs";
 
 declare const M: any;
 declare const document: any;
@@ -52,22 +51,5 @@ export abstract class Form {
 		document.querySelector('#preloader-modal').style.display = 'flex';
 		this.form.disable();
 	}
-
-	public search(callback: any): void {
-		this.searchControl.valueChanges.pipe(
-			debounceTime(300),
-			distinctUntilChanged(),
-		).subscribe(valor => {
-			this.preloaderService.show();
-			this.pesquisar(valor);
-			// console.log(callback, typeof callback);
-			// if (callback == Function) {
-			// 	alert('ts');
-			// 	return eval(callback());
-			// }
-		})
-	}
-
-	public abstract pesquisar(valor: string): {}
 
 }

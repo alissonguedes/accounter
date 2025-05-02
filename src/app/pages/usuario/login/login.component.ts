@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
-import { TokenService } from '../../services/auth/token.service';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
+import { TokenService } from '../../../services/auth/token.service';
 
 declare const M: any;
 declare const document: any;
@@ -11,7 +11,7 @@ declare const document: any;
 @Component({
 	selector: 'app-login',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule],
+	imports: [CommonModule, RouterLink, ReactiveFormsModule],
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.css',
 })

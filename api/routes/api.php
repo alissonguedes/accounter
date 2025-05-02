@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(function () {
 
 	Route::post('/login', [AuthController::class, 'login']);
+	Route::post('/register', [AuthController::class, 'register']);
 	Route::get('/status', [AuthController::class, 'me']);
 
 	// Route::middleware(['auth:sanctum'])->group(function () {
@@ -42,14 +43,15 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 	Route::get('/categorias', function (Request $request) {
 
 		$id            = request('id') ?? null;
+		$search        = request('search') ?? null;
 		$db            = new DB('clinica');
 		$allCategorias = [];
 
-		$getCategorias = DB::connection('medicus')->table('tb_categoria');
+		$getCategorias = DB::table('tb_categoria');
 
 		if ($id) {
 			$categoria = $getCategorias->where('id', $id)->first();
-			$titulo    = DB::connection('medicus')->table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
+			$titulo    = DB::table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
 			return [
 				'id'          => $categoria->id,
 				'titulo'      => $titulo->titulo,
@@ -62,13 +64,20 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				'color'       => $categoria->color,
 				'text_color'  => $categoria->text_color,
 			];
+		} else if ($search) {
+			$getCategorias = $getCategorias->where('id', function ($query) use ($search) {
+				$query->select('id')
+					->from('tb_categoria_descricao')
+					->whereColumn('id', 'id_categoria')
+					->where('titulo', 'like', $search . '%');
+			});
 		}
 
 		$categorias = $getCategorias->get();
 
 		if ($categorias->count() > 0) {
 			foreach ($categorias as $categoria) {
-				$titulo          = DB::connection('medicus')->table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
+				$titulo          = DB::table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
 				$allCategorias[] = [
 					'id'          => $categoria->id,
 					'titulo'      => $titulo->titulo,

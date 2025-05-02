@@ -26,6 +26,10 @@ export class AuthService {
 		return this.http.post('login', { email, password });
 	}
 
+	cadastro(name: string, email: string, password: string, confirmPassword: string): Observable<any> {
+		return this.http.post('register', { name, email, password, confirmPassword });
+	}
+
 	isAuthenticated(): boolean {
 		return !!this.token.getToken();
 	}

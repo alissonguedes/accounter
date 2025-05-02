@@ -1,10 +1,7 @@
 import { inject, Injectable } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Validators } from "@angular/forms";
 import { CategoriaService } from "./categoria.service";
 import { Form } from "../../../shared/form";
-import { PreloaderService } from "../../../services/preloader/preloader.service";
-import { Observable } from "rxjs";
-import { CategoriasComponent } from "./categorias.component";
 
 declare const M: any;
 declare const document: any;
@@ -51,15 +48,6 @@ export class CategoriaForm extends Form {
 				this.enable();
 				let select = document.querySelectorAll('select');
 				M.FormSelect.init(select);
-			}
-		);
-	}
-
-	public pesquisar(valor: string) {
-		return this.categoriaService.getCategorias(valor).subscribe(
-			results => {
-				console.log(results);
-				this.preloaderService.hide();
 			}
 		);
 	}

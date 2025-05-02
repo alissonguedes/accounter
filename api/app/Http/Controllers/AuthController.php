@@ -12,6 +12,44 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
 
+	public function register(Request $request)
+	{
+
+		$expires       = 3600;
+		$validatedData = $request->validate([
+			'name'     => 'required', //|string|max:255',
+			'email'    => 'required', //|string|email|max:255|unique:users',
+			'password' => 'required', //|string|min:8|confirmed',
+		]);
+
+		// Criação do usuário
+		$user = User::create([
+			'name'     => $validatedData['name'],
+			'email'    => $validatedData['email'],
+			'password' => Hash::make($validatedData['password']),
+		]);
+
+		// Gerar o token JWT para o usuário recém-criado
+		$token = JWTAuth::fromUser($user);
+
+		// Gravar o token no banco de dados para validar se o usuário precisa se logar novamente...
+		$userToken = new UserToken();
+		$userToken->saveToken($user, $token, strtotime('now + ' . $expires . 'seconds'));
+
+		return response()->json([
+			'authorized'   => true,
+			'access_token' => $token,
+			'token_type'   => 'bearer',
+			'expires'      => $expires,
+		]);
+
+		return response()->json([
+			'user'         => $user,
+			'access_token' => $token,
+		]);
+
+	}
+
 	public function login(Request $request)
 	{
 

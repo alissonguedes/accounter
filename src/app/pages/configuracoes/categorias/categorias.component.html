@@ -1,9 +1,10 @@
 <div class="card card card-default border-radius-6 fixed-width" style="overflow: hidden;">
+
 	<div class="email-header" style="padding: 20px 20px 10px">
 		<div class="left-icons">
 			<div class="app-search">
 				<i class="material-icons mr-2 search-icon">search</i>
-				<input type="text" id="search" placeholder="Pesquisar" class="app-filter" id="email_filter" [formControl]="categoriaForm.searchControl">
+				<input type="text" id="search" placeholder="Pesquisar" class="app-filter" id="email_filter" [formControl]="searchControl" autocomplete="off">
 			</div>
 		</div>
 		<div class="list-content"></div>
@@ -11,34 +12,25 @@
 			<button class="btn btn-floating waves-effect green" (click)="openModal()"><i class="material-icons white-text">add</i></button>
 		</div>
 	</div>
+
 	<div class="card-content p-0 pb-2" style="min-height: calc(100vh - 260px)">
-		<div class="collection" *ngIf="categorias.length > 0 else results">
+
+		<div class="collection" *ngIf="!app.preloaderService.isLoading() && categorias.length > 0 else results">
 			<div *ngFor="let cat of categorias">
 				{{ cat.id }} - {{ cat.titulo }} - <button (click)="openModal(cat.id)">Editar</button>
 			</div>
 		</div>
+
 		<ng-template #results>
 			<div *ngIf="app.preloaderService.isLoading() else noResults">
-				<div id="preloader">
-					<div class="preloader-wrapper active">
-						<div class="spinner-layer spinner-blue-only">
-							<div class="circle-clipper left">
-								<div class="circle"></div>
-							</div>
-							<div class="gap-patch">
-								<div class="circle"></div>
-							</div>
-							<div class="circle-clipper right">
-								<div class="circle"></div>
-							</div>
-						</div>
-					</div>
-				</div>
+				Carregando...
 			</div>
 		</ng-template>
+
 		<ng-template #noResults>
 			<p>Nenhum resultado encontrado</p>
 		</ng-template>
+
 	</div>
 </div>
 
@@ -46,7 +38,6 @@
 	<div class="row">
 		<div class="col s12 m6 l4">
 			<div id="modal-categoria" class="modal modal-fixed-footer">
-
 
 				<div id="preloader-modal" class="progress">
 					<div class="indeterminate blue"></div>
