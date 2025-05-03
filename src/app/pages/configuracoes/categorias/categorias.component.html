@@ -16,9 +16,7 @@
 	<div class="card-content p-0 pb-2" style="min-height: calc(100vh - 260px)">
 
 		<div class="collection" *ngIf="!app.preloaderService.isLoading() && categorias.length > 0 else results">
-			<div *ngFor="let cat of categorias">
-				{{ cat.id }} - {{ cat.titulo }} - <button (click)="openModal(cat.id)">Editar</button>
-			</div>
+			<app-nestable [items]="categorias"></app-nestable>
 		</div>
 
 		<ng-template #results>
@@ -29,7 +27,6 @@
 
 		<ng-template #noResults>
 			<!-- <p>Nenhum resultado encontrado</p> -->
-			<app-nestable [items]="treeData"></app-nestable>
 		</ng-template>
 
 	</div>

@@ -13,102 +13,93 @@ declare const M: any;
 declare const document: any;
 
 @Component({
-	selector: 'app-categorias',
-	imports: [CommonModule, ReactiveFormsModule, NestableComponent ],
-	templateUrl: './categorias.component.html',
-	styleUrl: './categorias.component.css',
+  selector: 'app-categorias',
+  imports: [CommonModule, ReactiveFormsModule, NestableComponent],
+  templateUrl: './categorias.component.html',
+  styleUrl: './categorias.component.css',
 })
 export class CategoriasComponent implements OnInit {
+  public categorias: ItemNode[] = [];
 
-	treeData: ItemNode[] = [
-    {
-      id: 1,
-      name: 'Eletrônicos',
-      children: [
-        { id: 2, name: 'Celulares', children: [{
-			id: 6, name: 'SmartPhone', children: []
-		}] },
-        { id: 3, name: 'TVs', children: [] }
-      ]
-    },
-    {
-      id: 4,
-      name: 'Móveis',
-      children: [
-        { id: 5, name: 'Sofás', children: [] }
-      ]
+  protected searchControl = new FormControl();
+
+  constructor(
+    protected app: AppComponent,
+    protected categoriaForm: CategoriaForm,
+    private categoriaService: CategoriaService,
+    protected preloaderService: PreloaderService
+  ) {
+    this.categoriaForm.init();
+  }
+
+  ngOnInit(): void {
+    this.categoriaService.getCategorias().subscribe((result) => {
+      this.categorias = this.parseCategorias(result);
+    });
+
+    this.search();
+  }
+
+  private parseCategorias(
+    categorias: any,
+    parentId: number | null = null
+  ): ItemNode[] {
+    let categoriasBuild = [];
+
+    for (let categoria of categorias) {
+      categoriasBuild.push({
+        id: categoria.id,
+        name: categoria.titulo,
+        id_parent: categoria.id_parent,
+      });
     }
-  ];
 
+    return categoriasBuild
+      .filter((c) => c.id_parent === parentId)
+      .map((c) => ({
+        ...c,
+        children: this.parseCategorias(categorias, c.id),
+      }));
+  }
 
-	public categorias: any = [];
-	protected searchControl = new FormControl();
+  openModal(id?: number) {
+    let modalCategoria = document.querySelector('#modal-categoria');
+    let modalOptions = {
+      dismissible: false,
+      onOpenStart: () => {
+        if (id) {
+          this.categoriaForm.edit(id);
+        }
+      },
+      onOpenEnd: () => {
+        if (!id) {
+          this.categoriaForm.enable();
+        }
+      },
+      onCloseEnd: () => {
+        this.categoriaForm.reset();
+      },
+    };
+    let modal = M.Modal.init(modalCategoria, modalOptions);
+    modal.open();
+  }
 
-	constructor(
-		protected app: AppComponent,
-		protected categoriaForm: CategoriaForm,
-		private categoriaService: CategoriaService,
-		protected preloaderService: PreloaderService
-	) {
+  save() {}
 
-		this.categoriaForm.init();
+  private search() {
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((valor) => {
+        this.preloaderService.show();
+        this.pesquisar(valor);
+      });
+  }
 
-	}
-
-	ngOnInit(): void {
-		this.categoriaService.getCategorias().subscribe(
-			result => {
-				this.categorias = result;
-			}
-		);
-
-		this.search();
-
-	}
-
-	openModal(id?: number) {
-		let modalCategoria = document.querySelector('#modal-categoria');
-		let modalOptions = {
-			dismissible: false,
-			onOpenStart: () => {
-				if (id) {
-					this.categoriaForm.edit(id);
-				}
-			},
-			onOpenEnd: () => {
-				if (!id) {
-					this.categoriaForm.enable();
-				}
-			},
-			onCloseEnd: () => {
-				this.categoriaForm.reset();
-			}
-		}
-		let modal = M.Modal.init(modalCategoria, modalOptions);
-		modal.open();
-	}
-
-	save() {
-
-	}
-
-	private search() {
-		this.searchControl.valueChanges.pipe(
-			debounceTime(300),
-			distinctUntilChanged(),
-		).subscribe(valor => {
-			this.preloaderService.show();
-			this.pesquisar(valor);
-		})
-	}
-
-	private pesquisar(valor: string) {
-		return this.categoriaService.getCategorias(valor).subscribe(
-			results => {
-				this.categorias = results;
-				this.preloaderService.hide();
-			}
-		);
-	}
-
+  private pesquisar(valor: string) {
+    return this.categoriaService.getCategorias(valor).subscribe((results) => {
+      // this.categorias = results;
+      this.parseCategorias(results);
+      this.preloaderService.hide();
+    });
+  }
 }

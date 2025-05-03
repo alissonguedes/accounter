@@ -50,7 +50,15 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 		$id            = request('id') ?? null;
 		$search        = request('search') ?? null;
 		$db            = new DB('clinica');
-		$allCategorias = [];
+		$allCategorias = [
+			['id' => 1, 'titulo' => 'Categoria 1', 'descricao' => null, 'id_parent' => null],
+			['id' => 2, 'titulo' => 'Categoria 2', 'descricao' => null, 'id_parent' => 1],
+			['id' => 3, 'titulo' => 'Categoria 3', 'descricao' => null, 'id_parent' => 2],
+			['id' => 4, 'titulo' => 'Categoria 4', 'descricao' => null, 'id_parent' => null],
+			['id' => 5, 'titulo' => 'Categoria 5', 'descricao' => null, 'id_parent' => 4],
+		];
+
+		return response($allCategorias, 200);
 
 		$getCategorias = DB::table('tb_categoria');
 

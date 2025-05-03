@@ -4,19 +4,31 @@
 }
 
 .nestable-node {
-	margin: 4px;
-	border: 1px solid #ccc;
+	border: 1px solid #eee;
 	border-radius: 4px;
+	margin: 4px;
 	padding: 10px;
-	background: #f9f9f99f;
+	background: #f9f9f9;
+	transition: 2000ms;
 }
 
 .drag-item {
-	/* cursor: move; */
+	/* background: #f9f9f99f; */
+	/* border: 1px solid #eee; */
+	/* padding: 10px; */
+	margin: 4px;
+	border-radius: 4px;
+	transition: 2000ms;
 }
 
 .nestable-children {
-	margin-left: 20px;
-	padding-left: 10px;
-	border-left: 2px dashed #ccc;
+	margin-left: 4px;
+	transition: 2000ms;
+	display: none;
+	/* padding-left: 10px; */
+	/* border-left: 2px dashed #ccc; */
+}
+
+.expanded {
+	display: block;
 }
