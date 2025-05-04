@@ -21,7 +21,7 @@ return new class extends Migration
 			$table->string('titulo', 50);
 			$table->enum('status', ['0', '1'])->default('1');
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		Schema::create('tb_grupo_financeiro_usuario', function (Blueprint $table) {
@@ -31,8 +31,8 @@ return new class extends Migration
 			$table->enum('aceito', ['0', '1'])->default('0');
 			$table->enum('status', ['0', '1'])->default('1');
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
-			$table->foreign('id_grupo')->references('id')->on('tb_grupo_financeiro');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_grupo')->references('id')->on('tb_grupo_financeiro')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela de categorias
@@ -47,8 +47,8 @@ return new class extends Migration
 			$table->boolean('compartilhado')->default(false);
 			$table->enum('status', ['0', '1'])->default('1');
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
-			$table->foreign('id_parent')->references('id')->on('tb_categoria');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_parent')->references('id')->on('tb_categoria')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela de carteiras digitais
@@ -60,7 +60,7 @@ return new class extends Migration
 			$table->boolean('compartilhado')->default(false);
 			$table->enum('status', ['ativa', 'inativa', 'suspensa'])->default('ativa');
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela para cadastro de bandeiras de cartões de crédito
@@ -79,8 +79,8 @@ return new class extends Migration
 			$table->boolean('compartilhado')->default(false);
 			$table->unsignedInteger('limite')->nullable();
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
-			$table->foreign('id_bandeira')->references('id')->on('tb_cartao_credito_bandeira');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_bandeira')->references('id')->on('tb_cartao_credito_bandeira')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela para cadastro de aplicativos de recompensa, caso o usuário tenha algum meio de receita desse tipo: YouTube, TikTok, BlabláCar, 99, InDriver, Uber etc...
@@ -93,8 +93,8 @@ return new class extends Migration
 			$table->boolean('compartilhado')->default(false);
 			$table->enum('status', ['0', '1'])->default('1');
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
-			$table->foreign('id_categoria')->references('id')->on('tb_categoria');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_categoria')->references('id')->on('tb_categoria')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela para cadastro de planejamentos e metas financeiras
@@ -107,7 +107,7 @@ return new class extends Migration
 			$table->string('descricao');
 			$table->boolean('compartilhado')->default(false);
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela de transações
@@ -123,17 +123,17 @@ return new class extends Migration
 			$table->json('extras')->nullable();
 			$table->boolean('compartilhado')->default(false);
 			$table->timestamps();
-			$table->foreign('id_usuario')->references('id')->on('users');
-			$table->foreign('id_grupo')->references('id')->on('tb_grupo_financeiro');
-			$table->foreign('id_categoria')->references('id')->on('tb_categoria');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_grupo')->references('id')->on('tb_grupo_financeiro')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_categoria')->references('id')->on('tb_categoria')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		Schema::create('tb_planejamento_transacao', function (Blueprint $table) {
 			$table->id();
 			$table->unsignedBigInteger('id_planejamento');
 			$table->unsignedBigInteger('id_transacao');
-			$table->foreign('id_planejamento')->references('id')->on('tb_planejamento');
-			$table->foreign('id_transacao')->references('id')->on('tb_transacao');
+			$table->foreign('id_planejamento')->references('id')->on('tb_planejamento')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_transacao')->references('id')->on('tb_transacao')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela para salvar configurações de projeções
@@ -146,7 +146,7 @@ return new class extends Migration
 			$table->integer('saldo_final');
 			$table->json('planejamento_ids');
 			$table->json('transacao_ids');
-			$table->foreign('id_usuario')->references('id')->on('users');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela de configurações
