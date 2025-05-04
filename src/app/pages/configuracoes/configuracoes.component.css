@@ -2,7 +2,7 @@
 	position: absolute;
 	overflow: hidden;
 	width: 280px;
-	height: calc(100vh - 325px);
+	height: calc(100vh - 100px);
 	margin-left: -1.8rem;
 	padding-left: 1.4rem;
 }
@@ -85,7 +85,7 @@ ul:not(.browser-default)>li {
 /** AppEmail */
 .app-email .content-area {
 	width: calc(100% - 280px);
-	margin-top: 20px;
+	margin-top: 8px;
 }
 
 .app-email .content-area.content-left {
@@ -109,7 +109,7 @@ ul:not(.browser-default)>li {
 
 .app-email .content-area .app-wrapper .app-search .app-filter {
 	max-width: calc(100% - 3rem);
-	margin-bottom: .5rem;
+	margin-bottom: 0;
 	padding: .2rem .2rem .2rem 2.75rem;
 	border: none;
 	border-radius: .4rem;
@@ -127,7 +127,8 @@ ul:not(.browser-default)>li {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
-	padding: 1rem 1.5rem 1rem 0;
+	align-items: center;
+	padding: 20px;
 	border-bottom: 1px solid #e0e0e0;
 	-webkit-box-pack: justify;
 	-webkit-justify-content: space-between;
@@ -320,6 +321,15 @@ ul:not(.browser-default)>li {
 
 .app-email .content-area .no-data-found.show {
 	display: block !important
+}
+
+.app-email .content-area .card {
+	overflow: hidden;
+}
+
+.app-email .content-area .card-content {
+	min-height: calc(100vh - 235px);
+	overflow: auto;
 }
 
 .snow-container {

@@ -46,8 +46,8 @@ export class CategoriaForm extends Form {
 				}
 				this.setValues(fields);
 				this.enable();
-				let select = document.querySelectorAll('select');
-				M.FormSelect.init(select);
+				// let select = document.querySelectorAll('select');
+				// M.FormSelect.init(select);
 			}
 		);
 	}

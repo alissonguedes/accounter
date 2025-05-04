@@ -1,4 +1,12 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  inject,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   CdkDropList,
@@ -10,7 +18,9 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { ItemNode } from './item-node.model';
+import { HttpService } from '../../services/http.service';
 
+declare const M: any;
 declare const document: any;
 
 @Component({
@@ -20,26 +30,56 @@ declare const document: any;
   templateUrl: './nestable.component.html',
   styleUrls: ['./nestable.component.css'],
 })
-export class NestableComponent {
+export class NestableComponent implements AfterViewInit {
   @Input() items: ItemNode[] = [];
+  @Input() edit: ItemNode['edit'];
+  @Input() delete: ItemNode['delete'];
+  @Input() modalTarget: ItemNode['modal_target'];
+  @Input() form: any;
 
-  constructor() {
-    this.toggle();
+  @ViewChild('collapsible', { static: false }) collapsibleRef!: ElementRef;
+
+  expanded = false;
+  expandedIndex: number | null = null;
+
+  private http = inject(HttpService);
+  private router = inject(Router);
+  private collapsibleElem: any;
+  private collapsibleInstance: any;
+
+  ngAfterViewInit(): void {
+    this.collapsibleInstance = M.Collapsible.init(
+      this.collapsibleRef.nativeElement
+    );
+  }
+
+  preventHeaderClick(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  isExpanded(index: number): boolean {
+    return this.expandedIndex === index;
+  }
+
+  toggleItem(index: number): void {
+    if (this.expandedIndex === index) {
+      this.collapsibleInstance.close(index);
+      this.expandedIndex = null;
+    } else {
+      this.collapsibleInstance.open(index);
+      this.expandedIndex = index;
+    }
   }
 
   drop(event: CdkDragDrop<ItemNode[]>, parent?: ItemNode): void {
     const draggedItem = event.previousContainer.data[event.previousIndex];
 
-    // Remove da lista original
     event.previousContainer.data.splice(event.previousIndex, 1);
 
-    // Adiciona ao novo destino
     if (parent) {
-      console.log('>>>', draggedItem);
       parent.children?.push(draggedItem);
     } else {
-      // Soltou no nível raiz
-      console.log(draggedItem);
       event.container.data.splice(event.currentIndex, 0, draggedItem);
     }
   }
@@ -48,28 +88,43 @@ export class NestableComponent {
     return 'dropList-' + item.id;
   }
 
-  toggle() {
-    let elementos = document.querySelectorAll('.drag-item');
+  openModal(target: string, form: any, id?: number) {
+    let modalElement = document.querySelector(target);
+    let modalOptions = {
+      dismissible: false,
+      onOpenStart: () => {
+        if (id) {
+          form.edit(id);
+        } else {
+          form.enable();
+        }
+      },
+      onOpenEnd: () => {
+        if (!id) {
+        }
+      },
+      onCloseEnd: () => {
+        form.reset();
+      },
+    };
+    let modal = M.Modal.init(modalElement, modalOptions);
+    modal.open();
+  }
 
-    elementos.forEach((el: HTMLElement) => {
-      el.addEventListener('click', (event) => {
-        // Pega o elemento pai (.nestable-node)
-        let parentNode = el.closest('.nestable-node');
-
-        if (!parentNode) return;
-
-        // Dentro dele, pega o .nestable-children
-        let childrenContainer = parentNode.querySelector(
-          '.nestable-node'
-        ) as HTMLElement;
-
-        if (!childrenContainer) return;
-
-        // Toggle de exibição
-        childrenContainer.style.display =
-          childrenContainer.style.display === 'none' ? 'block' : 'none';
-        // childrenContainer.classList.toggle('expanded');
+  deleteItem(id: number) {
+    let confirma = confirm(
+      'Tem certeza de que deseja remover este registro? Tenha em mente que se continuar, todas as categorias dependentes desta categoria serão removidas, bem como todas as respectivas subcategorias.'
+    );
+    if (confirma) {
+      let deleteUrl = `${this.delete}/${id}`;
+      this.http.delete(deleteUrl).subscribe((ok: any) => {
+        if (ok.success) {
+          alert(ok.message);
+          //   this.router.navigate(this.delete);
+          location.reload();
+        }
+        console.log(ok);
       });
-    });
+    }
   }
 }

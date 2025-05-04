@@ -51,6 +51,8 @@ export class CategoriasComponent implements OnInit {
         id: categoria.id,
         name: categoria.titulo,
         id_parent: categoria.id_parent,
+        icon: categoria.icone,
+        color: categoria.cor,
       });
     }
 
@@ -101,5 +103,9 @@ export class CategoriasComponent implements OnInit {
       this.parseCategorias(results);
       this.preloaderService.hide();
     });
+  }
+
+  delete(id: number) {
+    console.log(`Registro ${id} excluído com sucesso!`);
   }
 }
