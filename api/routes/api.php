@@ -49,27 +49,11 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 		$id            = request('id') ?? null;
 		$search        = request('search') ?? null;
-		$db            = new DB('clinica');
-		$allCategorias = [
-			// ['id' => 1, 'titulo' => 'Categoria 1', 'descricao' => null, 'cor' => '#ff0099', 'icone' => 'dashboard', 'id_parent' => null],
-			// ['id' => 2, 'titulo' => 'Categoria 2', 'descricao' => null, 'cor' => '#ff0000', 'icone' => '', 'id_parent' => 1],
-			// ['id' => 3, 'titulo' => 'Categoria 3', 'descricao' => null, 'cor' => '#00ff99', 'icone' => '', 'id_parent' => 2],
-			// ['id' => 4, 'titulo' => 'Categoria 4', 'descricao' => null, 'cor' => '#99ff00', 'icone' => 'place', 'id_parent' => null],
-			// ['id' => 5, 'titulo' => 'Categoria 5', 'descricao' => null, 'cor' => '#ff9900', 'icone' => '', 'id_parent' => 4],
-			// ['id' => 6, 'titulo' => 'Categoria 5', 'descricao' => null, 'cor' => '#9900ff', 'icone' => '', 'id_parent' => 5],
-			// ['id' => 7, 'titulo' => 'Categoria 5', 'descricao' => null, 'cor' => '#0099ff', 'icone' => '', 'id_parent' => 6],
-			// ['id' => 8, 'titulo' => 'Categoria 5', 'descricao' => null, 'cor' => '#0099ff', 'icone' => '', 'id_parent' => 3],
-			// ['id' => 9, 'titulo' => 'Categoria 5', 'descricao' => null, 'cor' => '#0099ff', 'icone' => '', 'id_parent' => 3],
-			// ['id' => 10, 'titulo' => 'Categoria 5', 'descricao' => null, 'cor' => '#0099ff', 'icone' => '', 'id_parent' => 4],
-		];
-
-		// return response($allCategorias, 200);
-
+		$allCategorias = [];
 		$getCategorias = DB::table('tb_categoria');
 
 		if ($id) {
 			$categoria = $getCategorias->where('id', $id)->first();
-			// $titulo    = DB::table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
 			return [
 				'id'          => $categoria->id,
 				'titulo'      => $categoria->titulo,
@@ -84,19 +68,25 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				'text_color'  => $categoria->text_color ?? null,
 			];
 		} else if ($search) {
-			$getCategorias = $getCategorias->where('id', function ($query) use ($search) {
-				$query->select('id')
-					->from('tb_categoria_descricao')
-					->whereColumn('id', 'id_categoria')
-					->where('titulo', 'like', $search . '%');
-			});
+			 $getCategorias = DB::table('tb_categoria AS C')->select('titulo',
+				'id',
+				'titulo_slug',
+				'descricao',
+				'id_parent',
+				'status',
+				'imagem',
+				'ordem',
+				'icone',
+				'color',
+				'text_color',
+				DB::raw('(SELECT titulo FROM tb_categoria AS Cat WHERE Cat.id = C.id_parent) AS tituloParent'))->where('titulo', 'like', urldecode($search) . '%')->get();
+				return $getCategorias;
 		}
 
 		$categorias = $getCategorias->get();
 
 		if ($categorias->count() > 0) {
 			foreach ($categorias as $categoria) {
-				// $titulo          = DB::table('tb_categoria_descricao')->select('titulo', 'descricao')->where('id_categoria', $categoria->id)->first();
 				$allCategorias[] = [
 					'id'          => $categoria->id,
 					'titulo'      => $categoria->titulo,
@@ -114,6 +104,55 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 		return response()->json($allCategorias, 200);
 
+	});
+
+	Route::post('/categorias', function (Request $request) {
+
+		$categoria               = request()->all();
+		$id                      = $categoria['id'] ?? null;
+		$success                 = true;
+		$message                 = 'Categoria salva com sucesso!';
+		$categoria['id_usuario'] = 2;
+		$categoria['status']     = $categoria['status'] ? '1' : '0';
+
+		unset($categoria['id']);
+
+		if ($id) {
+			DB::table('tb_categoria')->where('id', $id)->update($categoria);
+		} else {
+			DB::table('tb_categoria')->insert($categoria);
+		}
+
+		return response()->json(['success' => $success, 'message' => $message], 200);
+	});
+
+	Route::put('/categorias', function (Request $request) {
+
+		$categoria               = request()->all();
+		$id                      = $categoria['id'] ?? null;
+		$success                 = true;
+		$message                 = 'Categoria editada com sucesso!';
+		$categoria['id_usuario'] = 2;
+		$categoria['status']     = $categoria['status'] ? '1' : '0';
+
+		unset($categoria['id']);
+
+		DB::table('tb_categoria')->where('id', $id)->update($categoria);
+
+		return response()->json(['success' => $success, 'message' => $message], 200);
+	});
+
+	Route::patch('/categorias/{id}', function (Request $request) {
+
+		$categoria               = request()->all();
+		$id                      = request('id');
+		$success                 = true;
+		$message                 = 'Categoria atualizada com sucesso!';
+		$categoria['id_usuario'] = 2;
+
+		DB::table('tb_categoria')->where('id', $id)->update($categoria);
+
+		return response()->json(['success' => $success, 'message' => $message], 200);
 	});
 
 	Route::delete('/categorias/{id}', function () {

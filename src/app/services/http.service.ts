@@ -16,7 +16,7 @@ import { PreloaderService } from './preloader/preloader.service';
 export class HttpService {
   private API_TOKEN =
     '$2y$12$TXHNPaAxbimjcD1S5aHaB.IbPAG/Gj46uZkfPxFVwZyTT2zWS/pzK';
-  private baseUrl = 'http://192.168.210.231/accounter/api/public/api/v2';
+  private baseUrl = 'http://localhost/accounter/api/public/api/v2';
 
   constructor(
     private http: HttpClient,
@@ -73,10 +73,18 @@ export class HttpService {
       .pipe(finalize(() => this.preloaderService.hide()));
   }
 
+  patch<T>(endpoint: string, body: any): Observable<T> {
+    return this.http
+      .patch<T>(`${this.baseUrl}/${endpoint}`, body, {
+        headers: this.getHeaders(),
+      })
+      .pipe(finalize(() => this.preloaderService.hide()));
+  }
+
   delete<T>(endpoint: string): Observable<T> {
     return this.http
       .delete<T>(`${this.baseUrl}/${endpoint}`, {
-        headers: this.getHeaders()
+        headers: this.getHeaders(),
       })
       .pipe(finalize(() => this.preloaderService.hide()));
   }

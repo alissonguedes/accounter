@@ -1,23 +1,14 @@
 <ul cdkDropListGroup class="collapsible" #collapsible>
-	<li *ngFor="let item of items; let i=index" cdkDropList [cdkDropListData]="items" (cdkDropListDropped)="drop($event)" class="nestable-node">
-		<div cdkDrag class="drag-item collapsible-header" [attr.data-index]="i" (click)="preventHeaderClick($event)">
-			<i class="material-icons" *ngIf="item.icon">{{ item.icon }}</i>
-			<span *ngIf="item.color" class="tag-color" [attr.style]="`background-color: ${item.color};`"> </span>
-			<span style="margin-right: 10px;">{{ item.name }}</span>
-			<div class="btn-actions">
-				<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-expand" *ngIf="item.children?.length" (click)="toggleItem(i)">
-					<i class="material-icons grey-text text-darken-2">{{ isExpanded(i) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</i>
-				</button>
-				<button class="btn btn-flat btn-floating transparent btn-small waves-effect modal-trigger" *ngIf="edit" [attr.data-target]="modalTarget" (click)="openModal(modalTarget!, form, item.id)">
-					<i class="material-icons">edit</i>
-				</button>
-				<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" *ngIf="delete" (click)="deleteItem(item.id)">
-					<i class="material-icons">delete</i>
-				</button>
-			</div>
+	<li *ngFor="let item of items; let index = index" cdkDropList [cdkDropListData]="items" (cdkDropListDropped)="drop($event)" class="nestable-node" [class.active]="isExpanded(index)">
+		<div cdkDrag class="drag-item collapsible-header" [attr.data-index]="index" (click)="preventHeaderClick($event)">
+			<ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item, index: index, toggle: toggleItem.bind(this), isExpanded: isExpanded.bind(this)}"></ng-container>
+			<ng-template #defaultTemplate let-item let-i="i">
+				<!-- Template padrão, caso nenhum seja passado -->
+				{{ item.name }}
+			</ng-template>
 		</div>
-		<div class="nestable-children collapsible-body" [attr.data-index]="i" cdkDropList [cdkDropListData]="item.children || []" (cdkDropListDropped)="drop($event, item)">
-			<app-nestable *ngIf="item.children?.length" [items]="item.children || []" [edit]="edit" [delete]="delete" [form]="form" [modalTarget]="modalTarget"></app-nestable>
+		<div class="nestable-children collapsible-body" [attr.data-index]="index" cdkDropList [cdkDropListData]="item.children || []" (cdkDropListDropped)="drop($event, item)">
+			<app-nestable *ngIf="item.children?.length" [items]="item.children || []" [itemTemplate]="itemTemplate"></app-nestable>
 		</div>
 	</li>
 </ul>

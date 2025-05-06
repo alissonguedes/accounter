@@ -26,18 +26,8 @@
 
 // });
 
-// Route::get('/categorias', function (Request $request) {
-
-// 	$id = request('id') ?? null;
-
-// 	$categorias = DB::table('tb_categoria')->get();
-
-// 	return response()->json($categorias, 200);
-
-// 	if (!$id) {
-
-// 	} else {
-
-// 	}
-
-// });
+Route::get('/categorias', function (Request $request) {
+	$id = request('id') ?? null;
+ 	$categorias = DB::table('tb_categoria')->get();
+	return response()->json($categorias, 200);
+});
