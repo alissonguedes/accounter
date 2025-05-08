@@ -189,9 +189,7 @@ export class CategoriasComponent implements OnInit {
   }
 
   delete(id: number) {
-    let confirma = confirm(
-      'Tem certeza de que deseja remover este registro? Tenha em mente que se continuar, todas as categorias dependentes desta categoria serão removidas, bem como todas as respectivas subcategorias.'
-    );
+    let confirma = confirm('Tem certeza de que deseja remover este registro? Tenha em mente que se continuar, todas as categorias dependentes desta categoria serão removidas, bem como todas as respectivas subcategorias.');
     if (confirma) {
       this.categoriaService.removeCategoria(id).subscribe((ok: any) => {
         if (ok.success) {

@@ -41,8 +41,12 @@ return new class extends Migration
 			$table->unsignedBigInteger('id_usuario');
 			$table->unsignedBigInteger('id_parent')->nullable();
 			$table->string('titulo', 50);
-			$table->string('cor', '7')->nullable();
+			$table->string('titulo_slug', 100);
+			$table->string('descricao', 500)->nullable();
+			$table->string('color', '7')->nullable();
+			$table->string('text_color', '7')->nullable();
 			$table->string('icone', 255)->nullable();
+			$table->string('imagem', 255)->nullable();
 			$table->integer('ordem')->nullable()->default(1);
 			$table->boolean('compartilhado')->default(false);
 			$table->enum('status', ['0', '1'])->default('1');

@@ -78,20 +78,44 @@
 		<div class="card z-depth-0 transparent no-margin">
 			<div class="card-content">
 				<div class="card-title left-align grey-text uppercase">Resumo Mensal</div>
-				<div class="row" *ngFor="let m of resumo">
-					<div class="col s12 m6">
+				<div class="row">
+					<div class="col s6 m6" *ngFor="let m of resumo">
 						<div class="meses" *ngFor="let mes of m.e">
-							<span>{{ mes.mes }}</span>
-							<span>{{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</span>
+							<span style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 50%;">{{ mes.mes }}</span>
+							<span> {{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}.123.3143</span>
 						</div>
 					</div>
-					<div class="col s12 m6">
+					<div class="col s6 m6" *ngFor="let m of resumo">
 						<div class="meses" *ngFor="let mes of m.d">
-							<span>{{ mes.mes }}</span>
+							<span style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 50%;">{{ mes.mes }}</span>
 							<span>{{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</span>
 						</div>
 					</div>
 				</div>
+				<!-- <ng-container *ngIf="resumo">
+					<div class="row" *ngFor="let m of resumo">
+						<div class="col s6 m6">
+							<div class="meses" *ngFor="let mes of m.e">
+								<span style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 50%;">
+									{{ width <= 992 ? abreviarMes(mes.mes) : mes.mes }}
+								</span>
+								<span>
+									{{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}
+								</span>
+							</div>
+						</div>
+						<div class="col s6 m6">
+							<div class="meses" *ngFor="let mes of m.d">
+								<span style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 50%;">
+									{{ width <= 992 ? abreviarMes(mes.mes) : mes.mes }}
+								</span>
+								<span>
+									{{ mes.valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</ng-container> -->
 			</div>
 		</div>
 	</div>

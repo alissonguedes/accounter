@@ -7,6 +7,9 @@ import { routes } from './app.routes';
 declare const M: any;
 declare const document: any;
 
+/**
+ * Configuração principal do Angular
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -15,6 +18,13 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 
+/**
+ * Função para exibir/ocultar menu
+ * Se o usuário utilizar dispositivo cuja janela seja menor que 992px,
+ * ao clicar nos links do menus, ao mudar de página, o menu principal
+ * (.sidenav) é recolhido; sem esta função, ao acessar outra página do menu,
+ * o mesmo fica sendo exibido a menos que a página se atualizada.
+ */
 export const menuCollapse = () => {
   let sidenav = document.querySelector('.sidenav');
   let instance = M.Sidenav.init(sidenav);
@@ -30,6 +40,9 @@ export const menuCollapse = () => {
     });
 };
 
+/**
+ * Iniciar funções do Materializecss automaticamente
+ */
 export const initApp = () => {
   setTimeout(() => {
     M.AutoInit();
@@ -39,6 +52,9 @@ export const initApp = () => {
   });
 };
 
+/**
+ * FUnção para remover os caracteres especiais de palavras
+ */
 export function slugify(str: string): string {
   return str
     .normalize('NFD')
@@ -48,3 +64,108 @@ export function slugify(str: string): string {
     .toLowerCase()
     .replace(/\s+/g, '-');
 }
+
+/**
+ * Função para exibir o nome dos meses em português
+ */
+
+function getMeses() {
+  const nomes = [
+    'janeiro',
+    'fevereiro',
+    'março',
+    'abril',
+    'maio',
+    'junho',
+    'julho',
+    'agosto',
+    'setembro',
+    'outubro',
+    'novembro',
+    'dezembro',
+  ];
+  const abreviados = [
+    'jan',
+    'fev',
+    'mar',
+    'abr',
+    'mai',
+    'jun',
+    'jul',
+    'ago',
+    'set',
+    'out',
+    'nov',
+    'dez',
+  ];
+
+  const getMes = (indice: any) => {
+    if (indice >= 1 && indice <= 12) {
+      return nomes[indice - 1];
+    }
+    return undefined;
+  };
+
+  const getAbreviado = (indice: any) => {
+    if (indice >= 1 && indice <= 12) {
+      return abreviados[indice - 1];
+    }
+    return undefined;
+  };
+
+  const handler = {
+    apply: function (target: any, thisArg: any, argumentsList: any) {
+      if (argumentsList.length === 1 && Number.isInteger(argumentsList[0])) {
+        const mes = getMes(argumentsList[0]);
+        return mes
+          ? new MesComAbreviado(mes, getAbreviado(argumentsList[0]))
+          : undefined;
+      }
+      return nomes;
+    },
+    get: function (target: any, prop: any) {
+      if (Number.isInteger(Number(prop))) {
+        const mes = getMes(Number(prop));
+        return mes
+          ? new MesComAbreviado(mes, getAbreviado(Number(prop)))
+          : undefined;
+      } else if (prop === 'abreviados') {
+        return abreviados;
+      }
+      return Reflect.get(target, prop);
+    },
+    toString: function () {
+      return `[${nomes.join(', ')}]`;
+    },
+  };
+
+  class MesComAbreviado {
+    _nome: any;
+    _abreviado: any;
+    constructor(nome: any, abreviado: any) {
+      this._nome = nome;
+      this._abreviado = abreviado;
+    }
+    get abreviado() {
+      return this._abreviado;
+    }
+    set abreviado(novoAbreviado) {
+      this._abreviado = novoAbreviado;
+    }
+    toString() {
+      return this._nome;
+    }
+  }
+
+  return new Proxy(() => {}, handler);
+}
+
+export const meses = getMeses();
+
+// console.log(mesesProxy(1));
+// console.log(mesesProxy(1)?.abreviado);
+// console.log(mesesProxy[1]);
+// console.log(mesesProxy[1]?.abreviado);
+// console.log(mesesProxy());
+// console.log(meses); // Usando a coerção de string para chamar toString
+// console.log(mesesProxy.abreviados);
