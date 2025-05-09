@@ -86,9 +86,9 @@ export class DashboardComponent {
     meses().forEach((mes: string, index: number) => {
       let data = {
         mes: mes,
+        mesAbr: meses[index]?.abreviado,
         valor: Math.random() * 1000,
       };
-
       if (index < 6) {
         ladoEsquerdo.push(data);
       } else {
@@ -255,7 +255,7 @@ export class DashboardComponent {
   getChartCategoria() {
     setTimeout(() => {
       let spark = document.querySelector('#sparkline');
-      console.log(spark);
+      //   console.log(spark);
 
       // spark.sparkline([70, 80, 65, 78, 58, 80, 78, 80, 70, 50, 75, 65, 80, 70, 65, 90, 65, 80, 70, 65, 90], { type: "bar", height: "25", barWidth: 7, barSpacing: 4, barColor: "#b2ebf2", negBarColor: "#81d4fa", zeroColor: "#81d4fa" });
 

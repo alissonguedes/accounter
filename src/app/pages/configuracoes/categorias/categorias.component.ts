@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  Input,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CategoriaService } from './categoria.service';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from '../../../app.component';
@@ -20,6 +27,9 @@ declare const document: any;
   styleUrl: './categorias.component.css',
 })
 export class CategoriasComponent implements OnInit {
+  @ViewChild('modalCategoria') modalCategoriaRef!: ElementRef;
+  @ViewChild('modalDialog') modalDialogRef!: ElementRef;
+
   public allCategorias: any;
   public categorias: ItemNode[] = [];
   public checkedStatus = true;
@@ -27,8 +37,8 @@ export class CategoriasComponent implements OnInit {
   public canDelete = true;
 
   protected searchControl = new FormControl();
-  itemExpanded: number | null = null;
-  isExpanded: boolean = false;
+  protected itemExpanded: number | null = null;
+  protected isExpanded: boolean = false;
 
   constructor(
     protected app: AppComponent,
@@ -40,22 +50,46 @@ export class CategoriasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.search();
+    // Resgata todas as categorias do banco de dados
     this.getCategorias();
+
+    // Adiciona o evento de pesquisa no input[id="search"]
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((valor) => {
+        this.preloaderService.show();
+        this.getCategorias(valor);
+      });
+
+    this.categoriaService.getCategorias().subscribe(
+      (results) => (
+        (this.categorias = this.parseCategorias(results)), // Lista todas as categorias para evitar o delay de exibir "Nenhum resultado" prematuramente
+        (this.allCategorias = results) // Categorias para listar no Select[name="id_parent"]
+      )
+    );
   }
 
-  private getCategorias() {
-    let self = this;
-    let c = this.categoriaService;
-    let categorias;
-    // let preloaderService = this.preloaderService;
-    this.preloaderService.show();
-    setTimeout(function () {
-      c.getCategorias().subscribe((result) => {
-        self.categorias = self.parseCategorias(result);
-        self.allCategorias = result;
-        self.preloaderService.hide();
-      });
+  /**
+   * Obtém todas as categorias do banco
+   */
+  private getCategorias(valor?: string) {
+    return this.categoriaService.getCategorias(valor).subscribe((results) => {
+      if (valor) {
+        let c = [];
+        let categorias = results;
+        for (let i of categorias) {
+          let cdata = {
+            name: i.titulo,
+            categoriaTitulo: i.tituloParent,
+            id: i.id,
+            status: i.status,
+          };
+          c.push(cdata);
+        }
+        this.categorias = c;
+      } else {
+        this.categorias = this.parseCategorias(results);
+      }
     });
   }
 
@@ -85,9 +119,11 @@ export class CategoriasComponent implements OnInit {
   }
 
   openModal(id?: number) {
-    let modalCategoria = document.querySelector('#modal-categoria');
+    const modalCategoria = this.modalCategoriaRef.nativeElement;
     let modalOptions = {
       dismissible: false,
+      startingTop: '100px',
+      endingTop: '100px',
       onOpenStart: () => {
         if (id) {
           this.categoriaForm.edit(id);
@@ -95,9 +131,6 @@ export class CategoriasComponent implements OnInit {
           this.categoriaForm.getForm().get('status')?.setValue('1');
           this.categoriaForm.enable();
         }
-        setTimeout(() => {
-          //   console.log(this.categoriaForm.getForm().get('status')?.getValue());
-        });
       },
       onCloseEnd: () => {
         this.categoriaForm.reset();
@@ -109,27 +142,25 @@ export class CategoriasComponent implements OnInit {
 
   replaceTitulo() {
     const titulo = this.categoriaForm.getForm().get('titulo')?.value;
-    const slug = slugify(titulo); // <-- ajuste aqui conforme seu objetivo real
+    const slug = slugify(titulo);
     return this.categoriaForm.getForm().get('titulo_slug')?.setValue(slug);
   }
 
+  /**
+   * Adiciona (sem id)/ Edita (com id) categoria
+   */
   save() {
     this.categoriaForm.disable();
     let values = this.categoriaForm.getValues();
     values.status = values.status ? '1' : '0';
-    console.log(values);
     this.categoriaService.saveCategoria(values).subscribe(
       (ok: any) => {
         this.categoriaForm.enable();
         this.categoriaForm.alert(ok.success, ok.message);
-        let mClose = document.querySelector('.modal-close');
-        this.getCategorias();
-        mClose.click();
-        setTimeout(() => {
-          let btnExpand = document.querySelector('.btn-expand');
-          btnExpand.querySelector('i').innerText = 'keyboard_arrow_down';
-          console.log(btnExpand.querySelector('i'));
-        }, 100);
+        this.getCategorias(this.searchControl.value);
+        let modalCategoria = this.modalCategoriaRef.nativeElement;
+        let modal = M.Modal.getInstance(modalCategoria);
+        modal.close();
       },
       (err: any) => {
         this.categoriaForm.enable();
@@ -137,37 +168,10 @@ export class CategoriasComponent implements OnInit {
     );
   }
 
-  private search() {
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((valor) => {
-        if (valor) {
-          this.preloaderService.show();
-          this.pesquisar(valor);
-        } else {
-          this.getCategorias();
-        }
-      });
-  }
-
-  private pesquisar(valor: string) {
-        return this.categoriaService.getCategorias(valor).subscribe((results) => {
-      let c = [];
-      let categorias = results;
-      for (let i of categorias) {
-        let cdata = {
-          name: i.titulo,
-          categoriaTitulo: i.tituloParent,
-          id: i.id,
-          status: i.status,
-        };
-        c.push(cdata);
-      }
-      console.log(c);
-      this.categorias = c;
-    });
-  }
-
+  /**
+   * Muda status:
+   * 1 - ativo; 2 - inativo
+   */
   updateStatus(item: any) {
     const originalStatus = item.status;
     item.status = originalStatus === '1' ? '0' : '1';
@@ -176,9 +180,7 @@ export class CategoriasComponent implements OnInit {
       .subscribe(
         (ok: any) => {
           if (ok.success) {
-            this.categoriaService.getCategorias().subscribe((result) => {
-              this.categorias = this.parseCategorias(result);
-            });
+            this.getCategorias(this.searchControl.value);
           }
         },
         (error) => {
@@ -188,19 +190,33 @@ export class CategoriasComponent implements OnInit {
       );
   }
 
-  delete(id: number) {
-    let confirma = confirm('Tem certeza de que deseja remover este registro? Tenha em mente que se continuar, todas as categorias dependentes desta categoria serão removidas, bem como todas as respectivas subcategorias.');
-    if (confirma) {
-      this.categoriaService.removeCategoria(id).subscribe((ok: any) => {
-        if (ok.success) {
-          this.categoriaForm.enable();
-          this.categoriaForm.alert(ok.success, ok.message);
-          this.getCategorias();
-          let mClose = document.querySelector('.modal-close');
-          mClose.click();
+  dialog(id: number) {
+    const modalDialog = this.modalDialogRef.nativeElement;
+    let modalOptions = {
+      startingTop: '30%',
+      endingTop: '30%',
+      onOpenEnd: () => {
+        let btn_delete = modalDialog.querySelector('.btn-confirm');
+        if (btn_delete) {
+          btn_delete.addEventListener('click', () => this.delete(id));
         }
-        console.log(ok);
-      });
-    }
+      },
+      onCloseEnd: () => {},
+    };
+    let modal = M.Modal.init(modalDialog, modalOptions);
+    modal.open();
+  }
+
+  delete(id: number) {
+    this.categoriaService.removeCategoria(id).subscribe((ok: any) => {
+      if (ok.success) {
+        this.categoriaForm.enable();
+        this.categoriaForm.alert(ok.success, ok.message);
+        this.getCategorias(this.searchControl.value);
+        let modalDialog = this.modalDialogRef.nativeElement;
+        let dialog = M.Modal.getInstance(modalDialog);
+        dialog.close();
+      }
+    });
   }
 }

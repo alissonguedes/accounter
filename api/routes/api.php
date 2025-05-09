@@ -68,7 +68,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				'text_color'  => $categoria->text_color ?? null,
 			];
 		} else if ($search) {
-			 $getCategorias = DB::table('tb_categoria AS C')->select('titulo',
+			$getCategorias = DB::table('tb_categoria AS C')->select('titulo',
 				'id',
 				'titulo_slug',
 				'descricao',
@@ -80,7 +80,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				'color',
 				'text_color',
 				DB::raw('(SELECT titulo FROM tb_categoria AS Cat WHERE Cat.id = C.id_parent) AS tituloParent'))->where('titulo', 'like', urldecode($search) . '%')->get();
-				return $getCategorias;
+			return $getCategorias;
 		}
 
 		$categorias = $getCategorias->get();

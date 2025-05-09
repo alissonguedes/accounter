@@ -100,17 +100,31 @@ function getMeses() {
   ];
 
   const getMes = (indice: any) => {
-    if (indice >= 1 && indice <= 12) {
+    if (indice >= 0 && indice <= 11) {
+      return nomes[indice];
+    } else if (indice >= 1 && indice <= 12) {
       return nomes[indice - 1];
     }
     return undefined;
   };
 
   const getAbreviado = (indice: any) => {
-    if (indice >= 1 && indice <= 12) {
+    if (indice >= 0 && indice <= 11) {
+      return abreviados[indice];
+    } else if (indice >= 1 && indice <= 12) {
       return abreviados[indice - 1];
     }
     return undefined;
+  };
+
+  const all = () => {
+    return { meses: nomes, mesesAbr: abreviados };
+  };
+
+  const target = {
+    all: all(),
+    meses: getMes,
+    mesesAbr: getAbreviado,
   };
 
   const handler = {
@@ -118,7 +132,7 @@ function getMeses() {
       if (argumentsList.length === 1 && Number.isInteger(argumentsList[0])) {
         const mes = getMes(argumentsList[0]);
         return mes
-          ? new MesComAbreviado(mes, getAbreviado(argumentsList[0]))
+          ? new MesComAbreviado(mes, getAbreviado(argumentsList[0]), all())
           : undefined;
       }
       return nomes;
@@ -127,7 +141,7 @@ function getMeses() {
       if (Number.isInteger(Number(prop))) {
         const mes = getMes(Number(prop));
         return mes
-          ? new MesComAbreviado(mes, getAbreviado(Number(prop)))
+          ? new MesComAbreviado(mes, getAbreviado(Number(prop)), all())
           : undefined;
       } else if (prop === 'abreviados') {
         return abreviados;
@@ -142,9 +156,11 @@ function getMeses() {
   class MesComAbreviado {
     _nome: any;
     _abreviado: any;
-    constructor(nome: any, abreviado: any) {
+    _all: any;
+    constructor(nome: any, abreviado: any, all: any) {
       this._nome = nome;
       this._abreviado = abreviado;
+      this._all = all;
     }
     get abreviado() {
       return this._abreviado;
@@ -155,6 +171,9 @@ function getMeses() {
     toString() {
       return this._nome;
     }
+    all() {
+      return this._all;
+    }
   }
 
   return new Proxy(() => {}, handler);
@@ -162,10 +181,10 @@ function getMeses() {
 
 export const meses = getMeses();
 
-// console.log(mesesProxy(1));
-// console.log(mesesProxy(1)?.abreviado);
-// console.log(mesesProxy[1]);
-// console.log(mesesProxy[1]?.abreviado);
-// console.log(mesesProxy());
+console.log(meses);
+// console.log(meses(1)?.abreviado);
+// console.log(meses[1]);
+// console.log(meses?.abreviado);
+// console.log(meses());
 // console.log(meses); // Usando a coerção de string para chamar toString
-// console.log(mesesProxy.abreviados);
+// console.log(meses.abreviados);

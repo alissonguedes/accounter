@@ -352,6 +352,11 @@ nav .sidenav-trigger i {
 	bottom: 0;
 }
 
+#modal-dialog.modal.modal-fixed-footer {
+	height: 30% !important;
+	max-height: 30% !important;
+}
+
 .modal.modal-fixed-footer .modal-header~.modal-content {
 	height: calc(100% - 104px);
 	overflow: auto;
@@ -442,6 +447,48 @@ body:has(#login-page) #preloader {
 	bottom: 0;
 	z-index: 9999; */
 }
+
+/*************MODAL***************/
+
+/* .modal {
+	transform: scale(0.8) !important;
+	transition: transform var(150ms, 0ms) cubic-bezier(0, 0, 0.2, 1);
+	top: 50%;
+}
+
+.modal.open {
+	transform: scale(1) !important;
+	opacity: 1;
+} */
+.modal {
+	opacity: 0;
+	transition:
+		transform 150ms cubic-bezier(0.1, 0, 0.2, 1),
+		opacity 150ms cubic-bezier(0.1, 0, 0.2, 1);
+	will-change: transform, opacity;
+	border-radius: 24px;
+}
+
+.modal .modal-footer {
+	padding: 10px 24px;
+	height: auto;
+}
+
+.modal.open {
+	opacity: 1;
+}
+
+.modal-overlay {
+	background-color: rgba(0, 0, 0, 0.3);
+	opacity: 0;
+	transition: opacity 100ms cubic-bezier(0, -1, 0, 1);
+}
+
+.modal-overlay.open {
+	opacity: 1;
+}
+
+/*************MODAL***************/
 
 .input-field>label {
 	padding: 0 5px;

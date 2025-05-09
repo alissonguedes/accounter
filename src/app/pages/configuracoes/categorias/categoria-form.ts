@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { CategoriaService } from './categoria.service';
 import { Form } from '../../../shared/form';
+import { Categoria } from './categoria';
 
 declare const M: any;
 declare const document: any;
@@ -10,6 +11,7 @@ declare const document: any;
   providedIn: 'root',
 })
 export class CategoriaForm extends Form {
+  private categoria = inject(Categoria);
   private categoriaService = inject(CategoriaService);
 
   protected fields() {
@@ -30,30 +32,29 @@ export class CategoriaForm extends Form {
   public edit(id: number) {
     this.disable();
     return this.categoriaService.getCategoria(id).subscribe((dados: any) => {
-      this.categoriaService.setId(dados.id);
-      this.categoriaService.setIdParent(dados.id_parent);
-      this.categoriaService.setTitulo(dados.titulo);
-      this.categoriaService.setTituloSlug(dados.titulo_slug);
-      this.categoriaService.setDescricao(dados.descricao);
-      this.categoriaService.setStatus(dados.status);
-      this.categoriaService.setOrdem(dados.ordem);
-      this.categoriaService.setImagem(dados.imagem);
-      this.categoriaService.setColor(dados.color);
-      this.categoriaService.setTextColor(dados.text_color);
-      let fields = {
-        id: this.categoriaService.getId(),
-        id_parent: this.categoriaService.getIdParent(),
-        titulo: this.categoriaService.getTitulo(),
-        titulo_slug: this.categoriaService.getTituloSlug(),
-        descricao: this.categoriaService.getDescricao(),
-        status: this.categoriaService.getStatus(),
-        ordem: this.categoriaService.getOrdem(),
-        imagem: this.categoriaService.getImagem(),
-        color: this.categoriaService.getColor(),
-        text_color: this.categoriaService.getTextColor(),
-      };
+      this.categoria.setId(dados.id);
+      this.categoria.setIdParent(dados.id_parent);
+      this.categoria.setTitulo(dados.titulo);
+      this.categoria.setTituloSlug(dados.titulo_slug);
+      this.categoria.setDescricao(dados.descricao);
+      this.categoria.setStatus(dados.status);
+      this.categoria.setOrdem(dados.ordem);
+      this.categoria.setImagem(dados.imagem);
+      this.categoria.setColor(dados.color);
+      this.categoria.setTextColor(dados.text_color);
 
-      console.log(fields);
+      let fields = {
+        id: this.categoria.getId(),
+        id_parent: this.categoria.getIdParent(),
+        titulo: this.categoria.getTitulo(),
+        titulo_slug: this.categoria.getTituloSlug(),
+        descricao: this.categoria.getDescricao(),
+        status: this.categoria.getStatus(),
+        ordem: this.categoria.getOrdem(),
+        imagem: this.categoria.getImagem(),
+        color: this.categoria.getColor(),
+        text_color: this.categoria.getTextColor(),
+      };
 
       this.setValues(fields);
       this.enable();
