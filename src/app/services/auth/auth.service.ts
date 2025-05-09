@@ -5,42 +5,47 @@ import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  private session = false;
+  // private tokenKey = 'access_token';
 
-	private session = false;
-	// private tokenKey = 'access_token';
+  constructor(
+    private http: HttpService,
+    private token: TokenService,
+    private router: Router
+  ) {}
 
-	constructor(private http: HttpService, private token: TokenService, private router: Router) { }
+  setSessionStatus(session: boolean) {
+    return (this.session = session);
+  }
 
-	setSessionStatus(session: boolean) {
-		return this.session = session;
-	}
+  getSessionStatus() {
+    return this.session;
+  }
 
-	getSessionStatus() {
-		return this.session;
-	}
+  login(email: string, password: string): Observable<any> {
+    return this.http.post('login', { email, password });
+  }
 
-	login(email: string, password: string): Observable<any> {
-		return this.http.post('login', { email, password });
-	}
+  // cadastro(name: string, email: string, password: string, confirmPassword: string): Observable<any> {
+  cadastro(form: any): Observable<any> {
+    return this.http.post('register', form);
+  }
 
-	cadastro(name: string, email: string, password: string, confirmPassword: string): Observable<any> {
-		return this.http.post('register', { name, email, password, confirmPassword });
-	}
+  checkEmail(email: string): Observable<{ existe: boolean }> {
+    return this.http.get<{ existe: boolean }>('mailcheck', {
+      query: encodeURIComponent(email),
+    });
+  }
 
-	checkEmail(email: string): Observable<{ existe: boolean }> {
-		return this.http.get<{ existe: boolean }>('mailcheck', { query: encodeURIComponent(email) });
-	}
+  isAuthenticated(): boolean {
+    return !!this.token.getToken();
+  }
 
-	isAuthenticated(): boolean {
-		return !!this.token.getToken();
-	}
-
-	logout() {
-		localStorage.removeItem(this.token.getKey());
-		this.router.navigate(['/login']);
-	}
-
+  logout() {
+    localStorage.removeItem(this.token.getKey());
+    this.router.navigate(['/login']);
+  }
 }

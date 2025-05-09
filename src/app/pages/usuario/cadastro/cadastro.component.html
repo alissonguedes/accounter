@@ -57,11 +57,11 @@
 					</div>
 					<div class="col s12">
 						<div class="input-field">
-							<label for="confirmPassword">Confirme a Senha</label>
-							<input type="password" id="confirmPassword" formControlName="confirmPassword">
-							<div class="error" *ngIf="signinForm.get('confirmPassword')?.invalid && (signinForm.get('confirmPassword')?.dirty || signinForm.get('confirmPassword')?.touched)">
-								<small *ngIf="signinForm.get('confirmPassword')?.errors?.['required']">Campo obrigatório.</small>
-								<small *ngIf="signinForm.get('confirmPassword')?.errors?.['confirmPasswordMismatch']">Senhas não coincidem.</small>
+							<label for="password_confirmation">Confirme a Senha</label>
+							<input type="password" id="password_confirmation" formControlName="password_confirmation">
+							<div class="error" *ngIf="signinForm.get('password_confirmation')?.invalid && (signinForm.get('password_confirmation')?.dirty || signinForm.get('password_confirmation')?.touched)">
+								<small *ngIf="signinForm.get('password_confirmation')?.errors?.['required']">Campo obrigatório.</small>
+								<small *ngIf="signinForm.get('password_confirmation')?.errors?.['confirmPasswordMismatch']">Senhas não coincidem.</small>
 							</div>
 						</div>
 					</div>

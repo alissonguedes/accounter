@@ -8,7 +8,7 @@
 	"adUsername": null,
 	"acessoTi": false,
 	"funcionarioId": null,
-	"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MzA5OCIsImVtYWlsIjoiYWxpc3Nvbmd1ZWRlczg3QGdtYWlsLmNvbSIsImp0aSI6IjE1YTFlNWUwLTY2NmItNDZkOC1hODY4LTU2ZjdjYTVkZDAyZSIsIm5iZiI6MTc0NjM0MTA5OCwiaWF0IjoxNzQ2MzQxMDk4LCJleHAiOjE3NDYzNDgyOTgsImlzcyI6IklDTS1QT1JUQUwiLCJhdWQiOiIqLnByZXNiaXRlcmlvLm9yZy5iciJ9.6J43kq6TaZgwDLDF74LAUW3J40SEPTinvXktE2dmgPE",
+	"accessToken": "",
 	"expiresIn": 7200,
 	"temImagemPerfil": false,
 	"imagemPerfilNome": null,
