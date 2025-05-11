@@ -1,0 +1,101 @@
+<div id="login-page" class="row no-margin">
+	<div class="col s12 m6 l4">
+		<div class="z-depth-3 card-panel border-radius-6 login-card bg-opacity-8">
+			<!-- <div id="preloader-login">
+				<div class="preloader-wrapper active">
+					<div class="spinner-layer spinner-blue-only">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<app-preloader id="login-spinner">
+				aguarde
+				<ng-content>
+					<div class="progress">
+						<div class="indeterminate"></div>
+					</div>
+				</ng-content>
+			</app-preloader>
+
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+
+				<div class="row">
+					<div class="input-field col s12">
+						<h5 class="ml-4 center-align">Gestão de Clínica</h5>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+						<div class="input-field">
+							<label for="name">Nome</label>
+							<input type="text" id="name" formControlName="name">
+							<div class="error" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+								<small *ngIf="form.get('name')?.errors?.['required']">Nome é obrigatório.</small>
+							</div>
+						</div>
+					</div>
+					<div class="col s12">
+						<div class="input-field">
+							<label for="email">Email</label>
+							<input type="email" id="email" formControlName="email">
+							<div class="error" *ngIf="(form.get('email')?.touched && form.get('email')?.invalid)">
+								<small *ngIf="form.get('email')?.errors?.['required']">Email é obrigatório.</small>
+								<small *ngIf="form.get('email')?.errors?.['email']">Email inválido.</small>
+								<small *ngIf="form.get('email')?.hasError('emailExists')">E-mail já cadastrado.</small>
+							</div>
+						</div>
+					</div>
+					<div class="col s12">
+						<div class="input-field">
+							<label for="password">Senha</label>
+							<input type="password" id="password" formControlName="password">
+							<div class="error" *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)">
+								<small *ngIf="form.get('password')?.errors?.['required']">Senha é obrigatória.</small>
+								<small *ngIf="form.get('password')?.errors?.['minlength']">A senha deve ter no mínimo 6 caracteres.</small>
+							</div>
+						</div>
+					</div>
+					<div class="col s12">
+						<div class="input-field">
+							<label for="password_confirmation">Confirme a Senha</label>
+							<input type="password" id="password_confirmation" formControlName="passowrd_confirmation">
+							<div class="error" *ngIf="form.get('password_confirmation')?.invalid && (form.get('password_confirmation')?.dirty || form.get('password_confirmation')?.touched)">
+								<small *ngIf="form.get('password_confirmation')?.errors?.['required']">Campo obrigatório.</small>
+								<small *ngIf="form.get('password_confirmation')?.errors?.['confirmPasswordMismatch']">Senhas não coincidem.</small>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<br>
+
+				<div class="row">
+					<div class="col s12">
+						<button type="submit" id="btn-login" class="btn btn-large waves-effect col s12" [disabled]="form.invalid || this.submited()">
+							<span class="material-icons">login</span> Entrar
+						</button>
+					</div>
+				</div>
+
+			</form>
+
+			<br>
+
+			<div class="row">
+				<div class="col s12 center-align">
+					<a routerLink="/login">Já Tenho Uma Conta</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

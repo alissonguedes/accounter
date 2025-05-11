@@ -30,8 +30,11 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      email: [
+        'alissonguedes@gmail.com',
+        [Validators.required, Validators.email],
+      ],
+      password: ['123456', Validators.required],
     });
 
     if (this.authService.isAuthenticated()) {
@@ -64,17 +67,16 @@ export class LoginComponent {
         },
 
         (error) => {
-        //   preloader.style.display = 'none';
-        //   btn_login.disabled = false;
-        //   inputs.forEach((el: any) => {
-        //     el.disabled = false;
-        //   });
-
-        //   M.toast({
-        //     html: `${error.status} - ${error.error.error}<br>${error.error.message}`,
-        //   });
-        //   // alert(`${error.status} - ${error.statusText}`);
-        //   console.log(error);
+          //   preloader.style.display = 'none';
+          //   btn_login.disabled = false;
+          //   inputs.forEach((el: any) => {
+          //     el.disabled = false;
+          //   });
+          //   M.toast({
+          //     html: `${error.status} - ${error.error.error}<br>${error.error.message}`,
+          //   });
+          //   // alert(`${error.status} - ${error.statusText}`);
+          //   console.log(error);
         }
       );
     } else {

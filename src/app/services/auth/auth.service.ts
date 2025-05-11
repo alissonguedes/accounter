@@ -3,6 +3,7 @@ import { HttpService } from '../http.service';
 import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { toast } from '../../shared/toast';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +26,14 @@ export class AuthService {
     return this.session;
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post('login', { email, password });
+  login(email: any | string, password?: string): Observable<any> {
+    let params;
+    if (typeof email === 'object') {
+      params = email;
+    } else {
+      params = { email, password };
+    }
+    return this.http.post('login', params);
   }
 
   // cadastro(name: string, email: string, password: string, confirmPassword: string): Observable<any> {
@@ -45,7 +52,20 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(this.token.getKey());
-    this.router.navigate(['/login']);
+    this.http
+      .post('logout', {
+        id: localStorage.getItem('id'),
+        username: localStorage.getItem('username'),
+        email: localStorage.getItem('email'),
+        token: localStorage.getItem('access_token'),
+      })
+      .subscribe((success: any) => {
+        localStorage.removeItem(this.token.getKey());
+        localStorage.removeItem('id');
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+        this.router.navigate(['/login']);
+        toast(success.message);
+      });
   }
 }

@@ -13,6 +13,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 	Route::post('/login', [AuthController::class, 'login']);
 	Route::post('/register', [AuthController::class, 'register']);
+	Route::post('/logout', [AuthController::class, 'logout']);
 	Route::get('/mailcheck', function () {
 		$email  = urldecode(request('query'));
 		$existe = \App\Models\User::where('email', $email)->exists();

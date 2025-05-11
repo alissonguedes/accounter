@@ -20,3 +20,56 @@
 	"nivelId": 62023,
 	"tipoAcesso": "T"
 }
+[
+	{
+		"moduloId": 26,
+		"nome": "Membro",
+		"descricao": "Módulo de Acesso do Membro",
+		"color2": "#428bca",
+		"icone": "fa-home",
+		"isExterno": true,
+		"dataAutorizacao": null,
+		"versao": 2,
+		"pendenteId": 0,
+		"pendenteDescricao": null,
+		"termoId": 2,
+		"termoDescricao": "TERMO DE CONSENTIMENTO PARA MEMBROS",
+		"termoVersao": "2021.07.16._REV_3_OK._SDA",
+		"usuarioTermoId": "69724",
+		"usuarioTermoVersao": "2021.07.16._REV_3_OK._SDA"
+	},
+	{
+		"moduloId": 22,
+		"nome": "Patrimônio",
+		"descricao": "Gestão de Aluguel e Inventário",
+		"color2": "#FF0000",
+		"icone": "fa-home",
+		"isExterno": true,
+		"dataAutorizacao": "2021-06-09T18:43:54",
+		"versao": 1,
+		"pendenteId": 0,
+		"pendenteDescricao": null,
+		"termoId": 0,
+		"termoDescricao": null,
+		"termoVersao": null,
+		"usuarioTermoId": null,
+		"usuarioTermoVersao": null
+	},
+	{
+		"moduloId": 13,
+		"nome": "Tesouraria",
+		"descricao": "Confecção de relatório financeiro de igreja.",
+		"color2": "#444444",
+		"icone": "fa-files-o",
+		"isExterno": true,
+		"dataAutorizacao": "2021-02-09T15:40:24",
+		"versao": 1,
+		"pendenteId": 0,
+		"pendenteDescricao": null,
+		"termoId": 0,
+		"termoDescricao": null,
+		"termoVersao": null,
+		"usuarioTermoId": null,
+		"usuarioTermoVersao": null
+	}
+]

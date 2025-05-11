@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpClient,
   HttpContext,
@@ -14,15 +14,15 @@ import { PreloaderService } from './preloader/preloader.service';
   providedIn: 'root',
 })
 export class HttpService {
+  preloaderService = inject(PreloaderService);
   private API_TOKEN =
     '$2y$12$TXHNPaAxbimjcD1S5aHaB.IbPAG/Gj46uZkfPxFVwZyTT2zWS/pzK';
-//   private baseUrl = 'http://localhost/accounter/api/public/api/v2';
-  private baseUrl = 'http://192.168.135.152/accounter/api/public/api/v2';
+  private baseUrl = 'http://localhost/accounter/api/public/api/v2';
+  //   private baseUrl = 'http://192.168.135.152/accounter/api/public/api/v2';
 
   constructor(
     private http: HttpClient,
-    private tokenService: TokenService,
-    public preloaderService: PreloaderService
+    private tokenService: TokenService // public preloaderService: PreloaderService
   ) {
     let self = this;
     // setTimeout(function () {
@@ -55,7 +55,7 @@ export class HttpService {
         headers: this.getHeaders(),
         params: params,
       })
-      .pipe(finalize(() => this.preloaderService.hide()));
+      .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
 
   post<T>(endpoint: string, body: any): Observable<T> {
@@ -63,7 +63,7 @@ export class HttpService {
       .post<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
       })
-      .pipe(finalize(() => this.preloaderService.hide()));
+      .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
 
   put<T>(endpoint: string, body: any): Observable<T> {
@@ -71,7 +71,7 @@ export class HttpService {
       .put<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
       })
-      .pipe(finalize(() => this.preloaderService.hide()));
+      .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
 
   patch<T>(endpoint: string, body: any): Observable<T> {
@@ -79,7 +79,7 @@ export class HttpService {
       .patch<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
       })
-      .pipe(finalize(() => this.preloaderService.hide()));
+      .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
 
   delete<T>(endpoint: string): Observable<T> {
@@ -87,6 +87,6 @@ export class HttpService {
       .delete<T>(`${this.baseUrl}/${endpoint}`, {
         headers: this.getHeaders(),
       })
-      .pipe(finalize(() => this.preloaderService.hide()));
+      .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
 }

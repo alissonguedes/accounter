@@ -86,18 +86,12 @@ class AuthController extends Controller
 	public function login(Request $request)
 	{
 
-		$response = [
-			'statusCode' => 200,
-			'status'     => 'success',
-			'authorized' => false,
-		];
 		$expires = 3600;
 		$user    = User::where('email', $request->email)->first();
 
 		if (!$user) {
 			$response = [
 				'statusCode' => 401,
-				'error'      => 'Unauthorized',
 				'status'     => 'error',
 				'authorized' => false,
 				'message'    => 'Usuário inexistente no sistema',
@@ -105,10 +99,27 @@ class AuthController extends Controller
 		} else if (!Hash::check($request->password, $user->password)) {
 			$response = [
 				'statusCode' => 401,
-				'error'      => 'Unauthorized',
 				'status'     => 'error',
 				'authorized' => false,
 				'message'    => 'Senha incorreta',
+			];
+		} else {
+
+			$token = $user->createToken('token')->plainTextToken;
+
+			$response = [
+				'statusCode'   => 200,
+				'status'       => 'success',
+				'authorized'   => true,
+				'message'      => 'Login realizado com sucesso!',
+				'token_type'   => 'Bearer',
+				'expires'      => $expires,
+				'access_token' => $token,
+				'user'         => [
+					'id'    => $user->id,
+					'name'  => $user->name,
+					'email' => $user->email,
+				],
 			];
 		}
 
@@ -139,8 +150,9 @@ class AuthController extends Controller
 
 	public function logout(Request $request)
 	{
-		$request->user()->currentAccessToken()->delete();
-		return response()->json(['message' => 'Successfully logged out']);
+		// $request->user()->currentAccessToken()->delete();
+		// print_r($request->token);
+		return response()->json(['message' => 'Usuário deslogado com sucesso!']);
 	}
 
 	public function me()

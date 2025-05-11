@@ -1,33 +1,41 @@
-import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, Signal, WritableSignal } from '@angular/core';
 
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PreloaderService {
+  private preloaders = new Map<string, WritableSignal<boolean>>();
+  private tasks = new Map<string, number>();
 
-	private loadingTasks = 0;
+  register(id: string, visibilitySignal: WritableSignal<boolean>) {
+    this.preloaders.set(id, visibilitySignal);
+    this.tasks.set(id, 0);
+  }
 
-	isLoading = signal(false);
+  unregister(id: string) {
+    this.preloaders.delete(id);
+    this.tasks.delete(id);
+  }
 
-	show() {
-		this.loadingTasks++;
-		this.isLoading.set(true);
-	}
+  show(id: string) {
+    const signal = this.preloaders.get(id);
+    if (signal && this.tasks.has(id)) {
+      const count = this.tasks.get(id)! + 1;
+      this.tasks.set(id, count);
+      signal.set(true);
+    }
+  }
 
-	hide() {
-		if (this.loadingTasks > 0) {
-			this.loadingTasks--;
-		}
+  hide(id: string) {
+    const signal = this.preloaders.get(id);
+    if (signal && this.tasks.has(id)) {
+      const count = Math.max(this.tasks.get(id)! - 1, 0);
+      this.tasks.set(id, count);
+      if (count === 0) signal.set(false);
+    }
+  }
 
-		if (this.loadingTasks === 0) {
-			this.isLoading.set(false);
-		}
-	}
-
-	reset() {
-		this.loadingTasks = 0;
-		this.isLoading.set(false);
-	}
-
+  reset(id: string) {
+    this.tasks.set(id, 0);
+    const signal = this.preloaders.get(id);
+    if (signal) signal.set(false);
+  }
 }

@@ -10,9 +10,13 @@
 				</div>
 			</div>
 		</div>
-		<div id="progress" class="progress" *ngIf="app.preloaderService.isLoading()">
-			<div class="indeterminate"></div>
-		</div>
+		<app-preloader id="progress-bar">
+			<ng-content>
+				<div class="progress">
+					<div class="indeterminate"></div>
+				</div>
+			</ng-content>
+		</app-preloader>
 	</nav>
 </header>
 
@@ -20,8 +24,8 @@
 	<ul>
 		<li class="user-view">
 			<button data-href="#user" class="user"></button>
-			<button data-href="#name"><span class="name">John Doe</span></button>
-			<button data-href="#email"><span class="email">jdandturk&#64;gmail.com</span></button>
+			<button data-href="#name"><span class="name">{{ storage.getItem('username') }}</span></button>
+			<button data-href="#email"><span class="email">{{ storage.getItem('email') }}</span></button>
 		</li>
 		<li routerLinkActive="active"> <button routerLink="/dashboard" class="waves-effect">Dashboard</button> </li>
 		<li routerLinkActive="active"> <button routerLink="/entradas" class="waves-effect">Entradas</button> </li>
