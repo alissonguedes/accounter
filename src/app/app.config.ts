@@ -1,9 +1,23 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  inject,
+  ApplicationConfig,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from './services/auth/auth.interceptor';
 import { routes } from './app.routes';
+import { ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  Observable,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  of,
+} from 'rxjs';
 
+import { AuthService } from './services/auth/auth.service';
+import { authInterceptor } from './services/auth/auth.interceptor';
 declare const M: any;
 declare const document: any;
 
@@ -63,6 +77,52 @@ export function slugify(str: string): string {
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '-');
+}
+
+/**
+ * Função para verificar se a senha digitada é igual e correta
+ */
+export function confirmPasswordValidator(
+  controlName: string,
+  matchingControlName: string
+): ValidatorFn {
+  return (controls: AbstractControl): ValidationErrors | null => {
+    const control = controls.get(controlName);
+    const matchingControl = controls.get(matchingControlName);
+
+    if (!control || !matchingControl) return null;
+
+    if (
+      matchingControl.errors &&
+      !matchingControl.errors['confirmPasswordMismatch']
+    ) {
+      return null;
+    }
+
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ confirmPasswordMismatch: true });
+      return { confirmPasswordMismatch: true };
+    } else {
+      matchingControl.setErrors(null);
+      return null;
+    }
+  };
+}
+
+/**
+ * Função para verificar se o e-mail já existe no banco de dados
+ */
+export function checkEmailExists() {
+  let authService = inject(AuthService);
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    if (!control.value) return of(null);
+    return authService.checkEmail(control.value).pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      map((res) => (res.existe ? { emailExists: true } : null)),
+      catchError(() => of(null))
+    );
+  };
 }
 
 /**

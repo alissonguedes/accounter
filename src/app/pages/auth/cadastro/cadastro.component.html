@@ -17,7 +17,6 @@
 				</div>
 			</div> -->
 			<app-preloader id="login-spinner">
-				aguarde
 				<ng-content>
 					<div class="progress">
 						<div class="indeterminate"></div>
@@ -67,7 +66,7 @@
 					<div class="col s12">
 						<div class="input-field">
 							<label for="password_confirmation">Confirme a Senha</label>
-							<input type="password" id="password_confirmation" formControlName="passowrd_confirmation">
+							<input type="password" id="password_confirmation" formControlName="password_confirmation">
 							<div class="error" *ngIf="form.get('password_confirmation')?.invalid && (form.get('password_confirmation')?.dirty || form.get('password_confirmation')?.touched)">
 								<small *ngIf="form.get('password_confirmation')?.errors?.['required']">Campo obrigatório.</small>
 								<small *ngIf="form.get('password_confirmation')?.errors?.['confirmPasswordMismatch']">Senhas não coincidem.</small>

@@ -1,19 +1,148 @@
 <div class="card card card-default border-radius-6 fixed-width">
-	<div class="email-header" style="padding: 20px 20px 10px">
+	<div class="email-header">
 		<div class="left-icons">
 			<div class="app-search">
 				<i class="material-icons mr-2 search-icon">search</i>
-				<input type="text" placeholder="Pesquisar" class="app-filter" id="email_filter">
+				<input type="search" placeholder="Pesquisar" class="app-filter" [formControl]="searchControl" autocomplete="off">
 			</div>
 		</div>
 		<div class="list-content"></div>
 		<div class="email-action">
-			<button class="btn btn-floating waves-effect green"><i class="material-icons white-text">add</i></button>
+			<button class="btn btn-floating waves-effect green" (click)="openModal()">
+				<i class="material-icons white-text">add</i>
+			</button>
 		</div>
 	</div>
-	<div class="card-content p-0 pb-2" style="min-height: calc(100vh - 260px)">
-		<div class="collection">
-			Carteiras digitais
+
+	<div class="card-content p-0 pb-2" style="max-height: calc(100vh - 220px); min-height: calc(100vh - 260px); overflow: auto;">
+
+		<div *ngIf="(carteiras$ | async)">
+			<table>
+				<thead>
+					<tr>
+						<th>Nome da carteira</th>
+						<th class="center-align">Saldo atual</th>
+						<th class="center-align">Status</th>
+						<th class="center-align">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngIf="(carteiras$ | async)?.length === 0">
+						<td colspan="4" class="center-align">Nenhum resultado encontrado</td>
+					</tr>
+					<tr *ngFor="let item of carteiras$ | async">
+						<td>{{ item.titulo }}</td>
+						<td class="center-align">{{ item.saldo_atual }}</td>
+						<td class="center-align">{{ item.status }}</td>
+						<td class="center-align">
+							<button class="btn btn-flat btn-floating transparent btn-small waves-effect modal-trigger" data-target="#modal-categoria" (click)="openModal(item.id)">
+								<i class="material-icons grey-text text-darken-1">edit</i>
+							</button>
+							<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" (click)="dialog(item.id)">
+								<i class="material-icons grey-text text-darken-1">delete</i>
+							</button>
+							<button class="btn-flat btn-floating transparent btn-small waves-effect btn-status" (click)="updateStatus(item)">
+								<i class="material-icons grey-text text-darken-1">{{ item.status === 'ativa' ? 'visibility' : 'visibility_off' }}</i>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+<div class="row">
+	<div class="col s10 m6 l4">
+		<div #modalDialog id="modal-dialog" class="modal modal-fixed-footer">
+			<div class="modal-content">
+				<h4>Atenção</h4>
+				<p>Esta ação removerá a carteira selecionada.</p>
+				<p>Essa operação é irreversível. Deseja continuar mesmo assim?</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn white grey-text modal-close left">
+					<span>Não</span>
+				</button>
+				<button class="btn red white-text right btn-confirm waves-effect">
+					<span>Sim</span>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
+
+<form [formGroup]="carteiraForm.getForm()" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
+	<div class="row">
+		<div class="col s12 m6 l4">
+			<div #modalCarteira id="modal-carteira" class="modal modal-fixed-footer">
+				<app-preloader id="preloader-carteira">
+					<ng-content>
+						<div class="progress modal-progress">
+							<div class="indeterminate"></div>
+						</div>
+					</ng-content>
+				</app-preloader>
+
+				<div class="modal-content">
+					<input type="hidden" formControlName="id" *ngIf="this.carteiraForm.getForm().get('id')?.value">
+
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="titulo" [attr.class]="this.carteiraForm.getForm().get('titulo')?.value ? 'active': null">Título</label>
+								<input type="text" formControlName="titulo" id="titulo" autofocus="autofocus" (input)="replaceTitulo()">
+								<input type="hidden" formControlName="titulo_slug" id="titulo_slug" readonly="readonly">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="saldo_atual" [attr.class]="this.carteiraForm.getForm().get('saldo_atual')?.value ? 'active': null">Saldo Atual</label>
+								<input type="text" formControlName="saldo_atual" id="saldo_atual">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							<div class="switch">
+								<label for="compartilhado">Compartilhar entre os membros do seu grupo</label>
+								<label class="right">
+									<input type="checkbox" formControlName="compartilhado" id="compartilhado">
+									<span class="lever"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							<div class="switch">
+								<label for="status">Ativar</label>
+								<label class="right">
+									<input type="checkbox" formControlName="status" id="status">
+									<span class="lever"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="reset" class="btn waves-effect white black-text left modal-close">
+						<i class="material-icons left">cancel</i>
+						<span>Cancelar</span>
+					</button>
+					<button type="submit" class="btn waves-effect green" [disabled]="carteiraForm.invalid() || carteiraForm.submited()">
+						<i class="material-icons left">save</i>
+						<span>Salvar</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

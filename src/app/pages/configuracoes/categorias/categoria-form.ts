@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
-import { CategoriaService } from './categoria.service';
 import { Form } from '../../../shared/form';
+import { CategoriaService } from './categoria.service';
 import { Categoria } from './categoria';
 
 declare const M: any;
@@ -14,23 +14,32 @@ export class CategoriaForm extends Form {
   private categoria = inject(Categoria);
   private categoriaService = inject(CategoriaService);
 
-  protected fields() {
-    return {
-      id: [{ value: '', disabled: true }],
-      id_parent: [{ value: '', disabled: true }],
-      titulo: [{ value: '', disabled: true }, [Validators.required]],
-      titulo_slug: [{ value: '', disabled: true }, [Validators.required]],
-      descricao: [{ value: '', disabled: true }],
-      status: [{ value: '1', disabled: true, checked: true }],
-      ordem: [],
-      imagem: [],
-      color: [],
-      text_color: [],
-    };
-  }
+  form = this.fb.group({
+    id: [{ value: '', disabled: true }],
+    id_parent: [{ value: '', disabled: true }],
+    titulo: [{ value: '', disabled: true }, [Validators.required]],
+    titulo_slug: [{ value: '', disabled: true }, [Validators.required]],
+    descricao: [{ value: '', disabled: true }],
+    status: [{ value: '1', disabled: true, checked: true }],
+    ordem: [],
+    imagem: [],
+    color: [],
+    text_color: [],
+  });
 
-  public edit(id: number) {
+  submitForm(id?: any) {
+    this.preloaderService.show('preloader-categoria');
     this.disable();
+
+    if (!id) {
+      setTimeout(() => {
+        this.getForm().get('status')?.setValue('1');
+        this.enable();
+        this.preloaderService.hide('preloader-categoria');
+      }, 1000);
+      return '';
+    }
+
     return this.categoriaService.getCategoria(id).subscribe((dados: any) => {
       this.categoria.setId(dados.id);
       this.categoria.setIdParent(dados.id_parent);
@@ -56,8 +65,11 @@ export class CategoriaForm extends Form {
         text_color: this.categoria.getTextColor(),
       };
 
-      this.setValues(fields);
-      this.enable();
+      setTimeout(() => {
+        this.setValues(fields);
+        this.enable();
+        this.preloaderService.hide('preloader-categoria');
+      }, 1000);
     });
   }
 }

@@ -22,9 +22,9 @@ class AuthController extends Controller
 
 		// $expires       = 3600;
 		// $validatedData = $request->validate([
-		// 	'name'     => 'required', //|string|max:255',
-		// 	'email'    => 'required', //|string|email|max:255|unique:users',
-		// 	'password' => 'required', //|string|min:8|confirmed',
+		// 	'name'     => 'required|string|max:255',
+		// 	'email'    => 'required|string|email|max:255|unique:users',
+		// 	'password' => 'required|string|min:8|confirmed',
 		// ]);
 
 		// // Criação do usuário
@@ -71,16 +71,13 @@ class AuthController extends Controller
 
 		$token    = $user->createToken('auth_token')->plainTextToken;
 		$response = [
-			'statusCode' => 401,
+			'statusCode' => 201,
 			'status'     => 'success',
-			'created'    => true,
+			'message'    => 'Seu usuário foi cadastrado com sucesso!',
 		];
 
 		return response()->json($response, $response['statusCode']);
-		// return response()->json([
-		// 	'access_token' => $token,
-		// 	'token_type'   => 'Bearer',
-		// ]);
+
 	}
 
 	public function login(Request $request)

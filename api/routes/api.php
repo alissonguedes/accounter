@@ -171,6 +171,157 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 		return response()->json(['success' => $success, 'message' => $message], 200);
 	});
 
+	Route::prefix('/carteiras-digitais')->group(function () {
+
+		Route::get('/', function () {
+
+			// $id            = request('id') ?? null;
+			// $search        = request('search') ?? null;
+			// $allCategorias = [];
+
+			// $allCarteiras = DB::table('tb_carteira_digital')->get();
+			// return response()->json($allCarteiras, 200);
+
+			$id           = request('id') ?? null;
+			$search       = request('search') ?? null;
+			$allCarteiras = [];
+			$getCarteiras = DB::table('tb_carteira_digital');
+
+			if ($id) {
+				$carteira = $getCarteiras->where('id', $id)->first();
+				return [
+					'id'            => $carteira->id,
+					'titulo'        => $carteira->titulo,
+					'titulo_slug'   => $carteira->titulo,
+					// 'descricao'   => $carteira->descricao ?? null,
+					// 'id_parent'   => $carteira->id_parent,
+					'saldo_atual'   => $carteira->saldo_atual / 100,
+					'compartilhado' => $carteira->compartilhado,
+					'status'        => $carteira->status,
+					// 'imagem'      => $carteira->imagem ?? null,
+					// 'ordem'       => $carteira->ordem ?? null,
+					// 'icone'       => $carteira->icone,
+					// 'color'       => $carteira->color ?? null,
+					// 'text_color'  => $carteira->text_color ?? null,
+				];
+			} else if ($search) {
+				$getCarteiras = DB::table('tb_carteira_digital AS C')->select('titulo',
+					'id',
+					'titulo',
+					'titulo_slug',
+					// 'descricao',
+					// 'id_parent',
+					'saldo_atual',
+					'compartilhado',
+					'status',
+					// 'imagem',
+					// 'ordem',
+					// 'icone',
+					// 'color',
+					// 'text_color',
+				)->where('titulo', 'like', urldecode($search) . '%')->get();
+				return $getCarteiras;
+			}
+
+			$carteiras = $getCarteiras->get();
+
+			if ($carteiras->count() > 0) {
+
+				foreach ($carteiras as $carteira) {
+
+					$allCarteiras[] = [
+						'id'            => $carteira->id,
+						'titulo'        => $carteira->titulo,
+						'titulo_slug'   => $carteira->titulo,
+						'saldo_atual'   => $carteira->saldo_atual / 100,
+						// 'descricao'   => $carteira->descricao,
+						// 'id_parent'   => $carteira->id_parent,
+						'compartilhado' => $carteira->compartilhado,
+						'status'        => $carteira->status,
+						// 'ordem'       => $carteira->ordem,
+						// 'icone'       => $carteira->icone,
+						// 'color'       => $carteira->color,
+						// 'text_color'  => $carteira->text_color,
+					];
+
+				}
+
+			}
+
+			return response()->json($allCarteiras, 200);
+
+		});
+
+		Route::post('/', function () {
+
+			$carteira                  = request()->all();
+			$id                        = $carteira['id'] ?? null;
+			$success                   = true;
+			$message                   = 'Carteira salva com sucesso!';
+			$carteira['id_usuario']    = 2;
+			$carteira['saldo_atual']   = $carteira['saldo_atual'] * 100;
+			$carteira['compartilhado'] = $carteira['compartilhado'] ? '1' : '0';
+
+			unset($carteira['id']);
+
+			if ($id) {
+				DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
+			} else {
+				DB::table('tb_carteira_digital')->insert($carteira);
+			}
+
+			return response()->json(['success' => $success, 'message' => $message], 200);
+
+		});
+
+		Route::put('/', function () {
+
+			$carteira                  = request()->all();
+			$id                        = $carteira['id'] ?? null;
+			$success                   = true;
+			$message                   = 'Carteira salva com sucesso!';
+			$carteira['id_usuario']    = 2;
+			$carteira['saldo_atual']   = $carteira['saldo_atual'] * 100;
+			$carteira['compartilhado'] = $carteira['compartilhado'] ? '1' : '0';
+
+			unset($carteira['id']);
+
+			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
+
+			return response()->json(['success' => $success, 'message' => $message], 200);
+
+		});
+
+		Route::patch('/{id}', function (Request $request) {
+
+			$carteira               = request()->all();
+			$id                     = request('id');
+			$success                = true;
+			$message                = 'Carteira atualizada com sucesso!';
+			$carteira['id_usuario'] = 2;
+
+			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
+
+			return response()->json(['success' => $success, 'message' => $message], 200);
+		});
+
+		Route::delete('/{id}', function () {
+			$id       = request('id');
+			$carteira = DB::table('tb_carteira_digital')->where('id', $id)->delete();
+
+			if ($carteira) {
+				$success = true;
+				$message = 'Carteira removida com sucesso!';
+			} else {
+				$success = false;
+				$message = 'Erro ao tentar remover o item [' . $id . ']!';
+			}
+
+			return response()->json(['success' => $success, 'message' => $message], 200);
+		});
+
+	});
+
 });
 
 // Route::get('/', function () {

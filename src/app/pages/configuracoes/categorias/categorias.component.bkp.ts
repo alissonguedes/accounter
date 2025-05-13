@@ -5,13 +5,11 @@ import {
   Input,
   ElementRef,
   ViewChild,
-  inject,
 } from '@angular/core';
 import { CategoriaService } from './categoria.service';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from '../../../app.component';
 import { PreloaderService } from '../../../services/preloader/preloader.service';
-import { PreloaderComponent } from '../../../services/preloader/preloader/preloader.component';
 import { CategoriaForm } from './categoria-form';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Observable } from 'rxjs';
@@ -24,12 +22,7 @@ declare const document: any;
 
 @Component({
   selector: 'app-categorias',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NestableComponent,
-    PreloaderComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, NestableComponent],
   templateUrl: './categorias.component.html',
   styleUrl: './categorias.component.css',
 })
@@ -39,20 +32,22 @@ export class CategoriasComponent implements OnInit {
 
   public allCategorias: any;
   public categorias: ItemNode[] = [];
-  //   public canEdit = true;
-  //   public canDelete = true;
-  public isLoading = false;
+  public checkedStatus = true;
+  public canEdit = true;
+  public canDelete = true;
 
   protected searchControl = new FormControl();
   protected itemExpanded: number | null = null;
   protected isExpanded: boolean = false;
 
   constructor(
-    // protected app: AppComponent,
+    protected app: AppComponent,
     protected categoriaForm: CategoriaForm,
     protected categoriaService: CategoriaService,
     protected preloaderService: PreloaderService
-  ) {}
+  ) {
+    this.categoriaForm.init();
+  }
 
   ngOnInit(): void {
     // Resgata todas as categorias do banco de dados
@@ -60,16 +55,16 @@ export class CategoriasComponent implements OnInit {
 
     // Adiciona o evento de pesquisa no input[id="search"]
     this.searchControl.valueChanges
-      .pipe(debounceTime(200), distinctUntilChanged())
+      .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((valor) => {
+        this.preloaderService.show();
         this.getCategorias(valor);
       });
 
     this.categoriaService.getCategorias().subscribe(
       (results) => (
         (this.categorias = this.parseCategorias(results)), // Lista todas as categorias para evitar o delay de exibir "Nenhum resultado" prematuramente
-        (this.allCategorias = results), // Categorias para listar no Select[name="id_parent"]
-        this.preloaderService.hide('progress-bar')
+        (this.allCategorias = results) // Categorias para listar no Select[name="id_parent"]
       )
     );
   }
@@ -78,8 +73,6 @@ export class CategoriasComponent implements OnInit {
    * Obtém todas as categorias do banco
    */
   private getCategorias(valor?: string) {
-    this.isLoading = true;
-    this.preloaderService.show('progress-bar');
     return this.categoriaService.getCategorias(valor).subscribe((results) => {
       if (valor) {
         let c = [];
@@ -97,8 +90,6 @@ export class CategoriasComponent implements OnInit {
       } else {
         this.categorias = this.parseCategorias(results);
       }
-      this.isLoading = false;
-      this.preloaderService.hide('progress-bar');
     });
   }
 
@@ -128,19 +119,24 @@ export class CategoriasComponent implements OnInit {
   }
 
   openModal(id?: number) {
-    const modalElement = this.modalCategoriaRef.nativeElement;
+    const modalCategoria = this.modalCategoriaRef.nativeElement;
     let modalOptions = {
       dismissible: false,
       startingTop: '100px',
       endingTop: '100px',
       onOpenStart: () => {
-        this.categoriaForm.submitForm(id);
+        if (id) {
+          this.categoriaForm.edit(id);
+        } else {
+          this.categoriaForm.getForm().get('status')?.setValue('1');
+          this.categoriaForm.enable();
+        }
       },
       onCloseEnd: () => {
         this.categoriaForm.reset();
       },
     };
-    let modal = M.Modal.init(modalElement, modalOptions);
+    let modal = M.Modal.init(modalCategoria, modalOptions);
     modal.open();
   }
 
@@ -151,7 +147,7 @@ export class CategoriasComponent implements OnInit {
   }
 
   /**
-   * Salva a categoria sem considerar se deve cadastrar ou editar
+   * Adiciona (sem id)/ Edita (com id) categoria
    */
   save() {
     this.categoriaForm.disable();
@@ -194,35 +190,21 @@ export class CategoriasComponent implements OnInit {
       );
   }
 
-  dialog(id: number): void {
-    const modalElement = this.modalDialogRef?.nativeElement;
-
-    if (!modalElement) return;
-
-    // Verifica se já há uma instância do modal
-    let existingInstance = M.Modal.getInstance(modalElement);
-    if (existingInstance) {
-      existingInstance.destroy();
-    }
-
-    // Remove qualquer listener anterior para evitar múltiplas execuções
-    const btnDelete = modalElement.querySelector('.btn-confirm');
-    if (btnDelete) {
-      const clonedBtn = btnDelete.cloneNode(true);
-      btnDelete.parentNode.replaceChild(clonedBtn, btnDelete);
-
-      clonedBtn.addEventListener('click', () => {
-        this.delete(id);
-      });
-    }
-
-    const modalOptions = {
+  dialog(id: number) {
+    const modalDialog = this.modalDialogRef.nativeElement;
+    let modalOptions = {
       startingTop: '30%',
       endingTop: '30%',
+      onOpenEnd: () => {
+        let btn_delete = modalDialog.querySelector('.btn-confirm');
+        if (btn_delete) {
+          btn_delete.addEventListener('click', () => this.delete(id));
+        }
+      },
+      onCloseEnd: () => {},
     };
-
-    const modalInstance = M.Modal.init(modalElement, modalOptions);
-    modalInstance.open();
+    let modal = M.Modal.init(modalDialog, modalOptions);
+    modal.open();
   }
 
   delete(id: number) {

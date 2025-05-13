@@ -358,9 +358,13 @@ nav .sidenav-trigger i {
 	bottom: 0;
 }
 
-#modal-dialog.modal.modal-fixed-footer {
+/* #modal-dialog.modal.modal-fixed-footer {
 	height: 30% !important;
 	max-height: 30% !important;
+} */
+#modal-dialog.modal.modal-fixed-footer {
+	height: 280px !important;
+	max-height: 100% !important;
 }
 
 .modal.modal-fixed-footer .modal-header~.modal-content {
@@ -390,8 +394,9 @@ main .content {
 	}
 }
 
-#preloader,
-#preloader-modal {
+/* #preloader,
+#preloader-modal,
+.modal-progress {
 	z-index: 997;
 	position: absolute;
 	top: 0;
@@ -402,6 +407,20 @@ main .content {
 	align-items: center;
 	place-content: center;
 	background-color: #ffffff;
+} */
+
+.progress.modal-progress {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	background-color: rgba(255, 255, 255, 0.5);
+	z-index: 997;
+	display: flex;
+	align-items: center;
+	place-content: center;
+	width: inherit;
+	height: 4px;
 }
 
 body:has(#login-page) #preloader {
@@ -510,7 +529,7 @@ body:has(#login-page) #preloader {
 label {
 	font-weight: 600;
 	text-overflow: ellipsis;
-	overflow: hidden;
+	/* overflow: hidden; */
 	white-space: nowrap;
 	max-width: 90%;
 	font-size: 16px;

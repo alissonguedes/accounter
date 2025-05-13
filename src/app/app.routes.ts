@@ -13,7 +13,7 @@ import { PatrimonioComponent } from './pages/patrimonio/patrimonio.component';
 import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
 import { ProjecaoComponent } from './pages/projecao/projecao.component';
 import { PlanejamentoComponent } from './pages/planejamento/planejamento.component';
-// import { CategoriasComponent } from './pages/configuracoes/categorias/categorias.component';
+import { CategoriasComponent } from './pages/configuracoes/categorias/categorias.component';
 import { SistemaComponent } from './pages/configuracoes/sistema/sistema.component';
 import { CarteirasDigitaisComponent } from './pages/configuracoes/carteiras-digitais/carteiras-digitais.component';
 import { CartoesCreditoComponent } from './pages/configuracoes/cartoes-credito/cartoes-credito.component';
@@ -33,17 +33,18 @@ export const routes: Routes = [
       { path: 'patrimonio', component: PatrimonioComponent },
       { path: 'projecao', component: ProjecaoComponent },
       { path: 'planejamento', component: PlanejamentoComponent },
-      // {
-      // 	path: 'configuracoes', component: ConfiguracoesComponent,
-      // 	children: [
-      // 		{ path: '', redirectTo: 'categorias', pathMatch: 'full' },
-      // 		{ path: 'categorias', component: CategoriasComponent },
-      // 		{ path: 'carteiras-digitais', component: CarteirasDigitaisComponent },
-      // 		{ path: 'cartoes-credito', component: CartoesCreditoComponent },
-      // 		{ path: 'aplicativos', component: ConfigApps },
-      // 		{ path: 'sistema', component: SistemaComponent }
-      // 	]
-      // },
+      {
+        path: 'configuracoes',
+        component: ConfiguracoesComponent,
+        children: [
+          { path: '', redirectTo: 'categorias', pathMatch: 'full' },
+          { path: 'categorias', component: CategoriasComponent },
+          { path: 'carteiras-digitais', component: CarteirasDigitaisComponent },
+          { path: 'cartoes-credito', component: CartoesCreditoComponent },
+          { path: 'aplicativos', component: ConfigApps },
+          { path: 'sistema', component: SistemaComponent },
+        ],
+      },
     ],
   },
   {

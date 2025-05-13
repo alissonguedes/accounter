@@ -59,7 +59,9 @@ return new class extends Migration
 		Schema::create('tb_carteira_digital', function (Blueprint $table) {
 			$table->id();
 			$table->unsignedBigInteger('id_usuario');
-			$table->integer('saldo');
+			$table->string('titulo');
+			$table->string('titulo_slug');
+			$table->integer('saldo_atual');
 			$table->string('moeda', 10)->default('BRL');
 			$table->boolean('compartilhado')->default(false);
 			$table->enum('status', ['ativa', 'inativa', 'suspensa'])->default('ativa');

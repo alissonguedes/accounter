@@ -66,7 +66,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       .subscribe(() => {
         setTimeout(() => {
           this.preloaderService.hide('progress-bar');
-        }, 1000);
+        }, 500);
       });
   }
 
