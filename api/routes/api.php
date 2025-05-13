@@ -118,13 +118,10 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 		unset($categoria['id']);
 
-		if ($id) {
-			DB::table('tb_categoria')->where('id', $id)->update($categoria);
-		} else {
-			DB::table('tb_categoria')->insert($categoria);
-		}
+		DB::table('tb_categoria')->insert($categoria);
+		$cat = DB::table('tb_categoria')->where('id_usuario', $categoria['id_usuario'])->get();
 
-		return response()->json(['success' => $success, 'message' => $message], 200);
+		return response()->json(['success' => $success, 'message' => $message, 'categorias' => $cat], 200);
 	});
 
 	Route::put('/categorias', function (Request $request) {
@@ -139,8 +136,9 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 		unset($categoria['id']);
 
 		DB::table('tb_categoria')->where('id', $id)->update($categoria);
+		$cat = DB::table('tb_categoria')->where('id_usuario', $categoria['id_usuario'])->get();
 
-		return response()->json(['success' => $success, 'message' => $message], 200);
+		return response()->json(['success' => $success, 'message' => $message, 'categorias' => $cat], 200);
 	});
 
 	Route::patch('/categorias/{id}', function (Request $request) {
@@ -264,13 +262,26 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 			unset($carteira['id']);
 
-			if ($id) {
-				DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
-			} else {
-				DB::table('tb_carteira_digital')->insert($carteira);
-			}
+			DB::table('tb_carteira_digital')->insert($carteira);
+			$carteiras = [];
+			$db        = DB::table('tb_carteira_digital')->where('id_usuario', $carteira['id_usuario'])->get();
+			if ($db->count() > 0) {
 
-			return response()->json(['success' => $success, 'message' => $message], 200);
+				foreach ($db as $carteira) {
+
+					$carteiras[] = [
+						'id'            => $carteira->id,
+						'titulo'        => $carteira->titulo,
+						'titulo_slug'   => $carteira->titulo,
+						'saldo_atual'   => $carteira->saldo_atual / 100,
+						'compartilhado' => $carteira->compartilhado,
+						'status'        => $carteira->status,
+					];
+
+				}
+
+			}
+			return response()->json(['success' => $success, 'message' => $message, 'carteiras' => $carteiras], 200);
 
 		});
 
@@ -287,8 +298,25 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			unset($carteira['id']);
 
 			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
+			$carteiras = [];
+			$db        = DB::table('tb_carteira_digital')->where('id_usuario', $carteira['id_usuario'])->get();
+			if ($db->count() > 0) {
 
-			return response()->json(['success' => $success, 'message' => $message], 200);
+				foreach ($db as $carteira) {
+
+					$carteiras[] = [
+						'id'            => $carteira->id,
+						'titulo'        => $carteira->titulo,
+						'titulo_slug'   => $carteira->titulo,
+						'saldo_atual'   => $carteira->saldo_atual / 100,
+						'compartilhado' => $carteira->compartilhado,
+						'status'        => $carteira->status,
+					];
+
+				}
+
+			}
+			return response()->json(['success' => $success, 'message' => $message, 'carteiras' => $carteiras], 200);
 
 		});
 

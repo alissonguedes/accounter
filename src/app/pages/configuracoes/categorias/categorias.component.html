@@ -17,12 +17,12 @@
 
 	<div class="card-content p-0 pb-2">
 
-		<ng-container class="collection" *ngIf="isLoading; else dataLoaded">
-			Carregando...
+		<ng-container>
+			<ng-content *ngIf="isLoading; else dataLoaded">Carregando...</ng-content>
 		</ng-container>
 
 		<ng-template #dataLoaded>
-			<div *ngIf="categorias.length > 0 ; else noResults">
+			<div class="collection" *ngIf="((categorias$ | async) ?? []).length > 0; else noResults">
 				<ng-template #categoriasTmpl let-item let-index="index" let-toggle="toggle" let-isExpanded="isExpanded" toggle(itemExpanded)>
 					<i class="material-icons" *ngIf="item.icon">{{ item.icon }}</i>
 					<span *ngIf="item.color" class="tag-color" [attr.style]="`background-color: ${item.color}`"></span>
@@ -44,14 +44,12 @@
 							<i class="material-icons grey-text text-darken-1">{{ item.status === '1' ? 'visibility' : 'visibility_off' }}</i>
 						</button>
 					</div>
-					<!-- FIM DAS INFORMAÇÕES QUE DESEJO ADICIONAR -->
 				</ng-template>
-				<app-nestable [items]="categorias" [itemTemplate]="categoriasTmpl" [itemExpanded]="itemExpanded"></app-nestable>
+				<app-nestable [items]="(categorias$ | async) ?? []" [itemTemplate]="categoriasTmpl" [itemExpanded]="itemExpanded"></app-nestable>
 			</div>
 		</ng-template>
-
 		<ng-template #noResults>
-			Nenhum registro encontrado.
+			Nenhum registro encontrado
 		</ng-template>
 
 	</div>

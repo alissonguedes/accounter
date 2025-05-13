@@ -1,9 +1,10 @@
 export interface ItemNode {
-  id: number;
+  id?: number | string;
   id_parent?: number | null;
   name: string;
   icon?: string;
   color?: string;
+  status: string;
   children?: ItemNode[];
 
   edit?: boolean;

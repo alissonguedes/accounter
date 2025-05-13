@@ -1,23 +1,17 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  ViewChild,
-  inject,
-} from '@angular/core';
-import { CategoriaService } from './categoria.service';
+import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppComponent } from '../../../app.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, BehaviorSubject } from 'rxjs';
+
 import { PreloaderService } from '../../../services/preloader/preloader.service';
 import { PreloaderComponent } from '../../../services/preloader/preloader/preloader.component';
-import { CategoriaForm } from './categoria-form';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Observable } from 'rxjs';
 import { NestableComponent } from '../../../shared/nestable/nestable.component';
 import { ItemNode } from '../../../shared/nestable/item-node.model';
 import { slugify } from '../../../app.config';
+import { toast } from '../../../shared/toast';
+
+import { CategoriaService } from './categoria.service';
+import { CategoriaForm } from './categoria-form';
 
 declare const M: any;
 declare const document: any;
@@ -34,21 +28,21 @@ declare const document: any;
   styleUrl: './categorias.component.css',
 })
 export class CategoriasComponent implements OnInit {
-  @ViewChild('modalCategoria') modalCategoriaRef!: ElementRef;
-  @ViewChild('modalDialog') modalDialogRef!: ElementRef;
+  @ViewChild('modalCategoria') modalCategoria!: ElementRef;
+  @ViewChild('modalDialog') modalDialog!: ElementRef;
+
+  public categorias$: BehaviorSubject<ItemNode[]> = new BehaviorSubject<
+    ItemNode[]
+  >([]);
+  public isLoading = false;
+  protected searchControl = new FormControl();
 
   public allCategorias: any;
-  public categorias: ItemNode[] = [];
-  //   public canEdit = true;
-  //   public canDelete = true;
-  public isLoading = false;
 
-  protected searchControl = new FormControl();
   protected itemExpanded: number | null = null;
   protected isExpanded: boolean = false;
 
   constructor(
-    // protected app: AppComponent,
     protected categoriaForm: CategoriaForm,
     protected categoriaService: CategoriaService,
     protected preloaderService: PreloaderService
@@ -62,16 +56,15 @@ export class CategoriasComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(debounceTime(200), distinctUntilChanged())
       .subscribe((valor) => {
+        this.preloaderService.show('progress-bar');
         this.getCategorias(valor);
       });
 
-    this.categoriaService.getCategorias().subscribe(
-      (results) => (
-        (this.categorias = this.parseCategorias(results)), // Lista todas as categorias para evitar o delay de exibir "Nenhum resultado" prematuramente
-        (this.allCategorias = results), // Categorias para listar no Select[name="id_parent"]
-        this.preloaderService.hide('progress-bar')
-      )
-    );
+    this.categoriaService.getCategorias().subscribe((results) => {
+      // this.categorias$.next(this.parseCategorias(results)), // Lista todas as categorias para evitar o delay de exibir "Nenhum resultado" prematuramente
+      this.allCategorias = results; // Categorias para listar no Select[name="id_parent"]
+      this.preloaderService.hide('progress-bar');
+    });
   }
 
   /**
@@ -93,9 +86,9 @@ export class CategoriasComponent implements OnInit {
           };
           c.push(cdata);
         }
-        this.categorias = c;
+        this.categorias$.next(c);
       } else {
-        this.categorias = this.parseCategorias(results);
+        this.categorias$.next(this.parseCategorias(results));
       }
       this.isLoading = false;
       this.preloaderService.hide('progress-bar');
@@ -127,8 +120,127 @@ export class CategoriasComponent implements OnInit {
       }));
   }
 
+  /**
+   * Salva a categoria sem considerar se deve cadastrar ou editar
+   */
+  save() {
+    this.categoriaForm.disable();
+    let categoria = this.categoriaForm.getValues();
+    categoria.status = categoria.status ? '1' : '0';
+
+    let categoriaNode: ItemNode = {
+      id: categoria.id ?? null,
+      name: categoria.titulo,
+      id_parent: categoria.id_parent,
+      icon: categoria.icone,
+      color: categoria.cor,
+      status: categoria.status,
+    };
+
+    if (!categoria.id) {
+      let categ = [...this.categorias$.value, categoriaNode];
+      this.categorias$.next(categ);
+    } else {
+      const index = this.categorias$.value.findIndex(
+        (item) => item.id === categoria.id
+      );
+      if (index !== -1) {
+        this.categorias$.value[index] = categoriaNode;
+        this.categorias$.next([...this.categorias$.value]);
+      }
+    }
+
+    let modalCategoria = this.modalCategoria.nativeElement;
+    let modal = M.Modal.getInstance(modalCategoria);
+    modal.close();
+
+    this.categoriaService.saveCategoria(categoria).subscribe(
+      (ok: any) => {
+        toast(ok.message);
+        this.categorias$.next(this.parseCategorias(ok.categorias));
+        this.allCategorias = ok.categorias;
+      },
+      (err: any) => {
+        this.categoriaForm.enable();
+        this.getCategorias(this.searchControl.value); // Recarrega os dados do servidor caso falhe
+      }
+    );
+  }
+
+  /**
+   * Muda status:
+   * 1 - ativo; 2 - inativo
+   */
+  updateStatus(updatedItem: any) {
+    const originalStatus = updatedItem.status;
+    updatedItem.status = originalStatus === '1' ? '0' : '1';
+
+    const index = this.categorias$.value.findIndex(
+      (item) => item.id === updatedItem.id
+    );
+
+    if (index !== -1) {
+      this.categorias$.value[index] = updatedItem;
+      this.categorias$.next([...this.categorias$.value]);
+    }
+
+    return this.categoriaService
+      .atualizaStatus(updatedItem.id, { status: updatedItem.status })
+      .subscribe(
+        (ok: any) => {
+          if (ok.success) {
+            toast(ok.message);
+            // this.getCategorias(this.searchControl.value); // Recarrega os dados do servidor caso falhe
+          }
+        },
+        (error) => {
+          updatedItem.status = originalStatus;
+          this.categoriaForm.alert(500, 'Erro ao atualizar categoria');
+        }
+      );
+  }
+
+  /**
+   * Método para remover itens aninhados
+   */
+  private deleteRecursivo(categorias: any[], idRemove: number): any[] {
+    return categorias
+      .map((categoria: any) => {
+        if (categoria.children) {
+          categoria = {
+            ...categoria,
+            children: this.deleteRecursivo(categoria.children, idRemove),
+          };
+          return categoria;
+        }
+      })
+      .filter((categoria) => categoria.id !== idRemove);
+  }
+
+  deleteCategoria(id: number) {
+    const deletedCategoria = this.deleteRecursivo(this.categorias$.value, id);
+
+    this.categorias$.next(deletedCategoria);
+
+    let modalDialog = this.modalDialog.nativeElement;
+    let modal = M.Modal.getInstance(modalDialog);
+    modal.close();
+
+    this.categoriaService.removeCategoria(id).subscribe(
+      (ok: any) => {
+        if (ok.success) {
+          toast(ok.message);
+        }
+      },
+      (err: any) => {
+        alert('Erro ao excluir no servidor');
+        this.getCategorias(this.searchControl.value); // Recarrega os dados do servidor caso falhe
+      }
+    );
+  }
+
   openModal(id?: number) {
-    const modalElement = this.modalCategoriaRef.nativeElement;
+    const modalElement = this.modalCategoria.nativeElement;
     let modalOptions = {
       dismissible: false,
       startingTop: '100px',
@@ -150,52 +262,8 @@ export class CategoriasComponent implements OnInit {
     return this.categoriaForm.getForm().get('titulo_slug')?.setValue(slug);
   }
 
-  /**
-   * Salva a categoria sem considerar se deve cadastrar ou editar
-   */
-  save() {
-    this.categoriaForm.disable();
-    let values = this.categoriaForm.getValues();
-    values.status = values.status ? '1' : '0';
-    this.categoriaService.saveCategoria(values).subscribe(
-      (ok: any) => {
-        this.categoriaForm.enable();
-        this.categoriaForm.alert(ok.success, ok.message);
-        this.getCategorias(this.searchControl.value);
-        let modalCategoria = this.modalCategoriaRef.nativeElement;
-        let modal = M.Modal.getInstance(modalCategoria);
-        modal.close();
-      },
-      (err: any) => {
-        this.categoriaForm.enable();
-      }
-    );
-  }
-
-  /**
-   * Muda status:
-   * 1 - ativo; 2 - inativo
-   */
-  updateStatus(item: any) {
-    const originalStatus = item.status;
-    item.status = originalStatus === '1' ? '0' : '1';
-    return this.categoriaService
-      .atualizaStatus(item.id, { status: item.status })
-      .subscribe(
-        (ok: any) => {
-          if (ok.success) {
-            this.getCategorias(this.searchControl.value);
-          }
-        },
-        (error) => {
-          item.status = originalStatus;
-          this.categoriaForm.alert(500, 'Erro ao atualizar categoria');
-        }
-      );
-  }
-
   dialog(id: number): void {
-    const modalElement = this.modalDialogRef?.nativeElement;
+    const modalElement = this.modalDialog?.nativeElement;
 
     if (!modalElement) return;
 
@@ -212,7 +280,7 @@ export class CategoriasComponent implements OnInit {
       btnDelete.parentNode.replaceChild(clonedBtn, btnDelete);
 
       clonedBtn.addEventListener('click', () => {
-        this.delete(id);
+        this.deleteCategoria(id);
       });
     }
 
@@ -223,18 +291,5 @@ export class CategoriasComponent implements OnInit {
 
     const modalInstance = M.Modal.init(modalElement, modalOptions);
     modalInstance.open();
-  }
-
-  delete(id: number) {
-    this.categoriaService.removeCategoria(id).subscribe((ok: any) => {
-      if (ok.success) {
-        this.categoriaForm.enable();
-        this.categoriaForm.alert(ok.success, ok.message);
-        this.getCategorias(this.searchControl.value);
-        let modalDialog = this.modalDialogRef.nativeElement;
-        let dialog = M.Modal.getInstance(modalDialog);
-        dialog.close();
-      }
-    });
   }
 }
