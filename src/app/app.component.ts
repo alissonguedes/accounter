@@ -10,6 +10,7 @@ import {
   NavigationEnd,
   NavigationError,
   NavigationStart,
+  ActivatedRoute,
   Router,
   RouterLink,
   RouterLinkActive,
@@ -23,6 +24,9 @@ import { AuthService } from './services/auth/auth.service';
 import { PageHeaderService } from './services/page/page-header.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { initApp, menuCollapse } from './app.config';
+
+declare const M: any;
+declare const document: any;
 
 @Component({
   selector: 'app-root',
@@ -39,7 +43,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private router: Router,
     public titleService: TitleService,
     public pageHeaderService: PageHeaderService,
-    public preloaderService: PreloaderService
+    public preloaderService: PreloaderService // private routeActive: ActivatedRoute
   ) {
     let self = this;
     this.title$ = this.titleService.title$;
@@ -63,10 +67,35 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             event instanceof NavigationError
         )
       )
-      .subscribe(() => {
+      .subscribe((route: any) => {
         setTimeout(() => {
           this.preloaderService.hide('progress-bar');
         }, 500);
+
+        let activated = route.url.split('/').filter((s: any) => s)[0];
+
+        let body = document.querySelector('body');
+        let menu = document.querySelector('#slide-out');
+        let sidenav = M.Sidenav.getInstance(menu);
+
+        console.log(activated, activated === 'configuracoes');
+
+        if (activated === 'configuracoes') {
+          menu.classList.remove('sidenav-fixed');
+          body.classList.add('menu-collapsed');
+          sidenav.close();
+        } else {
+          menu.style.transform = 'translateX(0px)';
+          body.classList.remove('menu-collapsed');
+          let overlay = document.querySelectorAll('.sidenav-overlay');
+          overlay.forEach((o: any) => {
+            console.log(o);
+            if (o.style.display === 'block' && o.style.opacity === '1') {
+              o.style.display = 'none';
+              o.style.opacity = '0';
+            }
+          });
+        }
       });
   }
 

@@ -1,1 +1,188 @@
-<p>Configurações>>aplicativos works!</p>
+<div class="row">
+	<div class="col s12">
+		<div class="card green accent-1" style="height: auto;">
+			<div class="card-content" style="height: auto; min-height: 1px;">
+				<ul>
+					<li>Adicione aqui todos os aplicativos que você possui e/ou utiliza.</li>
+					<li>Essas informações só serão utilizadas para processamento dos relatórios de gastos. </li>
+					<li>As informações cadastradas aqui não serão utilizadas como formas ou meios de pagamentos.</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<div class="card card card-default border-radius-6 fixed-width">
+			<div class="email-header">
+				<div class="left-icons">
+					<div class="app-search">
+						<i class="material-icons mr-2 search-icon">search</i>
+						<input type="search" placeholder="Pesquisar" class="app-filter" [formControl]="searchControl" autocomplete="off">
+					</div>
+				</div>
+				<div class="list-content"></div>
+				<div class="email-action">
+					<button class="btn btn-floating waves-effect green" (click)="openModal()">
+						<i class="material-icons white-text">add</i>
+					</button>
+				</div>
+			</div>
+
+			<div class="card-content p-0 pb-2" style="max-height: calc(100vh - 220px); min-height: calc(100vh - 260px); overflow: auto;">
+
+				<div *ngIf="(aplicativos$ | async)">
+					<table>
+						<thead>
+							<tr>
+								<th>Aplicativo</th>
+								<!-- <th>Bandeira</th> -->
+								<!-- <th class="center-align">Limite</th> -->
+								<th class="center-align">Status</th>
+								<th class="center-align">Ações</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container>
+								<tr *ngIf="isLoading; else dataLoaded">
+									<td colspan="5">Carregando...</td>
+								</tr>
+							</ng-container>
+							<ng-template #dataLoaded>
+								<ng-content *ngIf="((aplicativos$ | async) ?? []).length > 0; else noResults">
+									<tr *ngFor="let item of aplicativos$ | async">
+										<!-- <td>{{ `${item.nome} - ${item.descricao}` }}</td> -->
+										<td>{{ item.bandeira }}</td>
+										<!-- <td class="center-align">{{ parseNumber(item.limite).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}) }}</td> -->
+										<td class="center-align">{{ item.status }}</td>
+										<td class="center-align">
+											<button class="btn btn-flat btn-floating transparent btn-small waves-effect modal-trigger" data-target="#modal-categoria" (click)="openModal(item.id)">
+												<i class="material-icons grey-text text-darken-1">edit</i>
+											</button>
+											<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" (click)="dialog(item.id)">
+												<i class="material-icons grey-text text-darken-1">delete</i>
+											</button>
+											<button class="btn-flat btn-floating transparent btn-small waves-effect btn-status" (click)="updateStatus(item)">
+												<i class="material-icons grey-text text-darken-1">{{ item.status === '1' ? 'visibility' : 'visibility_off' }}</i>
+											</button>
+										</td>
+									</tr>
+								</ng-content>
+							</ng-template>
+							<ng-template #noResults>
+								<tr *ngIf="(aplicativos$ | async)?.length === 0">
+									<td colspan="5" class="center-align">Nenhum resultado encontrado</td>
+								</tr>
+							</ng-template>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col s10 m6 l4">
+		<div #modalDialog id="modal-dialog" class="modal modal-fixed-footer">
+			<div class="modal-content">
+				<h4>Atenção</h4>
+				<p>Esta ação removerá o aplicativo selecionado.</p>
+				<p>Essa operação é irreversível. Deseja continuar mesmo assim?</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn white grey-text modal-close left">
+					<span>Não</span>
+				</button>
+				<button class="btn red white-text right btn-confirm waves-effect">
+					<span>Sim</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form [formGroup]="form.getForm()" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
+	<div class="row">
+		<div class="col s12 m6 l4">
+			<div #modalAplicativo id="modal-aplicativo" class="modal modal-fixed-footer">
+				<app-preloader id="preloader-aplicativo">
+					<ng-content>
+						<div class="progress modal-progress">
+							<div class="indeterminate"></div>
+						</div>
+					</ng-content>
+				</app-preloader>
+
+				<div class="modal-content">
+
+					<!-- <div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="id_bandeira" class="active">Bandeira</label>
+								<select formControlName="id_bandeira" id="id_bandeira">
+									<option value="" disabled>Informe a bandeira</option>
+									<option *ngFor="let b of (bandeiras$ | async)" [value]="b?.id">{{ b?.bandeira }}</option>
+								</select>
+							</div>
+						</div>
+					</div> -->
+
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="nome" [attr.class]="this.form.getForm().get('nome')?.value ? 'active': null">Título</label>
+								<input type="text" formControlName="nome" id="nome" autofocus="autofocus">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field amber-text mb-2">
+								<label for="descricao" [attr.class]="this.form.getForm().get('descricao')?.value ? 'active': null">Descrição</label>
+								<input type="text" formControlName="descricao" id="descricao" autofocus="autofocus">
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col s12">
+							<div class="switch">
+								<label for="compartilhado">Compartilhar entre os membros do seu grupo</label>
+								<label class="right">
+									<input type="checkbox" formControlName="compartilhado" id="compartilhado">
+									<span class="lever"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							<div class="switch">
+								<label for="status">Ativar</label>
+								<label class="right">
+									<input type="checkbox" formControlName="status" id="status">
+									<span class="lever"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="reset" class="btn waves-effect white black-text left modal-close">
+						<i class="material-icons left">cancel</i>
+						<span>Cancelar</span>
+					</button>
+					<button type="submit" class="btn waves-effect green" [disabled]="form.invalid() || form.submited()">
+						<i class="material-icons left">save</i>
+						<span>Salvar</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

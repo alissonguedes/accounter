@@ -1,5 +1,5 @@
 export interface ItemNode {
-  id?: number | string;
+  id?: number | null;
   id_parent?: number | null;
   name: string;
   icon?: string;

@@ -18,12 +18,10 @@ export class CarteiraService {
   }
 
   getCarteira(id: number) {
-    return this.http.get('carteiras-digitais', {
-      id: id,
-    });
+    return this.http.get(`carteiras-digitais/${id}`);
   }
 
-  saveCarteira(values: any) {
+  saveCarteira(values: any, id?: number) {
     if (values.id) return this.http.put('carteiras-digitais', values);
     return this.http.post('carteiras-digitais', values);
   }

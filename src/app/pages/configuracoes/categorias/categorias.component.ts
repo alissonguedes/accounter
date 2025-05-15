@@ -31,14 +31,11 @@ export class CategoriasComponent implements OnInit {
   @ViewChild('modalCategoria') modalCategoria!: ElementRef;
   @ViewChild('modalDialog') modalDialog!: ElementRef;
 
-  public categorias$: BehaviorSubject<ItemNode[]> = new BehaviorSubject<
-    ItemNode[]
-  >([]);
   public isLoading = false;
+  public categorias$: BehaviorSubject<ItemNode[]> = new BehaviorSubject<ItemNode[]>([]);
+  public allCategorias$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
   protected searchControl = new FormControl();
-
-  public allCategorias: any;
-
   protected itemExpanded: number | null = null;
   protected isExpanded: boolean = false;
 
@@ -62,7 +59,7 @@ export class CategoriasComponent implements OnInit {
 
     this.categoriaService.getCategorias().subscribe((results) => {
       // this.categorias$.next(this.parseCategorias(results)), // Lista todas as categorias para evitar o delay de exibir "Nenhum resultado" prematuramente
-      this.allCategorias = results; // Categorias para listar no Select[name="id_parent"]
+      this.allCategorias$.next(results); // Categorias para listar no Select[name="id_parent"]
       this.preloaderService.hide('progress-bar');
     });
   }
@@ -104,7 +101,7 @@ export class CategoriasComponent implements OnInit {
     for (let categoria of categorias) {
       categoriasBuild.push({
         id: categoria.id,
-        name: categoria.titulo,
+        name: categoria.titulo ?? categoria.name,
         id_parent: categoria.id_parent,
         icon: categoria.icone,
         color: categoria.cor,
@@ -137,28 +134,62 @@ export class CategoriasComponent implements OnInit {
       status: categoria.status,
     };
 
-    if (!categoria.id) {
-      let categ = [...this.categorias$.value, categoriaNode];
-      this.categorias$.next(categ);
-    } else {
-      const index = this.categorias$.value.findIndex(
-        (item) => item.id === categoria.id
-      );
-      if (index !== -1) {
-        this.categorias$.value[index] = categoriaNode;
-        this.categorias$.next([...this.categorias$.value]);
-      }
-    }
+    /**
+     * TODO
+     * Por enquanto, vamos atualizar os dados requisitando ao servidor para reorganizar as categorias em suas hieraquias.
+     * mais à frente, nós veremos como atualizá-las sem perder a hierarquia de forma recursiva
+     */
+    // if (!categoria.id) {
+    //   let categ = [...this.categorias$.value, categoriaNode];
+    //   this.categorias$.next(categ);
+    // } else {
+    //   const index = this.categorias$.value.findIndex(
+    //     (item) => item.id === categoria.id
+    //   );
+    //   if (index !== -1) {
+    //     this.categorias$.value[index] = categoriaNode;
+    //     this.categorias$.next([...this.categorias$.value]);
+    //   }
+    // }
 
     let modalCategoria = this.modalCategoria.nativeElement;
     let modal = M.Modal.getInstance(modalCategoria);
     modal.close();
 
     this.categoriaService.saveCategoria(categoria).subscribe(
-      (ok: any) => {
-        toast(ok.message);
-        this.categorias$.next(this.parseCategorias(ok.categorias));
-        this.allCategorias = ok.categorias;
+      (res: any) => {
+        toast(res.message);
+
+        /**
+         * TODO
+         * Por enquanto, vamos atualizar os dados requisitando ao servidor para reorganizar as categorias em suas hieraquias.
+         * mais à frente, nós veremos como atualizá-las sem perder a hierarquia de forma recursiva
+         */
+        this.getCategorias(this.searchControl.value);
+
+        // const c = res.categoria;
+        // const updated = {
+        //   id: c.id,
+        //   name: c.titulo,
+        //   id_parent: c.id_parent,
+        //   icon: c.icon,
+        //   color: c.color,
+        //   status: c.status,
+        // };
+
+        // const index = this.categorias$.value.findIndex(
+        //   (item) => !item.id || item.id === updated.id
+        // );
+
+        // if (index !== -1) {
+        //   const updatedCategorias = [...this.categorias$.value];
+        //   updatedCategorias[index] = updated;
+        //   this.categorias$.next(updatedCategorias);
+        //   // this.categorias$.next(this.parseCategorias(updatedCategorias));
+        // }
+
+        // // Adiciona a nova categoria à lista [select name="id_parent"]
+        // this.allCategorias$.next([...this.allCategorias$.value, res.categoria]);
       },
       (err: any) => {
         this.categoriaForm.enable();
@@ -206,13 +237,14 @@ export class CategoriasComponent implements OnInit {
   private deleteRecursivo(categorias: any[], idRemove: number): any[] {
     return categorias
       .map((categoria: any) => {
-        if (categoria.children) {
-          categoria = {
-            ...categoria,
-            children: this.deleteRecursivo(categoria.children, idRemove),
-          };
-          return categoria;
+        const novaCategoria = { ...categoria };
+        if (novaCategoria.children) {
+          novaCategoria.children = this.deleteRecursivo(
+            novaCategoria.children,
+            idRemove
+          );
         }
+        return novaCategoria; // ← sempre retorna
       })
       .filter((categoria) => categoria.id !== idRemove);
   }
@@ -227,9 +259,19 @@ export class CategoriasComponent implements OnInit {
     modal.close();
 
     this.categoriaService.removeCategoria(id).subscribe(
-      (ok: any) => {
-        if (ok.success) {
-          toast(ok.message);
+      (res: any) => {
+        if (res.success) {
+          toast(res.message);
+
+          const categoriasAtualizadas = [...this.allCategorias$.value];
+          const index = categoriasAtualizadas.findIndex(
+            (item) => item.id === id
+          );
+
+          if (index !== -1) {
+            categoriasAtualizadas.splice(index, 1);
+            this.allCategorias$.next(categoriasAtualizadas);
+          }
         }
       },
       (err: any) => {
@@ -241,17 +283,43 @@ export class CategoriasComponent implements OnInit {
 
   openModal(id?: number) {
     const modalElement = this.modalCategoria.nativeElement;
+    let removedOption: Element | null = null;
+    let removedNextSibling: ChildNode | null = null;
+
     let modalOptions = {
       dismissible: false,
       startingTop: '100px',
       endingTop: '100px',
       onOpenStart: () => {
+        if (id) {
+          const select = document.querySelector('select[id="id_parent"]');
+          if (select) {
+            removedOption = select.querySelector(`option[value="${id}"]`);
+            if (removedOption) {
+              removedNextSibling = removedOption.nextSibling;
+              removedOption.remove();
+            }
+          }
+        }
         this.categoriaForm.submitForm(id);
       },
       onCloseEnd: () => {
+        if (id && removedOption) {
+          const select = document.querySelector('select[id="id_parent"]');
+          if (select) {
+            if (removedNextSibling) {
+              select.insertBefore(removedOption, removedNextSibling);
+            } else {
+              select.appendChild(removedOption);
+            }
+            removedOption = null;
+            removedNextSibling = null;
+          }
+        }
         this.categoriaForm.reset();
       },
     };
+
     let modal = M.Modal.init(modalElement, modalOptions);
     modal.open();
   }

@@ -14,10 +14,36 @@
 	font-weight: bold !important;
 }
 
+.list li {
+	list-style-type: disc !important;
+}
+
+.list li>ul>li {
+	list-style-type: circle !important;
+	margin-left: 15px;
+}
+
 .btn {
 	display: inline-flex;
 	place-content: center;
 	align-items: center;
+}
+
+.menu-collapsed main {
+	padding-left: 0;
+}
+
+.menu-collapsed .app-sidebar {
+	left: 0 !important;
+}
+
+.menu-collapsed .page-title {
+	margin-left: 52px;
+}
+
+.menu-collapsed .progress {
+	width: 100% !important;
+	left: 0;
 }
 
 .btn:not(.btn-floating) i,
@@ -134,7 +160,6 @@ nav .sidenav-trigger i {
 }
 
 .sidenav-main {
-	transform: translateX(0px);
 	height: 100%;
 	overflow: hidden;
 	background-color: var(--blue-grey);
@@ -192,8 +217,24 @@ nav .sidenav-trigger i {
 	nav .nav-wrapper i,
 	nav a.sidenav-trigger,
 	nav a.sidenav-trigger i {
-		height: 80px;
-		line-height: 80px;
+		height: inherit;
+		line-height: inherit;
+		margin: 0;
+	}
+
+	nav a#btn-menu {
+		position: absolute;
+		width: 50px;
+		text-align: center;
+		cursor: pointer;
+	}
+
+	nav a#btn-menu i {
+		width: 1%;
+		margin: auto;
+		text-align: center;
+		display: flex;
+		place-content: center;
 	}
 }
 

@@ -5,7 +5,6 @@ import { debounceTime, distinctUntilChanged, BehaviorSubject } from 'rxjs';
 
 import { PreloaderService } from '../../../services/preloader/preloader.service';
 import { PreloaderComponent } from '../../../services/preloader/preloader/preloader.component';
-import { ItemNode } from '../../../shared/nestable/item-node.model';
 import { slugify } from '../../../app.config';
 import { toast } from '../../../shared/toast';
 
@@ -64,46 +63,57 @@ export class CarteirasDigitaisComponent implements OnInit {
 
   save() {
     this.carteiraForm.disable();
-    let carteira = this.carteiraForm.getValues();
+    const rawCarteira = this.carteiraForm.getValues();
 
-    let wal = carteira;
-    wal.compartilhado = wal.compartilhado ? '1' : '0';
-    // wal.saldo_atual = wal.saldo_atual.toLocaleString('pt-br', {
-    //   style: 'currency',
-    //   currency: 'BRL',
-    // });
-    carteira.status = carteira.status ? 'ativa' : 'inativa';
+    const carteira = {
+      ...rawCarteira,
+      compartilhado: rawCarteira.compartilhado ? '1' : '0',
+      saldo_atual: rawCarteira.saldo_atual,
+      status: rawCarteira.status ? 'ativa' : 'inativa',
+    };
+
+    const carteiras = [...this.carteiras$.value];
 
     if (!carteira.id) {
-      let newCarteira = [...this.carteiras$.value, carteira];
-      this.carteiras$.next(newCarteira);
+      carteiras.push(carteira);
     } else {
-      const index = this.carteiras$.value.findIndex(
-        (item) => item.id === carteira.id
-      );
-
-      if (index !== -1) {
-        this.carteiras$.value[index] = carteira;
-        this.carteiras$.next([...this.carteiras$.value]);
-        // console.log('==> ', this.carteiras$.value[index]);
-      }
+      const index = carteiras.findIndex((c) => c.id === carteira.id);
+      if (index !== -1) carteiras[index] = carteira;
     }
 
+    this.carteiras$.next(carteiras);
     let modalCarteira = this.modalCarteira.nativeElement;
     let modal = M.Modal.getInstance(modalCarteira);
     modal.close();
 
-    // Envia a atualização para o backend
-    this.carteiraService.saveCarteira(carteira).subscribe(
-      (ok: any) => {
-        toast(ok.message);
-        this.carteiras$.next(ok.carteiras);
+    this.carteiraService.saveCarteira(carteira).subscribe({
+      next: (res: any) => {
+        toast(res.message);
+
+        const c = res.carteira;
+        const updated = {
+          id: c.id,
+          titulo: c.titulo,
+          titulo_slug: c.titulo_slug,
+          saldo_atual: c.saldo_atual,
+          status: c.status,
+        };
+
+        const index = this.carteiras$.value.findIndex(
+          (item) => !item.id || item.id === updated.id
+        );
+
+        if (index !== -1) {
+          const updatedCarteiras = [...this.carteiras$.value];
+          updatedCarteiras[index] = updated;
+          this.carteiras$.next(updatedCarteiras);
+        }
       },
-      (err: any) => {
+      error: () => {
         alert('Erro ao atualizar no servidor');
-        this.getCarteiras(this.searchControl.value); // Recarrega os dados do servidor
-      }
-    );
+        this.getCarteiras(this.searchControl.value);
+      },
+    });
   }
 
   /**

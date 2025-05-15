@@ -73,6 +73,7 @@ return new class extends Migration
 		Schema::create('tb_cartao_credito_bandeira', function (Blueprint $table) {
 			$table->id();
 			$table->string('bandeira', 20);
+			$table->string('icone', 255)->nullable();
 			$table->timestamps();
 		});
 
@@ -81,10 +82,15 @@ return new class extends Migration
 			$table->id();
 			$table->unsignedBigInteger('id_usuario');
 			$table->unsignedBigInteger('id_bandeira');
+			$table->string('titulo');
+			$table->string('titulo_slug');
 			$table->string('digito_verificador', 4);
 			$table->boolean('compartilhado')->default(false);
 			$table->unsignedInteger('limite')->nullable();
+			$table->unsignedInteger('limite_utilizado')->nullable();
+			$table->enum('status', ['0', '1'])->default('1');
 			$table->timestamps();
+
 			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 			$table->foreign('id_bandeira')->references('id')->on('tb_cartao_credito_bandeira')->cascadeOnDelete()->cascadeOnUpdate();
 		});

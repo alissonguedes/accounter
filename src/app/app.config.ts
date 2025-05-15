@@ -58,12 +58,14 @@ export const menuCollapse = () => {
  * Iniciar funções do Materializecss automaticamente
  */
 export const initApp = () => {
-  setTimeout(() => {
+  //   setTimeout(() => {
+  document.addEventListener('DOMContentLoaded', function () {
     M.AutoInit();
-    menuCollapse();
     let tooltip = document.querySelector('[data-tooltip]');
     M.Tooltip.init(tooltip);
+    menuCollapse();
   });
+  //   });
 };
 
 /**

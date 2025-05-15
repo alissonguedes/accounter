@@ -111,7 +111,7 @@
 								<label for="id_parent" class="active">Categoria</label>
 								<select formControlName="id_parent" id="id_parent" [attr.value]="this.categoriaForm.getForm().get('id_parent')?.value || this.categoriaForm.getForm().get('id_parent')?.setValue('')">
 									<option value="" selected>Sem categoria</option>
-									<option [value]="categoria.id" *ngFor="let categoria of allCategorias">{{ categoria.titulo }}</option>
+									<option *ngFor="let categoria of (allCategorias$ | async)" [value]="categoria?.id">{{ categoria?.titulo }}</option>
 								</select>
 							</div>
 						</div>
