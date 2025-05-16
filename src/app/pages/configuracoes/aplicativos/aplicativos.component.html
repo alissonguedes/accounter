@@ -3,7 +3,7 @@
 		<div class="card green accent-1" style="height: auto;">
 			<div class="card-content" style="height: auto; min-height: 1px;">
 				<ul>
-					<li>Adicione aqui todos os aplicativos que você possui e/ou utiliza.</li>
+					<li>Adicione aqui todos os aplicativos que você utiliza.</li>
 					<li>Essas informações só serão utilizadas para processamento dos relatórios de gastos. </li>
 					<li>As informações cadastradas aqui não serão utilizadas como formas ou meios de pagamentos.</li>
 				</ul>
@@ -52,7 +52,7 @@
 								<ng-content *ngIf="((aplicativos$ | async) ?? []).length > 0; else noResults">
 									<tr *ngFor="let item of aplicativos$ | async">
 										<!-- <td>{{ `${item.nome} - ${item.descricao}` }}</td> -->
-										<td>{{ item.bandeira }}</td>
+										<td>{{ item.nome }}</td>
 										<!-- <td class="center-align">{{ parseNumber(item.limite).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}) }}</td> -->
 										<td class="center-align">{{ item.status }}</td>
 										<td class="center-align">

@@ -59,7 +59,30 @@ export class AplicativosComponent {
     modal.open();
   }
 
-  save() {}
+  save() {
+    this.form.disable();
+    let rawApp = this.form.getValues();
+    let id = rawApp.id;
+    delete rawApp.id;
+
+    const app = {
+      ...rawApp,
+      compartilhado: rawApp.compartilhado ? '1' : '0',
+      status: rawApp.status ? '1' : '0',
+    };
+
+    const aplicativos = [...this.aplicativos$.value];
+
+    if (!id) {
+      aplicativos.push(app);
+    } else {
+      const index = aplicativos.findIndex((c) => c.id === id);
+      if (index !== -1) aplicativos[index] = app;
+    }
+
+    this.aplicativos$.next(aplicativos);
+    console.log(rawApp, app);
+  }
 
   updateStatus(updatedItem: any) {
     const originalStatus = updatedItem.status;
