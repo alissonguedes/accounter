@@ -4,10 +4,10 @@
 			<a data-target="slide-out" id="btn-menu" class=""><i class="material-icons">menu</i></a>
 			<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
 			<div class="navbar-list right">
-				<div class="lancamentos">
+				<a class="lancamentos waves-effect" (click)="openModalPeriodo()">
 					<h4>Lançamentos: <span data-target="modal-periodo" data-value="">Mai/2025</span></h4>
 					<input type="hidden" name="periodo" value="">
-				</div>
+				</a>
 			</div>
 		</div>
 		<app-preloader id="progress-bar">
@@ -76,5 +76,30 @@
 		</ul>
 	</div>
 
+	<div class="row">
+		<div class="col s11 m6 l3">
+			<div id="modal-periodo" class="modal periodo modal-footer-fixed">
+				<div class="modal-content">
+					<form action="#">
+						<div class="row center-align">
+							<div class="col s12 center-align">
+								<div class="input-field">
+									<label for="ano" class="active">Ano:</label>
+									<select name="ano" id="ano"></select>
+								</div>
+							</div>
+						</div>
+						<div id="calendar-months" class="row"></div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn right white-text modal-close blue">
+						<i class="material-symbols-outlined">close</i>
+						<span>Fechar</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </main>
