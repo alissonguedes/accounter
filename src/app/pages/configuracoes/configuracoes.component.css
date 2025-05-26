@@ -10,7 +10,7 @@
 
 .sidebar .sidebar-content .sidebar-menu#sidebar-list {
 	position: absolute;
-	top: 73px;
+	/* top: 73px; */
 	height: calc(100% - 56px) !important;
 }
 
@@ -20,7 +20,6 @@
 	top: 8px;
 	width: 280px;
 	height: 100%;
-	padding-top: 15px;
 	box-shadow: none;
 	background: #fff;
 }

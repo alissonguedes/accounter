@@ -154,11 +154,7 @@ nav .sidenav-trigger i {
 .sidenav-main {
 	height: 100%;
 	overflow: hidden;
-	background-color: var(--blue-grey);
-}
-
-.sidenav-main {
-	background-color: var(--blue-grey) !important;
+	background-color: var(--grey-darken-3);
 }
 
 .sidenav-main ul {

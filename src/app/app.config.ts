@@ -3,7 +3,7 @@ import {
   ApplicationConfig,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
@@ -55,11 +55,14 @@ export const menuCollapse = () => {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+  let route = window.location.href.split('/').splice(3).splice(0, 1).join();
   window.onresize = () => {
     let sidenav = document.querySelector('.sidenav');
     let instance = M.Sidenav.getInstance(sidenav);
 
-    if (window.innerWidth > 992) {
+    // não se deve abrir o menu principal caso a página esteja localizada em `configuracoes`.
+    // O resto deverá abrir ao redimensionar a janela para evitar bug na visualização.
+    if (window.innerWidth > 992 && route !== 'configuracoes') {
       instance.open();
       sidenav.classList.add('sidenav-fixed');
     }
