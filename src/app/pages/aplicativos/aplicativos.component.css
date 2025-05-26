@@ -1,3 +1,17 @@
 .sidenav li.user-view .user {
 	background-image: url(/assets/icons/aplicativo.png);
 }
+
+.sidenav-main ul {
+	background-color: var(--yellow);
+}
+
+.sidenav-main li button {
+	border-color: #000 !important;
+	color: #000 !important;
+}
+
+.sidenav-main li.active button {
+	background-color: #000;
+	color: #fff;
+}

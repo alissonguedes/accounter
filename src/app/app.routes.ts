@@ -13,6 +13,7 @@ import { PatrimonioComponent } from './pages/patrimonio/patrimonio.component';
 import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
 import { ProjecaoComponent } from './pages/projecao/projecao.component';
 import { PlanejamentoComponent } from './pages/planejamento/planejamento.component';
+import { FluxoDeCaixaComponent } from './pages/fluxo-de-caixa/fluxo-de-caixa.component';
 import { CategoriasComponent } from './pages/configuracoes/categorias/categorias.component';
 import { SistemaComponent } from './pages/configuracoes/sistema/sistema.component';
 import { CarteirasDigitaisComponent } from './pages/configuracoes/carteiras-digitais/carteiras-digitais.component';
@@ -33,6 +34,7 @@ export const routes: Routes = [
       { path: 'patrimonio', component: PatrimonioComponent },
       { path: 'projecao', component: ProjecaoComponent },
       { path: 'planejamento', component: PlanejamentoComponent },
+      { path: 'fluxo-de-caixa', component: FluxoDeCaixaComponent },
       {
         path: 'configuracoes',
         component: ConfiguracoesComponent,

@@ -156,7 +156,7 @@ export class CategoriasComponent implements OnInit {
     let modal = M.Modal.getInstance(modalCategoria);
     modal.close();
 
-    this.categoriaService.saveCategoria(categoria).subscribe(
+    this.categoriaService.saveCategoria(categoria, categoria.id).subscribe(
       (res: any) => {
         toast(res.message);
 

@@ -124,7 +124,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$categoria['status']     = $categoria['status'] ? '1' : '0';
 
 			$id  = DB::table('tb_categoria')->insertGetId($categoria);
-			$cat = DB::table('tb_categoria')->where('id', $id)->where('id_usuario', $categoria['id_usuario'])->get()->first();
+			$cat = DB::table('tb_categoria')->where('id', $id)->where('id_usuario', $categoria['id_usuario'])->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'categoria' => $cat], 201);
 		});
@@ -138,7 +138,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$categoria['status']     = $categoria['status'] ? '1' : '0';
 
 			DB::table('tb_categoria')->where('id', $id)->update($categoria);
-			$cat = DB::table('tb_categoria')->where('id', $id)->where('id_usuario', $categoria['id_usuario'])->get()->first();
+			$cat = DB::table('tb_categoria')->where('id', $id)->where('id_usuario', $categoria['id_usuario'])->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'categoria' => $cat], 200);
 		});
@@ -150,10 +150,10 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$message                 = 'Categoria atualizada com sucesso!';
 			$categoria['id_usuario'] = 2;
 
-			DB::table('tb_categoria')->findOrFail($id);
+			// DB::table('tb_categoria')->findOrFail($id);
 
 			DB::table('tb_categoria')->where('id', $id)->update($categoria);
-			$cat = DB::table('tb_categoria')->where('id', $id)->where('id_usuario', $categoria['id_usuario'])->get()->first();
+			$cat = DB::table('tb_categoria')->where('id', $id)->where('id_usuario', $categoria['id_usuario'])->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'categoria' => $cat], 200);
 		});
@@ -264,7 +264,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 			$newCarteira = [];
 			$id          = DB::table('tb_carteira_digital')->insertGetId($carteira);
-			$db          = DB::table('tb_carteira_digital')->where('id', $id)->where('id_usuario', $carteira['id_usuario'])->get()->first();
+			$db          = DB::table('tb_carteira_digital')->where('id', $id)->where('id_usuario', $carteira['id_usuario'])->first();
 			if ($db) {
 
 				$newCarteira = [
@@ -291,12 +291,12 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$carteira['saldo_atual']   = $carteira['saldo_atual'] * 100;
 			$carteira['compartilhado'] = $carteira['compartilhado'] ? '1' : '0';
 
-			DB::table('tb_carteira_digital')->findOrFail($id);
+			// DB::table('tb_carteira_digital')->findOrFail($id);
 			unset($carteira['id']);
 
 			$newCarteira = [];
 			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
-			$db = DB::table('tb_carteira_digital')->where('id', $id)->where('id_usuario', $carteira['id_usuario'])->get()->first();
+			$db = DB::table('tb_carteira_digital')->where('id', $id)->where('id_usuario', $carteira['id_usuario'])->first();
 			if ($db) {
 
 				$newCarteira = [
@@ -320,12 +320,11 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$message                = 'Carteira atualizada com sucesso!';
 			$carteira['id_usuario'] = 2;
 
-			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
 			$newCarteira = [];
 			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
-			$db = DB::table('tb_carteira_digital')->where('id', $id)->where('id_usuario', $carteira['id_usuario'])->get()->first();
-			if ($db) {
+			$db = DB::table('tb_carteira_digital')->where('id', $id)->where('id_usuario', $carteira['id_usuario'])->first();
 
+			if ($db) {
 				$newCarteira = [
 					'id'            => $db->id,
 					'titulo'        => $db->titulo,
@@ -334,15 +333,14 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 					'compartilhado' => $db->compartilhado,
 					'status'        => $db->status,
 				];
-
 			}
 
 			return response()->json(['success' => $success, 'message' => $message, 'carteira' => $newCarteira], 200);
 
 		});
 
-		Route::delete('/{id}', function () {
-			$id       = request('id');
+		Route::delete('/{id}', function ($id) {
+
 			$carteira = DB::table('tb_carteira_digital')->where('id', $id)->delete();
 
 			if ($carteira) {
@@ -359,6 +357,118 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 	});
 
 	/**
+	 * Aplicativos
+	 */
+	Route::prefix('/aplicativos')->group(function () {
+
+		Route::get('/{id?}', function ($id = null) {
+			$search         = request('search') ?? null;
+			$getAplicativos = DB::table('tb_aplicativos');
+			if ($id) {
+				return $getAplicativos->where('id', $id)->first();
+			} else if ($search) {
+				return $getAplicativos->where('nome', 'like', $search . '%')->get();
+			}
+			return $getAplicativos->get();
+		});
+
+		Route::post('/', function () {
+			$aplicativo                  = request()->all();
+			$success                     = true;
+			$message                     = 'Aplicativo adicionado com sucesso!';
+			$aplicativo['id_categoria']  = 228;
+			$aplicativo['id_usuario']    = 2;
+			$aplicativo['compartilhado'] = $aplicativo['compartilhado'] ? '1' : '0';
+
+			$novoAplicativo = [];
+			$id             = DB::table('tb_aplicativos')->insertGetId($aplicativo);
+			$db             = DB::table('tb_aplicativos')->where('id', $id)->where('id_usuario', $aplicativo['id_usuario'])->first();
+
+			if ($db) {
+				$novoAplicativo = [
+					'id'            => $db->id,
+					'nome'          => $db->nome,
+					'compartilhado' => $db->compartilhado,
+					'status'        => $db->status,
+				];
+			}
+
+			return response()->json(['success' => $success, 'message' => $message, 'aplicativo' => $novoAplicativo], 201);
+
+		});
+
+		Route::put('/{id}', function ($id) {
+			$aplicativo                  = request()->all();
+			$success                     = true;
+			$message                     = 'Aplicativo atualizado com sucesso!';
+			$aplicativo['id_categoria']  = 228;
+			$aplicativo['id_usuario']    = 2;
+			$aplicativo['compartilhado'] = $aplicativo['compartilhado'] ? '1' : '0';
+
+			$novoAplicativo = [];
+
+			DB::table('tb_aplicativos')->where('id', $id)->update($aplicativo);
+			$db = DB::table('tb_aplicativos')->where('id', $id)->where('id_usuario', $aplicativo['id_usuario'])->first();
+
+			if ($db) {
+				$novoAplicativo = [
+					'id'            => $db->id,
+					'nome'          => $db->nome,
+					'compartilhado' => $db->compartilhado,
+					'status'        => $db->status,
+				];
+			}
+
+			return response()->json(['success' => $success, 'message' => $message, 'aplicativo' => $novoAplicativo], 200);
+
+		});
+
+		Route::patch('/{id}', function ($id) {
+
+			$aplicativo                  = request()->all();
+			$success                     = true;
+			$message                     = 'Aplicativo atualizado com sucesso!';
+			$aplicativo['id_categoria']  = 228;
+			$aplicativo['id_usuario']    = 2;
+			$aplicativo['compartilhado'] = $aplicativo['compartilhado'] ? '1' : '0';
+
+			$novoAplicativo = [];
+
+			DB::table('tb_aplicativos')->where('id', $id)->update($aplicativo);
+			$db = DB::table('tb_aplicativos')->where('id', $id)->where('id_usuario', $aplicativo['id_usuario'])->first();
+
+			if ($db) {
+				$novoAplicativo = [
+					'id'            => $db->id,
+					'nome'          => $db->nome,
+					'compartilhado' => $db->compartilhado,
+					'status'        => $db->status,
+				];
+			}
+
+			return response()->json(['success' => $success, 'message' => $message, 'aplicativo' => $novoAplicativo], 200);
+
+		});
+
+		Route::delete('/{id}', function ($id) {
+
+			$carteira = DB::table('tb_aplicativos')->where('id', $id)->delete();
+
+			if ($carteira) {
+				$success = true;
+				$message = 'Aplicativo removido com sucesso!';
+			} else {
+				$success = false;
+				$message = 'Erro ao tentar remover o item [' . $id . ']!';
+			}
+
+			return response()->json(['success' => $success, 'message' => $message], 200);
+
+		});
+
+	});
+
+	/**
 	 * Cartões de crédito
 	 */
 	Route::prefix('/cartoes-credito')->group(function () {
@@ -370,7 +480,8 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 		Route::get('/{id?}', function ($id = null) {
 
 			$search     = request('search') ?? null;
-			$getCartoes = DB::table('tb_cartao_credito')->select('id',
+			$getCartoes = DB::table('tb_cartao_credito')->select(
+				'id',
 				'id_usuario',
 				'id_bandeira',
 				DB::raw('(select bandeira from tb_cartao_credito_bandeira where id = id_bandeira) as bandeira'),
@@ -385,7 +496,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			);
 
 			if ($id) {
-				return $getCartoes->where('id', $id)->get()->first();
+				return $getCartoes->where('id', $id)->first();
 			} elseif ($search) {
 				return $getCartoes->where('titulo', 'like', urldecode($search) . '%')->get();
 			} else {
@@ -417,7 +528,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				DB::raw('(limite / 100) as limite'),
 				DB::raw('(limite_utilizado / 100) as limite_utilizado'),
 				'status',
-			)->where('id', $id)->get()->first();
+			)->where('id', $id)->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'cartao' => $db_cartao], 201);
 
@@ -448,7 +559,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				DB::raw('(limite / 100) as limite'),
 				DB::raw('(limite_utilizado / 100) as limite_utilizado'),
 				'status',
-			)->where('id', $id)->get()->first();
+			)->where('id', $id)->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'cartao' => $db_cartao], 200);
 

@@ -2,6 +2,19 @@
 	background-image: url(/assets/icons/dashboard.png);
 }
 
+.sidenav-main ul {
+	background-color: var(--blue-lighten-1);
+}
+
+.sidenav-main li button {
+	border-color: var(--blue-lighten-2) !important;
+}
+
+.sidenav-main li.active button {
+	background-color: var(--blue-lighten-2);
+	color: #fff;
+}
+
 .card .card-content {
 	padding: 10px 14px;
 }

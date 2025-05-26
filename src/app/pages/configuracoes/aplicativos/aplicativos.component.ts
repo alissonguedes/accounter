@@ -34,7 +34,25 @@ export class AplicativosComponent {
     protected aplicativoService: AplicativoService,
     protected form: AplicativoForm,
     private preloaderService: PreloaderService
-  ) {}
+  ) {
+    this.getAplicativos();
+    this.searchControl.valueChanges
+      .pipe(debounceTime(200), distinctUntilChanged())
+      .subscribe((valor) => {
+        this.preloaderService.show('progress-bar');
+        this.getAplicativos(valor);
+      });
+  }
+
+  getAplicativos(id?: string) {
+    this.isLoading = true;
+    this.preloaderService.show('progress-bar');
+    this.aplicativoService.getAplicativos(id).subscribe((results: any) => {
+      this.aplicativos$.next(results);
+      this.isLoading = false;
+      this.preloaderService.hide('progress-bar');
+    });
+  }
 
   parseNumber(value: string): number {
     return parseFloat(value);
@@ -49,6 +67,11 @@ export class AplicativosComponent {
       endingTop: '100px',
       onOpenStart: () => {
         this.form.submitForm(id);
+      },
+      onOpenEnd: () => {
+		setTimeout(function(){
+        document.querySelector('[autofocus]').focus();
+		})
       },
       onCloseEnd: () => {
         this.form.reset();
@@ -81,6 +104,36 @@ export class AplicativosComponent {
     }
 
     this.aplicativos$.next(aplicativos);
+
+    let modalAplicativo = this.modalAplicativo?.nativeElement;
+    let modal = M.Modal.getInstance(modalAplicativo);
+    modal.close();
+
+    this.aplicativoService.saveAplicativo(app, id).subscribe(
+      (res: any) => {
+        toast(res.message);
+
+        /***********************************************************************
+         * É necessário ter este bloco para atualizar o ID do banco de dados
+         * para evitar erros na aplicação. Caso não seja atualizado o ID,
+         * ao tentar editar ou remover o registro, o back-end irá apresentar erro
+         * devido à falta do ID.
+         * Visualmente, nada será atualizado para o usuário.
+         ***********************************************************************/
+        const index = this.aplicativos$.value.findIndex(
+          (item) => !item.id || item.id === res.aplicativo.id
+        );
+
+        if (index !== -1) {
+          const app = [...this.aplicativos$.value];
+          app[index] = res.aplicativo;
+          this.aplicativos$.next(app);
+        }
+        /***********************************************************************/
+      },
+      (err: any) => {}
+    );
+
     console.log(rawApp, app);
   }
 

@@ -101,12 +101,21 @@ return new class extends Migration
 			$table->unsignedBigInteger('id_usuario');
 			$table->unsignedBigInteger('id_categoria');
 			$table->string('nome', 100);
+			$table->string('icone')->nullable();
 			$table->string('descricao')->nullable();
 			$table->boolean('compartilhado')->default(false);
 			$table->enum('status', ['0', '1'])->default('1');
 			$table->timestamps();
 			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
 			$table->foreign('id_categoria')->references('id')->on('tb_categoria')->cascadeOnDelete()->cascadeOnUpdate();
+		});
+
+		Schema::create('tb_usuario_aplicativo', function (Blueprint $table) {
+			$table->id();
+			$table->unsignedBigInteger('id_usuario');
+			$table->unsignedBigInteger('id_aplicativo');
+			$table->foreign('id_usuario')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+			$table->foreign('id_aplicativo')->references('id')->on('tb_aplicativos')->cascadeOnDelete()->cascadeOnUpdate();
 		});
 
 		// Tabela para cadastro de planejamentos e metas financeiras

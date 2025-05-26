@@ -37,6 +37,7 @@ declare const document: any;
 export class AppComponent implements AfterViewInit, OnDestroy {
   public title$;
   public pageHeader$;
+  public route: any;
 
   constructor(
     private auth: AuthService,
@@ -72,30 +73,31 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           this.preloaderService.hide('progress-bar');
         }, 500);
 
-        let activated = route.url.split('/').filter((s: any) => s)[0];
+        this.route = route.url.split('/').filter((s: any) => s)[0];
 
         let body = document.querySelector('body');
         let menu = document.querySelector('#slide-out');
         let sidenav = M.Sidenav.getInstance(menu);
 
-        console.log(activated, activated === 'configuracoes');
-
-        if (activated === 'configuracoes') {
+        if (this.route === 'configuracoes') {
           menu.classList.remove('sidenav-fixed');
           body.classList.add('menu-collapsed');
-          sidenav.close();
+          if (sidenav) sidenav.close();
         } else {
           menu.style.transform = 'translateX(0px)';
           body.classList.remove('menu-collapsed');
+          body.style.overflow = 'auto';
           let overlay = document.querySelectorAll('.sidenav-overlay');
           overlay.forEach((o: any) => {
-            console.log(o);
             if (o.style.display === 'block' && o.style.opacity === '1') {
               o.style.display = 'none';
               o.style.opacity = '0';
             }
           });
         }
+
+        var elems = document.querySelectorAll('.fixed-action-btn');
+        var instances = M.FloatingActionButton.init(elems);
       });
   }
 

@@ -1,3 +1,16 @@
 .sidenav li.user-view .user {
 	background-image: url(/assets/icons/patrimonio.png);
 }
+
+.sidenav-main ul {
+	background-color: var(--green-darken-2);
+}
+
+.sidenav-main li button {
+	border-color: var(--green-darken-3) !important;
+}
+
+.sidenav-main li.active button {
+	background-color: var(--green-darken-3);
+	color: #fff;
+}

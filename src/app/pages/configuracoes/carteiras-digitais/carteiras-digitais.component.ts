@@ -86,7 +86,7 @@ export class CarteirasDigitaisComponent implements OnInit {
     let modal = M.Modal.getInstance(modalCarteira);
     modal.close();
 
-    this.carteiraService.saveCarteira(carteira).subscribe({
+    this.carteiraService.saveCarteira(carteira, carteira.id).subscribe({
       next: (res: any) => {
         toast(res.message);
 

@@ -1,3 +1,16 @@
 .sidenav li.user-view .user {
 	background-image: url(/assets/icons/financas.png);
 }
+
+.sidenav-main ul {
+	background-color: var(--red-lighten-1);
+}
+
+.sidenav-main li button {
+	border-color: var(--red-lighten-2) !important;
+}
+
+.sidenav-main li.active button {
+	background-color: var(--red-lighten-2);
+	color: #fff;
+}

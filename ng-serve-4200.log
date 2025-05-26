@@ -15,15 +15,7 @@ Please consider reporting any issues you encounter here: https://github.com/angu
 
 ❯ Building...
 ✔ Building...
-Initial chunk files | Names         |  Raw size
-scripts.js          | scripts       | 993.17 kB | 
-main.js             | main          | 331.78 kB | 
-styles.css          | styles        | 185.42 kB | 
-polyfills.js        | polyfills     |  90.20 kB | 
-
-                    | Initial total |   1.60 MB
-
-Application bundle generation complete. [3.569 seconds]
+Application bundle generation failed. [3.808 seconds]
 
 [33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
 
@@ -39,246 +31,422 @@ Application bundle generation complete. [3.569 seconds]
          ╵                                      [32m~~~~~~~~~~[0m
 
 
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'/assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~[0m
+
+
 Watch mode enabled. Watching for file changes...
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.043 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/public/assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'/public/assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.048 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../public/assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'../public/assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.024 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'../assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.052 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'./assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.143 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./public/assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'./public/assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.028 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "assets/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'assets/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "assets/color.css" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.028 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "public/assets/css/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'public/assets/css/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "public/assets/css/color.css" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.030 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/assets/css/color.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'/assets/css/color.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.045 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'/assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.025 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'./assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.051 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "public/assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'public/assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "public/assets/css/colors.css" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.099 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/public/assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'/public/assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.022 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'../assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.052 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'../../assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.045 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "/accounter/public/assets/css/colors.css"[0m
+
+    src/styles.css:1:12:
+[37m      1 │ @import url([32m'/accounter/public/assets/css/colors.css'[37m);
+        ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+scripts.js          | scripts       | 993.17 kB | 
+main.js             | main          | 417.31 kB | 
+styles.css          | styles        | 185.42 kB | 
+polyfills.js        | polyfills     |  90.20 kB | 
+
+                    | Initial total |   1.69 MB
+
+Application bundle generation complete. [0.171 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
+[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
+         ╵                                      [32m~~~~~~~~~~[0m
+
+
 NOTE: Raw file sizes do not reflect development server per-request transformations.
   ➜  Local:   http://localhost:4200/
   ➜  Network: http://10.255.255.254:4200/
   ➜  Network: http://192.168.210.231:4200/
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 331.76 kB | 
-
-Application bundle generation complete. [1.303 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Component update sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 331.78 kB | 
-
-Application bundle generation complete. [0.504 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Page reload sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 331.89 kB | 
-
-Application bundle generation complete. [0.370 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Page reload sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 332.06 kB | 
-
-Application bundle generation complete. [0.305 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Page reload sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 332.06 kB | 
-
-Application bundle generation complete. [0.263 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Page reload sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Application bundle generation failed. [0.286 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:80:31:
-[37m      80 │     if(index !== -1) aplicativos[[32m[37m]
-         ╵                                  [32m^[0m
-
-
-[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mUnexpected "]"[0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:161:28:
-[37m      161 │                 aplicativos[[32m][37m;
-          ╵                             [32m^[0m
-
-
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Application bundle generation failed. [0.426 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'cartao'.[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:80:45:
-[37m      80 │       if (index !== -1) aplicativos[index] = [32mcartao[37m;
-         ╵                                              [32m~~~~~~[0m
-
-
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names         |  Raw size
-scripts.js          | scripts       | 993.17 kB | 
-main.js             | main          | 332.30 kB | 
-styles.css          | styles        | 185.42 kB | 
-polyfills.js        | polyfills     |  90.20 kB | 
-
-                    | Initial total |   1.60 MB
-
-Application bundle generation complete. [0.371 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Page reload sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 332.34 kB | 
-
-Application bundle generation complete. [0.358 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Page reload sent to client(s).
-❯ Changes detected. Rebuilding...
-✔ Changes detected. Rebuilding...
-Initial chunk files | Names |  Raw size
-main.js             | main  | 332.33 kB | 
-
-Application bundle generation complete. [0.297 seconds]
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of AplicativosComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/aplicativos/aplicativos.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of CartoesCreditoComponent[0m [1m[35m[plugin angular-compiler][0m
-
-    src/app/pages/configuracoes/cartoes-credito/cartoes-credito.component.ts:20:47:
-[37m      20 │ ...ommonModule, ReactiveFormsModule, [32mRouterLink[37m, PreloaderComponent],
-         ╵                                      [32m~~~~~~~~~~[0m
-
-
-Component update sent to client(s).

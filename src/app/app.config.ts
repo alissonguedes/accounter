@@ -54,18 +54,28 @@ export const menuCollapse = () => {
     });
 };
 
+document.addEventListener('DOMContentLoaded', function () {
+  window.onresize = () => {
+    let sidenav = document.querySelector('.sidenav');
+    let instance = M.Sidenav.getInstance(sidenav);
+
+    if (window.innerWidth > 992) {
+      instance.open();
+      sidenav.classList.add('sidenav-fixed');
+    }
+  };
+});
+
 /**
  * Iniciar funções do Materializecss automaticamente
  */
 export const initApp = () => {
-  //   setTimeout(() => {
   document.addEventListener('DOMContentLoaded', function () {
     M.AutoInit();
-    let tooltip = document.querySelector('[data-tooltip]');
+    let tooltip = document.querySelectorAll('[data-tooltip]');
     M.Tooltip.init(tooltip);
     menuCollapse();
   });
-  //   });
 };
 
 /**
@@ -243,7 +253,7 @@ function getMeses() {
 
 export const meses = getMeses();
 
-console.log(meses);
+// console.log(meses);
 // console.log(meses(1)?.abreviado);
 // console.log(meses[1]);
 // console.log(meses?.abreviado);

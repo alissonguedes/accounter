@@ -19,15 +19,13 @@ export class CategoriaService {
   }
 
   getCategoria(id: number) {
-    return this.http.get('categorias', {
-      id: id,
-    });
+    return this.http.get(`categorias/${id}`);
   }
 
-  saveCategoria(values: any) {
-    if (values.id) return this.http.put('categorias', values);
+  saveCategoria(values: any, id?: number) {
+    if (values.id) return this.http.put(`categorias/${id}`, values);
 
-    return this.http.post('categorias', values);
+    return this.http.post(`categorias/${id}`, values);
   }
 
   removeCategoria(id: number) {
