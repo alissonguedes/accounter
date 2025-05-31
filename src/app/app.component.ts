@@ -77,23 +77,30 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
         let body = document.querySelector('body');
         let menu = document.querySelector('#slide-out');
-        let sidenav = M.Sidenav.getInstance(menu);
 
-        if (this.route === 'configuracoes') {
-          menu.classList.remove('sidenav-fixed');
-          body.classList.add('menu-collapsed');
-          if (sidenav) sidenav.close();
-        } else {
-          menu.style.transform = 'translateX(0px)';
-          body.classList.remove('menu-collapsed');
-          body.style.overflow = 'auto';
-          let overlay = document.querySelectorAll('.sidenav-overlay');
-          overlay.forEach((o: any) => {
-            if (o.style.display === 'block' && o.style.opacity === '1') {
-              o.style.display = 'none';
-              o.style.opacity = '0';
+        if (menu) {
+          let sidenav = M.Sidenav.getInstance(menu);
+          console.log(this.route);
+
+          //   if (this.route === 'configuracoes' || this.route === 'fluxo-de-caixa') {
+          if (this.route === 'configuracoes') {
+            menu.classList.remove('sidenav-fixed');
+            body.classList.add('menu-collapsed');
+            if (sidenav) sidenav.close();
+          } else {
+            if (window.innerWidth > 992) {
+              menu.style.transform = 'translateX(0px)';
+              body.classList.remove('menu-collapsed');
+              body.style.overflow = 'auto';
+              let overlay = document.querySelectorAll('.sidenav-overlay');
+              overlay.forEach((o: any) => {
+                if (o.style.display === 'block' && o.style.opacity === '1') {
+                  o.style.display = 'none';
+                  o.style.opacity = '0';
+                }
+              });
             }
-          });
+          }
         }
 
         var elems = document.querySelectorAll('.fixed-action-btn');

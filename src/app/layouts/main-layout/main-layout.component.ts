@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TitleService } from '../../services/title/title.service';
 import { AppComponent } from '../../app.component';
@@ -24,8 +31,15 @@ declare const document: any;
   styleUrl: './main-layout.component.css',
 })
 export class MainLayoutComponent {
+  @ViewChild('modalPeriodo') modalPeriodo!: ElementRef;
+
   storage: any;
-  constructor(public app: AppComponent, public http: HttpService) {
+
+  constructor(
+    public app: AppComponent,
+    public http: HttpService,
+    public calendar: ShowCalendar
+  ) {
     this.storage = localStorage;
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -40,9 +54,9 @@ export class MainLayoutComponent {
   }
 
   openModalPeriodo() {
-    const date = new Date();
-    const ano_ini = date.getFullYear() - 10;
-    const ano_fim = date.getFullYear();
+    // const date = new Date();
+    // const ano_ini = date.getFullYear() - 10;
+    // const ano_fim = date.getFullYear();
     const selectAno = document.querySelector(
       '#modal-periodo .input-field select[name="ano"]'
     );
@@ -61,26 +75,21 @@ export class MainLayoutComponent {
       'Dez',
     ];
 
-    for (let i = ano_ini; i <= ano_fim; i++) {
-      const option = document.createElement('option');
-      option.value = i;
-      option.textContent = i;
-      if (i === date.getFullYear()) option.selected = true;
-      selectAno.appendChild(option);
-    }
-
-    M.FormSelect.init(selectAno);
+    // for (let i = ano_ini; i <= ano_fim; i++) {
+    //   const option = document.createElement('option');
+    //   option.value = i;
+    //   option.textContent = i;
+    //   if (i === date.getFullYear()) option.selected = true;
+    //   selectAno.appendChild(option);
+    // }
 
     /** abre a janela de período para seleção do mês/ano dos lançamentos */
-    // document
-    //   .querySelectorAll("[data-target='modal-periodo']")
-    //   .forEach((button: any) => {
-    // button.addEventListener('click', () => {
     document
       .querySelectorAll('#calendar-months .btn')
       .forEach((label: any) => label.classList.remove('checked'));
 
     const periodoInput = document.querySelector("input[name='periodo']");
+    const periodoLabel = document.querySelector('#periodo-label');
     let periodo = periodoInput?.value;
 
     const selectedValue = periodoInput.getAttribute('value').split('/')[0];
@@ -88,7 +97,8 @@ export class MainLayoutComponent {
       .querySelector(`#calendar-months .btn input[value='${selectedValue}']`)
       ?.parentElement.classList.add('checked');
 
-    const modalElement = document.getElementById('modal-periodo');
+    const modalElement = this.modalPeriodo?.nativeElement;
+    //document.getElementById('modal-periodo');
     // const modalInstance = M.Modal.init(modalElement, {
     //     dismissible: false,
     //     onOpenStart: () => {
@@ -183,7 +193,7 @@ export class MainLayoutComponent {
               const periodoSelecionado = `${mesSelecionado}/${anoSelecionado}`;
               console.log(periodoSelecionado);
               periodoInput.setAttribute('data-value', periodoSelecionado);
-              periodoInput.textContent = `${
+              periodoLabel.textContent = `${
                 meses[parseInt(mesSelecionado) - 1]
               }/${anoSelecionado}`;
               periodoInput.value = periodoSelecionado;
@@ -199,7 +209,5 @@ export class MainLayoutComponent {
     });
 
     modalInstance.open();
-    // });
-    //   });
   }
 }

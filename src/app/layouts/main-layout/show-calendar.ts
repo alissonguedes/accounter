@@ -1,5 +1,36 @@
+import { Injectable } from '@angular/core';
+import { meses } from '../../app.config';
+
+@Injectable({
+  providedIn: 'root',
+})
 export class ShowCalendar {
   constructor() {}
+
+  // Exibir anos
+  showYears() {
+    const date = new Date();
+    const ano_ini = date.getFullYear() - 10; // Obter o ano inicial da configuração do sistema. Padrão 10 anos anteriores ao ano atual
+    const ano_fim = date.getFullYear(); // O ano atual
+    let ano: any = [];
+
+    for (let i = ano_ini; i <= ano_fim; i++) {
+      ano.push(i);
+    }
+
+    return ano;
+  }
+
+  // Exibir meses
+  showMonths() {
+    let mes: any = [];
+
+    meses().forEach((m: any) => {
+      mes.push(m);
+    });
+
+    return mes;
+  }
 
   static setDefaultDate() {
     //     let periodo = document.querySelector('[name="periodo"]').value ?? null;

@@ -44,7 +44,9 @@ export const menuCollapse = () => {
   let instance = M.Sidenav.init(sidenav);
 
   document
-    .querySelectorAll('#slide-out li a, #slide-out li button')
+    .querySelectorAll(
+      '#slide-out li a, #slide-out li button, .sidenav-footer a, .sidenav-footer button'
+    )
     .forEach((e: any) => {
       e.addEventListener('click', function () {
         if (window.innerWidth <= 992) {
