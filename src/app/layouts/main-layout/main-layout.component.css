@@ -11,3 +11,20 @@
 	align-items: center;
 	justify-content: center;
 }
+
+#modal-periodo {
+	padding: 0;
+	height: 400px;
+	min-height: 400px;
+	max-height: 100%;
+}
+
+#calendar-months .btn.checked {
+	background-color: var(--teal) !important;
+	color: #fff !important;
+}
+
+#calendar-months .btn.disabled {
+	background-color: var(--grey-lighten-3) !important;
+	color: var(--grey-lighten-1) !important;
+}

@@ -43,6 +43,14 @@
 	margin: 0 10px;
 }
 
+label.btn {
+	padding: 20px 30px;
+	width: inherit;
+	line-height: normal;
+	height: 2px;
+	margin: 15px auto;
+}
+
 header {
 	height: 64px;
 	line-height: 64px;

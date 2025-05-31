@@ -32,6 +32,11 @@ declare const document: any;
 })
 export class MainLayoutComponent {
   @ViewChild('modalPeriodo') modalPeriodo!: ElementRef;
+  @ViewChild('selectPeriodo') selectPeriodo!: ElementRef;
+  @ViewChild('periodoInput') periodoInput!: ElementRef;
+  @ViewChild('periodoLabel') periodoLabel!: ElementRef;
+
+  public anoSelecionado: number = this.calendar.currentYear;
 
   storage: any;
 
@@ -54,39 +59,78 @@ export class MainLayoutComponent {
   }
 
   openModalPeriodo() {
-    // const date = new Date();
-    // const ano_ini = date.getFullYear() - 10;
-    // const ano_fim = date.getFullYear();
+    const modalPeriodo = this.modalPeriodo.nativeElement;
+
+    const modalOptions = {
+      dismissible: false,
+      startingTop: '15%',
+      endingTop: '15%',
+      onOpenStart: () => {
+        const self = this;
+        const meses = this.calendar.getMonths();
+        const selectYear = this.selectPeriodo.nativeElement;
+        const periodoInput = this.periodoInput.nativeElement;
+        const periodoLabel = this.periodoLabel.nativeElement;
+        const btnMonth = document.querySelectorAll('#calendar-months .btn');
+
+        let currentPeriodo =
+          periodoInput?.value ||
+          `${this.calendar.currentMonth}/${this.calendar.currentYear}`;
+        let [mesSelecionado, anoSelecionado] = currentPeriodo.split('/');
+
+        this.anoSelecionado = selectYear?.value;
+
+        // limpa a seleção de mês ao trocar o ano
+        btnMonth.forEach((label: any) => label.classList.remove('checked'));
+        document.querySelector(`#calendar-months .btn input[value="${mesSelecionado}"]`).parentElement.classList.add('checked');
+
+        selectYear.addEventListener('change', function (e: any) {
+          let novoAnoSelecionado = e.target.value;
+
+          // limpa a seleção de mês ao trocar o ano
+          btnMonth.forEach((label: any) => label.classList.remove('checked'));
+
+          if (novoAnoSelecionado === anoSelecionado)
+            document.querySelector(`#calendar-months .btn input[value="${mesSelecionado}"]`).parentElement.classList.add('checked');
+
+          self.anoSelecionado = novoAnoSelecionado;
+        });
+
+        document
+          .getElementById('calendar-months')
+          .addEventListener('change', function (e: any) {
+            const input = e.target;
+
+            if (input.matches('input[type="radio"]')) {
+              mesSelecionado = input.value;
+              anoSelecionado = selectYear.value;
+
+              const periodoSelecionado = `${mesSelecionado}/${anoSelecionado}`;
+
+              periodoInput.value = periodoSelecionado;
+              periodoLabel.textContent = `${meses[mesSelecionado - 1]}/${anoSelecionado}`;
+              btnMonth.forEach((label: any) =>label.classList.remove('checked'));
+              input.parentElement.classList.add('checked');
+              modal.close();
+            }
+          });
+      },
+    };
+
+    const modal = M.Modal.init(modalPeriodo, modalOptions);
+    modal.open();
+  }
+
+  openModalPeriodo_OLD() {
     const selectAno = document.querySelector(
       '#modal-periodo .input-field select[name="ano"]'
     );
-    const meses = [
-      'Jan',
-      'Fev',
-      'Mar',
-      'Abr',
-      'Mai',
-      'Jun',
-      'Jul',
-      'Ago',
-      'Set',
-      'Out',
-      'Nov',
-      'Dez',
-    ];
-
-    // for (let i = ano_ini; i <= ano_fim; i++) {
-    //   const option = document.createElement('option');
-    //   option.value = i;
-    //   option.textContent = i;
-    //   if (i === date.getFullYear()) option.selected = true;
-    //   selectAno.appendChild(option);
-    // }
+    const meses = this.calendar.getMonths();
 
     /** abre a janela de período para seleção do mês/ano dos lançamentos */
-    document
-      .querySelectorAll('#calendar-months .btn')
-      .forEach((label: any) => label.classList.remove('checked'));
+    // document
+    //   .querySelectorAll('#calendar-months .btn')
+    //   .forEach((label: any) => label.classList.remove('checked'));
 
     const periodoInput = document.querySelector("input[name='periodo']");
     const periodoLabel = document.querySelector('#periodo-label');
@@ -136,8 +180,8 @@ export class MainLayoutComponent {
     // });
     const modalInstance = M.Modal.init(modalElement, {
       dismissible: false,
-      startingTop: '100px',
-      endingTop: '100px',
+      startingTop: '15%',
+      endingTop: '15%',
       onOpenStart: () => {
         const dataAtual = new Date();
         const mesAtual = String(dataAtual.getMonth() + 1); // Mês atual (1-12)
@@ -156,7 +200,6 @@ export class MainLayoutComponent {
           ?.parentElement.classList.add('checked');
 
         selectAno.addEventListener('change', function (e: any) {
-          console.log(e);
           let value = null;
           let novoAnoSelecionado = value;
           ShowCalendar.showMonths(novoAnoSelecionado);

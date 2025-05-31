@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild, ElementRef } from '@angular/core';
 import { meses } from '../../app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShowCalendar {
+  public date = new Date();
+  public currentMonth: number = this.date.getMonth() + 1;
+  public currentYear: number = this.date.getFullYear();
+
   constructor() {}
 
   // Exibir anos
-  showYears() {
-    const date = new Date();
-    const ano_ini = date.getFullYear() - 10; // Obter o ano inicial da configuração do sistema. Padrão 10 anos anteriores ao ano atual
-    const ano_fim = date.getFullYear(); // O ano atual
+  getYears() {
+    const ano_ini = this.date.getFullYear() - 10; // Obter o ano inicial da configuração do sistema. Padrão 10 anos anteriores ao ano atual
+    const ano_fim = this.date.getFullYear(); // O ano atual
     let ano: any = [];
 
     for (let i = ano_ini; i <= ano_fim; i++) {
@@ -22,10 +25,10 @@ export class ShowCalendar {
   }
 
   // Exibir meses
-  showMonths() {
+  getMonths() {
     let mes: any = [];
 
-    meses().forEach((m: any) => {
+    meses.abreviados.forEach((m: any) => {
       mes.push(m);
     });
 
