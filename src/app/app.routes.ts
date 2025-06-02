@@ -14,6 +14,7 @@ import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.comp
 import { ProjecaoComponent } from './pages/projecao/projecao.component';
 import { PlanejamentoComponent } from './pages/planejamento/planejamento.component';
 import { FluxoDeCaixaComponent } from './pages/fluxo-de-caixa/fluxo-de-caixa.component';
+import { EntradasComponent as FluxoEntradas} from './pages/fluxo-de-caixa'
 import { CategoriasComponent } from './pages/configuracoes/categorias/categorias.component';
 import { SistemaComponent } from './pages/configuracoes/sistema/sistema.component';
 import { CarteirasDigitaisComponent } from './pages/configuracoes/carteiras-digitais/carteiras-digitais.component';
