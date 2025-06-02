@@ -4,7 +4,7 @@
 			<a data-target="slide-out" id="btn-menu" class=""><i class="material-icons">menu</i></a>
 			<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
 			<div class="navbar-list right">
-				<a class="lancamentos waves-effect" (click)="openModalPeriodo()">
+				<a class="lancamentos waves-effect" (click)="openModalPeriodo()" [style.display]="app.route === 'configuracoes' || app.route === 'planejamento' || app.route === 'projecao' ? 'none' : null">
 					<h4>Lançamentos: <span #periodoLabel id="periodo-label">{{ calendar.periodoLabel }}</span></h4>
 					<input #periodoInput type="hidden" name="periodo" value="{{ calendar.periodoSelecionado }}">
 				</a>

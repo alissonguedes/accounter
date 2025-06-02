@@ -23,7 +23,7 @@ export class CarteiraService {
 
   saveCarteira(values: any, id?: number) {
     if (values.id) return this.http.put(`carteiras-digitais/${id}`, values);
-    return this.http.post(`carteiras-digitais/${id}`, values);
+    return this.http.post(`carteiras-digitais`, values);
   }
 
   removeCarteira(id: number) {

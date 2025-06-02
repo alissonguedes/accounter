@@ -59,10 +59,12 @@ export class MainLayoutComponent {
   }
 
   openModalPeriodo() {
-    const selectYear = this.selectPeriodo.nativeElement;
-    const periodoInput = this.periodoInput.nativeElement;
+
     const btnMonth = document.querySelectorAll('#calendar-months .btn');
     const modalPeriodo = this.modalPeriodo.nativeElement;
+    const selectYear = this.selectPeriodo.nativeElement;
+    const periodoInput = this.periodoInput.nativeElement;
+
     let currentPeriodo = periodoInput?.value || `${this.calendar.currentMonth}/${this.calendar.currentYear}`;
     let [mesSelecionado, anoSelecionado] = currentPeriodo.split('/');
 

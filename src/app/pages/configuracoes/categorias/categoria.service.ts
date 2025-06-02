@@ -25,7 +25,7 @@ export class CategoriaService {
   saveCategoria(values: any, id?: number) {
     if (values.id) return this.http.put(`categorias/${id}`, values);
 
-    return this.http.post(`categorias/${id}`, values);
+    return this.http.post(`categorias`, values);
   }
 
   removeCategoria(id: number) {
