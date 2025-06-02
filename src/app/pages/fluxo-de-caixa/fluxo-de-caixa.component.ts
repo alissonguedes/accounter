@@ -21,7 +21,7 @@ declare const window: any;
   ],
   templateUrl: './fluxo-de-caixa.component.html',
   styleUrl: './fluxo-de-caixa.component.css',
-  encapsulation: ViewEncapsulation.None,
+  //   encapsulation: ViewEncapsulation.None,
 })
 export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
   mes: string = '';

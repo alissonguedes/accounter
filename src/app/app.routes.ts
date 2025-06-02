@@ -35,11 +35,8 @@ export const routes: Routes = [
       { path: 'patrimonio', component: PatrimonioComponent },
       { path: 'projecao', component: ProjecaoComponent },
       { path: 'planejamento', component: PlanejamentoComponent },
-      {
-        path: 'fluxo-de-caixa',
-        component: FluxoDeCaixaComponent,
-        children: [{ path: 'entradas', component: FluxoEntradas }],
-      },
+      { path: 'fluxo-de-caixa', component: FluxoDeCaixaComponent },
+    //   { path: 'caixa/entradas', component: FluxoEntradas },
       {
         path: 'configuracoes',
         component: ConfiguracoesComponent,

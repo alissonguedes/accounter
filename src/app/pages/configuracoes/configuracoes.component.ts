@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
-import { TitleDirective } from '../../directives/title/title.directive';
+import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AppComponent } from '../../app.component';
 import { initApp, menuCollapse } from '../../app.config';
+import { TitleDirective } from '../../directives/title/title.directive';
 
 declare const M: any;
 declare const document: any;
