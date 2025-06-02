@@ -1,9 +1,11 @@
 <ng-container ngTitle="Fluxo de Caixa" />
-<ng-container *ngHeader=""></ng-container>
+<ng-container *ngHeader>
+Fluxo de Caixa: {{ mes }} {{ ano }}
+</ng-container>
 
-<div class="row">
+<div class="row" *ngIf="route === 'fluxo-de-caixa'">
 	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="entradas">
+		<div class="card animate fadeLeft cyan white-text" routerLink="/fluxo-de-caixa/entradas">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
 					<i class="material-icons right" style="font-size: 100px;">download</i> Entradas
@@ -43,3 +45,5 @@
 		</div>
 	</div>
 </div>
+
+<router-outlet></router-outlet>
