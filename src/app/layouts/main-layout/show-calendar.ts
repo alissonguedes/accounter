@@ -19,9 +19,7 @@ export class ShowCalendar {
     this.currentYear
   }`;
 
-  constructor(private periodoService: PeriodoService) {
-    this.getSelectedMonth();
-  }
+  constructor(private periodoService: PeriodoService) {}
 
   // Exibir anos
   getYears() {
@@ -47,33 +45,8 @@ export class ShowCalendar {
     return mes;
   }
 
-  mes = '';
-
   getSelectedMonth(abr: boolean = false) {
-    this.periodoService.periodo$
-      .pipe(
-        // takeUntil(this.destroy$),
-        //   switchMap((periodo) => {
-        //     const inicio = periodo.inicio.getMonth();
-        //     const fim = periodo.fim.getMonth();
-        //     return inicio + fim;
-        //   })
-        switchMap((periodo) => {
-          this.mes = periodo.inicio.toISOString();
-          //   return mes;
-          console.log(this.mes);
-          return this.mes.split('T').splice(0, 1).join();
-        })
-      )
-      .subscribe();
-
-    // return abr
-    //   ? meses.abreviados[this.currentMonth - 1]
-    //   : meses()[this.currentMonth - 1];
-  }
-
-  getMonth(){
-	return this.mes;
+    return abr ? meses.abreviados : meses();
   }
 
   getSelectedYear(): number {
