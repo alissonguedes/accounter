@@ -1,5 +1,5 @@
 <ng-container ngTitle="Dashboard" />
-<ng-container *ngHeader=""></ng-container>
+<!-- <ng-container *ngHeader=""></ng-container> -->
 
 <div id="card-stats" class="row">
 	<div class="col s12 m6 l3">
@@ -79,7 +79,7 @@
 			<div class="card-content">
 				<div class="card-title left-align grey-text uppercase">Resumo Mensal</div>
 
-				<ng-container>
+				<!-- <ng-container>
 					<div class="row" *ngFor="let m of resumo">
 						<div class="col s6 m6">
 							<div class="meses" *ngFor="let mes of m.e">
@@ -102,7 +102,7 @@
 							</div>
 						</div>
 					</div>
-				</ng-container>
+				</ng-container> -->
 				<ng-template #noResults> Nenhum dado </ng-template>
 			</div>
 		</div>
@@ -111,7 +111,7 @@
 		<div class="card z-depth-0 transparent no-margin">
 			<div class="card-content">
 				<div class="card-title left-align grey-text uppercase">Análise</div>
-				<apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [title]="chartOptions.title"></apx-chart>
+				<!-- <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [title]="chartOptions.title"></apx-chart> -->
 			</div>
 		</div>
 	</div>

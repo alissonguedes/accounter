@@ -5,8 +5,8 @@
 			<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
 			<div class="navbar-list right">
 				<a class="lancamentos waves-effect" (click)="openModalPeriodo()">
-					<h4>Lançamentos: <span #periodoLabel id="periodo-label">Mai/2025</span></h4>
-					<input #periodoInput type="hidden" name="periodo" value="5/2025">
+					<h4>Lançamentos: <span #periodoLabel id="periodo-label">{{ calendar.periodoLabel }}</span></h4>
+					<input #periodoInput type="hidden" name="periodo" value="{{ calendar.periodoSelecionado }}">
 				</a>
 			</div>
 		</div>
@@ -85,7 +85,7 @@
 							<div class="col s12 center-align">
 								<div class="input-field">
 									<label for="ano" class="active">Ano:</label>
-									<select #selectPeriodo name="ano" id="ano">
+									<select #selectPeriodo name="ano" id="ano" (change)="calendar.selectYear($event)">
 										<option value="{{ a }}" *ngFor="let a of calendar.getYears()" [selected]="this.calendar.currentYear === a">{{ a }}</option>
 									</select>
 								</div>
@@ -93,9 +93,9 @@
 						</div>
 						<div id="calendar-months" class="row">
 							<div class="col s3 center-align" *ngFor="let m of calendar.getMonths(); let i = index">
-								<label for="month_{{ m }}" class="btn white teal-text" [class]="i + 1 > this.calendar.currentMonth && this.anoSelecionado == this.calendar.currentYear ? 'disabled':null">
+								<label for="month_{{ m }}" class="btn white teal-text" [class]="i + 1 > this.calendar.currentMonth && this.calendar.anoSelecionado == this.calendar.currentYear ? 'disabled':null">
 									{{ m }}
-									<input type="radio" name="mes" value="{{ i + 1 }}" id="month_{{ m }}" [disabled]="i + 1 > this.calendar.currentMonth && this.anoSelecionado == this.calendar.currentYear">
+									<input type="radio" name="mes" value="{{ i + 1 }}" id="month_{{ m }}" (change)="calendar.selectMonth($event)" [disabled]="i + 1 > this.calendar.currentMonth && this.calendar.anoSelecionado == this.calendar.currentYear">
 								</label>
 							</div>
 						</div>

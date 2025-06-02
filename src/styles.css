@@ -60,7 +60,7 @@ header {
 
 .navbar-list .lancamentos {
 	position: relative;
-	top: -3px;
+	/* top: -3px; */
 }
 
 .navbar-list .lancamentos h4,
@@ -76,7 +76,7 @@ header {
 	flex-direction: column;
 	text-align: right;
 	text-transform: uppercase;
-	margin: 12px 0 0;
+	margin: -5px 0 0;
 }
 
 .navbar-list .lancamentos h4 span {
