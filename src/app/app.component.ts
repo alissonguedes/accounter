@@ -80,7 +80,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
         if (menu) {
           let sidenav = M.Sidenav.getInstance(menu);
-          console.log(this.route);
+        //   console.log(this.route);
 
           //   if (this.route === 'configuracoes' || this.route === 'fluxo-de-caixa') {
           if (this.route === 'configuracoes') {
