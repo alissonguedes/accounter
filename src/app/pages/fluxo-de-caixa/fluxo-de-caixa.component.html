@@ -1,13 +1,13 @@
-<ng-container ngTitle="Fluxo de Caixa" />
+<ng-template ngTitle>Fluxo de Caixa</ng-template>
 
 <ng-container *ngHeader>
 	Fluxo de Caixa: {{ mes }}
 </ng-container>
 
 
-<div class="row" *ngIf="route === 'fluxo-de-caixa'">
+<div class="row" *ngIf="route === 'caixa'">
 	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="caixa/entradas">
+		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa/entradas">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
 					<i class="material-icons right" style="font-size: 100px;">download</i> Entradas
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="/fluxo-de-caixa">
+		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
 					<i class="material-icons right" style="font-size: 100px;">upload</i> Saídas
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="/fluxo-de-caixa">
+		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
 					<i class="material-icons right" style="font-size: 100px;">download</i> Aplicativos
@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="/fluxo-de-caixa">
+		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
 					<i class="material-icons right" style="font-size: 100px;">download</i> Patrimônio

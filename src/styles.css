@@ -126,7 +126,7 @@ nav .sidenav-trigger i {
 	font-size: 26px;
 	font-weight: 700;
 	text-transform: uppercase;
-	line-height: inherit;
+	line-height: 60px;
 	margin: 0;
 	margin-left: 320px;
 	max-width: calc(100% - 70px);
@@ -859,4 +859,9 @@ textarea.materialize-textarea[readonly=readonly] {
 .btn-actions .btn:not(.btn-expand) {
 	opacity: 0;
 	transition: opacity 300ms;
+}
+
+.back-button {
+	position: relative;
+	top: -2px;
 }

@@ -36,13 +36,13 @@ export const routes: Routes = [
       { path: 'projecao', component: ProjecaoComponent },
       { path: 'planejamento', component: PlanejamentoComponent },
       {
-        path: 'fluxo-de-caixa',
+        path: 'caixa',
         component: FluxoDeCaixaComponent,
-        children: [
-          { path: 'caixa/entradas', component: FluxoEntradas },
-        ],
+        // children: [
+        //   { path: 'caixa/entradas', component: FluxoEntradas },
+        // ],
       },
-      //   { path: 'fluxo-de-caixa/caixa/entradas', component: FluxoEntradas },
+      { path: 'caixa/entradas', component: FluxoEntradas },
       {
         path: 'configuracoes',
         component: ConfiguracoesComponent,

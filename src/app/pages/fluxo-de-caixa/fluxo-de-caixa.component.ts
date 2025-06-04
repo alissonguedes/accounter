@@ -11,58 +11,62 @@ import { Subject, forkJoin } from 'rxjs';
 declare const window: any;
 
 @Component({
-  selector: 'app-fluxo-de-caixa',
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterOutlet,
-    TitleDirective,
-    HeaderDirective,
-  ],
-  templateUrl: './fluxo-de-caixa.component.html',
-  styleUrl: './fluxo-de-caixa.component.css',
-  //   encapsulation: ViewEncapsulation.None,
+	selector: 'app-fluxo-de-caixa',
+	imports: [
+		CommonModule,
+		RouterLink,
+		RouterOutlet,
+		TitleDirective,
+		HeaderDirective,
+	],
+	templateUrl: './fluxo-de-caixa.component.html',
+	styleUrl: './fluxo-de-caixa.component.css',
+	//   encapsulation: ViewEncapsulation.None,
 })
 export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
-  mes: string = '';
-  ano: number = this.calendar.getSelectedYear();
-  route = window.location.href.split('/').splice(-1).join();
+	mes: string = '';
+	ano: number = this.calendar.getSelectedYear();
+	route = window.location.href.split('/').splice(-1).join();
 
-  private destroy$ = new Subject<void>();
+	private destroy$ = new Subject<void>();
 
-  periodo = this.periodoService.periodo$;
+	periodo = this.periodoService.periodo$;
 
-  constructor(
-    protected calendar: ShowCalendar,
-    public periodoService: PeriodoService
-  ) {}
+	constructor(
+		protected calendar: ShowCalendar,
+		public periodoService: PeriodoService
+	) {
+		this.periodoService.periodo$
+			.pipe(
+				takeUntil(this.destroy$),
+				switchMap((periodo) => {
+					let m = parseInt(
+						periodo.inicio
+							.toISOString()
+							.split('T')
+							.splice(0, 1)
+							.join()
+							.split('-')
+							.splice(1, 1)
+							.join()
+					);
 
-  ngOnInit(): void {
-    this.periodoService.periodo$
-      .pipe(
-        takeUntil(this.destroy$),
-        switchMap((periodo) => {
-          let m = parseInt(
-            periodo.inicio
-              .toISOString()
-              .split('T')
-              .splice(0, 1)
-              .join()
-              .split('-')
-              .splice(1, 1)
-              .join()
-          );
+					this.mes = this.calendar.getSelectedMonth()[m - 1];
 
-          this.mes = this.calendar.getSelectedMonth()[m - 1];
+					return this.mes;
+				})
+			)
+			.subscribe();
+	}
 
-          return this.mes;
-        })
-      )
-      .subscribe();
-  }
+	ngOnInit(): void {
+		this.getMes();
+	}
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+	getMes() { }
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

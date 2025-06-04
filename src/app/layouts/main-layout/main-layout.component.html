@@ -2,7 +2,11 @@
 	<nav class="navbar-main navbar-fixed navbar-color nav-collapsible sideNav-lock navbar-dark z-depth-0">
 		<div class="nav-wrapper">
 			<a data-target="slide-out" id="btn-menu" class=""><i class="material-icons">menu</i></a>
-			<h2 class="page-title" *ngIf="app.title$">{{ app.title$ | async }}</h2>
+			<ng-container *ngIf="app.titleService.title() as title">
+				<h1 class="page-title">
+					<ng-container *ngTemplateOutlet="title"></ng-container>
+				</h1>
+			</ng-container>
 			<div class="navbar-list right">
 				<a class="lancamentos waves-effect" (click)="openModalPeriodo()" [style.display]="app.route === 'configuracoes' || app.route === 'planejamento' || app.route === 'projecao' ? 'none' : null">
 					<h4>Lançamentos: <span #periodoLabel id="periodo-label">{{ calendar.periodoLabel }}</span></h4>
@@ -57,13 +61,13 @@
 		</div>
 	</div>
 
-	<div class="fixed-action-btn" [style]="app.route === 'configuracoes' || app.route === 'fluxo-de-caixa' ? 'display: none' : null">
-		<button class="btn-floating btn-large blue" routerLink="fluxo-de-caixa" data-tooltip="Fluxo de Caixa" data-position="left">
+	<div class="fixed-action-btn" [style]="app.route === 'configuracoes' || app.route === 'caixa' ? 'display: none' : null">
+		<button class="btn-floating btn-large blue" routerLink="caixa" data-tooltip="Fluxo de Caixa" data-position="left">
 			<i class="large material-icons">point_of_sale</i>
 		</button>
 	</div>
 
-	<div class="fixed-action-btn" [style]="app.route === 'configuracoes' || app.route !== 'fluxo-de-caixa' ? 'display: none' : null">
+	<div class="fixed-action-btn" [style]="app.route === 'configuracoes' || app.route !== 'caixa' ? 'display: none' : null">
 		<button class="btn-floating btn-large red">
 			<i class="large material-icons">add</i>
 		</button>

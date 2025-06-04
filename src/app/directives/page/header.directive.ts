@@ -2,16 +2,17 @@ import { Directive, Input, OnInit, TemplateRef } from '@angular/core';
 import { PageHeaderService } from '../../services/page/page-header.service';
 
 @Directive({
-	selector: '[ngHeader]'
+  selector: '[ngHeader]',
 })
 export class HeaderDirective implements OnInit {
+  @Input('ngHeader') header: string = '';
 
-	@Input('ngHeader') header: string = '';
+  constructor(
+    private headerService: PageHeaderService,
+    private template: TemplateRef<any>
+  ) {}
 
-	constructor(private headerService: PageHeaderService, private template: TemplateRef<any>) { }
-
-	ngOnInit(): void {
-		this.headerService.setHeader(this.template);
-	}
-
+  ngOnInit(): void {
+    this.headerService.setHeader(this.template);
+  }
 }

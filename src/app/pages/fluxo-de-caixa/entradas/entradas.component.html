@@ -1,7 +1,16 @@
-<ng-container ngTitle="Entradas" />
+<ng-template ngTitle>
+	<button routerLink="/caixa" class="back-button btn-small btn-floating btn-flat transparent waves-effect">
+		<i class="material-icons">arrow_back</i>
+	</button>
+	Entradas
+</ng-template>
 
 <ng-container *ngHeader>
-	Fluxo de Caixa: {{ caixa.mes }}
+	<ul class="">
+		<li>Fluxo de Caixa: {{ caixa.mes }}</li>
+		<li>a</li>
+		<li>a</li>
+	</ul>
 </ng-container>
 
 <p>entradas works!</p>

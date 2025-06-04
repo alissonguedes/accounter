@@ -47,7 +47,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     public preloaderService: PreloaderService // private routeActive: ActivatedRoute
   ) {
     let self = this;
-    this.title$ = this.titleService.title$;
+    this.title$ = this.titleService.title;
     this.pageHeader$ = this.pageHeaderService.header;
 
     // Exibe a barra de carregamento
