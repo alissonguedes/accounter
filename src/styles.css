@@ -1,3 +1,60 @@
+.skeleton {
+	--card-bg: #ffffff;
+	border-radius: 4px;
+	position: relative;
+	overflow: hidden;
+	z-index: 9;
+	transition: background 150ms;
+	background-color: inherit;
+}
+
+.skeleton.skeleton-loading {
+	color: transparent !important;
+}
+
+
+.skeleton.skeleton-loading::before, .skeleton::after {
+	content: '';
+	position: absolute;
+	z-index: 100;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.skeleton.skeleton-loading::before {
+	/* background-color: color-mix(in srgb, #000 15%, #fff 100%); */
+	/* background: linear-gradient(45deg, #f7f7f7, #c9c9c9); */
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.skeleton.skeleton-loading::after {
+	content: '';
+	position: absolute;
+	z-index: 100;
+	top: 0;
+	left: -150px;
+	height: 100%;
+	width: 150px;
+	background: linear-gradient(90deg,
+			transparent,
+			rgba(255, 255, 255, 0.4),
+			transparent);
+	animation: loading 1.2s infinite;
+}
+
+@keyframes loading {
+	0% {
+		left: -150px;
+	}
+
+	100% {
+		left: 100%;
+	}
+}
+
+
 .uppercase {
 	text-transform: uppercase !important;
 }
@@ -56,6 +113,11 @@ header {
 	line-height: 64px;
 	position: relative;
 	z-index: 997;
+}
+
+.navbar-list{
+	height: inherit;
+	line-height: inherit;
 }
 
 .navbar-list .lancamentos {
@@ -134,12 +196,6 @@ nav .sidenav-trigger i {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-}
-
-@media screen and (max-width: 992px) {
-	.navbar-main .page-title {
-		margin-left: 52px;
-	}
 }
 
 .error {
@@ -425,12 +481,6 @@ main .content {
 	padding: 15px;
 }
 
-@media screen and (max-width: 992px) {
-	main {
-		padding-left: 0;
-	}
-}
-
 /* #preloader,
 #preloader-modal,
 .modal-progress {
@@ -478,13 +528,6 @@ body:has(#login-page) #preloader {
 	bottom: -4px;
 }
 
-@media screen and (max-width: 992px) {
-	.progress {
-		width: 100% !important;
-		left: 0;
-	}
-}
-
 .progress .indeterminate {
 	background-color: #4A90E2;
 }
@@ -529,6 +572,7 @@ body:has(#login-page) #preloader {
 	transform: scale(1) !important;
 	opacity: 1;
 } */
+
 .modal {
 	opacity: 0;
 	transition:
@@ -536,6 +580,7 @@ body:has(#login-page) #preloader {
 		opacity 150ms cubic-bezier(0.1, 0, 0.2, 1);
 	will-change: transform, opacity;
 	border-radius: 24px;
+	top: 10% !important
 }
 
 .modal .modal-footer {
@@ -555,6 +600,10 @@ body:has(#login-page) #preloader {
 
 .modal-overlay.open {
 	opacity: 1;
+}
+
+.datepicker-modal {
+	z-index: 999;
 }
 
 /*************MODAL***************/
@@ -687,6 +736,25 @@ textarea.materialize-textarea[readonly=readonly] {
 	max-height: 200px;
 }
 
+.datepicker-controls {
+	margin: 10px auto;
+}
+
+.datepicker-controls .select-wrapper input {
+	border: none !important;
+	text-align: center;
+	margin: 0px;
+	padding: 0;
+}
+
+.datepicker-controls .select-month input {
+	width: 70px;
+}
+
+.datepicker-controls .select-year input {
+	width: 50px;
+}
+
 .input-field input[type=search]:focus:not(.browser-default) {
 	background-color: transparent;
 }
@@ -729,13 +797,32 @@ textarea.materialize-textarea[readonly=readonly] {
 
 .page-header {
 	height: 70px;
+	line-height: 70px;
+}
+
+.page-header .header-main {
+	background-color: #f4f4f4;
+	position: relative;
+	padding: 0 24px;
+}
+
+.page-header .header-main {
+	color: #000;
+	font-weight: bold;
+	font-size: 18px;
+	text-transform: uppercase;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: rgba(0, 0, 0, 0.05);
-	position: relative;
-	padding: 25px;
-	z-index: 997;
+	padding-left: 324px;
+}
+
+.page-header .fixed-header {
+	position: fixed;
+	right: 0;
+	left: 0;
+	height: inherit;
+	line-height: inherit;
 }
 
 .breadcrumb {
@@ -782,6 +869,102 @@ textarea.materialize-textarea[readonly=readonly] {
 	height: calc(100vh - 200px);
 }
 
+.card .card-content {
+	padding: 10px 14px;
+}
+
+/* .card-content, */
+.chart-revenue,
+.icon-bg-color,
+.sidenav li a i {
+	text-align: center;
+}
+
+.card .card-content {
+	padding: 0;
+}
+
+.card .card-action:last-child,
+.card .card-content {
+	border-radius: 0 0 2px 2px;
+}
+
+.card-stats-title {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	padding: 24px 24px 10px;
+	margin: 0;
+	text-transform: uppercase;
+	text-align: left;
+	font-size: 24px;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+}
+
+.card-stats-title .title {
+	display: block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	flex: 1;
+}
+
+.card-stats-title i {
+	font-size: 2rem;
+	font-weight: 300;
+	position: relative;
+	/* margin-right: 10px; */
+	/* top: 5px; */
+}
+
+.card-stats-number {
+	font-size: 36px;
+	font-weight: 600;
+	height: 39px;
+	margin: 24px;
+}
+
+.card-stats-compare {
+	font-size: 1.2rem;
+	display: block;
+	padding-top: 0px;
+	padding-right: 24px;
+	padding-left: 24px;
+	display: block;
+	padding-bottom: 24px !important;
+
+}
+
+.card-stats-compare small {
+	position: relative;
+	display: block;
+	text-align: left;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	margin-bottom: 5px;
+}
+
+.card-stats-compare .valor {
+	min-width: 80px;
+}
+
+.card {
+	border-radius: 15px;
+	overflow: hidden;
+	background: transparent;
+}
+
+.card-action,
+.card .card-action:last-child,
+.card .card-content {
+	border-radius: 0;
+}
+
+.card-action {
+	border: none;
+	padding-top: 0px;
+}
 
 .collapsible {
 	border-left: 3px solid #2196f3;
@@ -864,4 +1047,28 @@ textarea.materialize-textarea[readonly=readonly] {
 .back-button {
 	position: relative;
 	top: -2px;
+}
+
+[routerLink] {
+	cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+
+	main {
+		padding-left: 0;
+	}
+
+	.navbar-main .page-title {
+		margin-left: 52px;
+	}
+
+	.page-header .header-main {
+		padding-left: 24px;
+	}
+
+	.progress {
+		width: 100% !important;
+		left: 0;
+	}
 }

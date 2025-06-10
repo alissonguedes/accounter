@@ -34,7 +34,7 @@ declare const document: any;
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   public title$;
   public pageHeader$;
   public route: any;
@@ -49,7 +49,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     let self = this;
     this.title$ = this.titleService.title;
     this.pageHeader$ = this.pageHeaderService.header;
+  }
 
+  ngOnInit() {
     // Exibe a barra de carregamento
     this.router.events
       .pipe(filter((event) => event instanceof NavigationStart))
@@ -80,9 +82,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
         if (menu) {
           let sidenav = M.Sidenav.getInstance(menu);
-        //   console.log(this.route);
+          //   console.log(this.route);
 
-          //   if (this.route === 'configuracoes' || this.route === 'fluxo-de-caixa') {
           if (this.route === 'configuracoes') {
             menu.classList.remove('sidenav-fixed');
             body.classList.add('menu-collapsed');
@@ -105,6 +106,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
         var elems = document.querySelectorAll('.fixed-action-btn');
         var instances = M.FloatingActionButton.init(elems);
+        // this.ngAfterViewInit();
+		initApp();
       });
   }
 

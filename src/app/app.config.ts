@@ -32,6 +32,21 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 
+document.addEventListener('DOMContentLoaded', function () {
+  let route = window.location.href.split('/').splice(3).splice(0, 1).join();
+  window.onresize = () => {
+    let sidenav = document.querySelector('.sidenav');
+    let instance = M.Sidenav.getInstance(sidenav);
+
+    // não se deve abrir o menu principal caso a página esteja localizada em `configuracoes`.
+    // O resto deverá abrir ao redimensionar a janela para evitar bug na visualização.
+    if (window.innerWidth > 992 && route !== 'configuracoes') {
+      instance.open();
+      sidenav.classList.add('sidenav-fixed');
+    }
+  };
+});
+
 /**
  * Função para exibir/ocultar menu
  * Se o usuário utilizar dispositivo cuja janela seja menor que 992px,
@@ -56,30 +71,30 @@ export const menuCollapse = () => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-  let route = window.location.href.split('/').splice(3).splice(0, 1).join();
-  window.onresize = () => {
-    let sidenav = document.querySelector('.sidenav');
-    let instance = M.Sidenav.getInstance(sidenav);
-
-    // não se deve abrir o menu principal caso a página esteja localizada em `configuracoes`.
-    // O resto deverá abrir ao redimensionar a janela para evitar bug na visualização.
-    if (window.innerWidth > 992 && route !== 'configuracoes') {
-      instance.open();
-      sidenav.classList.add('sidenav-fixed');
-    }
-  };
-});
+// Datepicker
+export const datepicker = () => {
+  let datepicker = document.querySelectorAll(
+    '.datepicker, [data-trigger="datepicker"], [data-mask="date"]'
+  );
+  M.Datepicker.init(datepicker, {
+    container: 'body',
+    autoClose: true,
+    format: 'dd/mm/yyyy',
+    showDaysInNextAndPreviousMonths: false,
+    showMonthAfterYear: false,
+  });
+};
 
 /**
  * Iniciar funções do Materializecss automaticamente
  */
 export const initApp = () => {
-  document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(() => {
     M.AutoInit();
     let tooltip = document.querySelectorAll('[data-tooltip]');
     M.Tooltip.init(tooltip);
     menuCollapse();
+    datepicker();
   });
 };
 
@@ -94,6 +109,18 @@ export function slugify(str: string): string {
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '-');
+}
+
+/**
+ * Função para formatar moeda:
+ * currency(@param valor, @param moeda = 'BRL')
+ */
+export function currency(value: number, digits?: number, local?: string) {
+  let num = typeof value === 'string' ? parseFloat(value) : value;
+  return num.toLocaleString(local ?? 'pt-br', {
+    style: 'decimal',
+    minimumFractionDigits: digits ?? 2,
+  });
 }
 
 /**

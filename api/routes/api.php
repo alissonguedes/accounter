@@ -52,11 +52,20 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 	 */
 	Route::prefix('/categorias')->group(function () {
 
-		Route::get('/{id?}', function ($id = null) {
+		Route::get('/{id?}', function ($id = null, $tipo = null) {
 
 			$search        = request('search') ?? null;
+			$tipo          = request('tipo') ?? null;
 			$allCategorias = [];
 			$getCategorias = DB::table('tb_categoria');
+
+			if ($tipo) {
+				$getCategorias = $getCategorias->whereIn('id_parent', function ($query) use ($id, $tipo) {
+					$query->select('id')->from('tb_categoria')->where('titulo_slug', $tipo);
+				});
+			}
+
+			$getCategorias = $getCategorias->orderBy('titulo', 'ASC');
 
 			if ($id) {
 				$categoria = $getCategorias->where('id', $id)->first();
@@ -652,6 +661,24 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			}
 
 			return response()->json(['success' => $success, 'message' => $message], 200);
+		});
+
+	});
+
+	/** Transações */
+	Route::prefix('/transactions/{transaction}')->group(function () {
+
+		Route::get('/{search?}', function ($transaction, $search = null) {
+			// return DB::table('tb_transacao')->get();
+			$dados = [
+				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
+				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
+				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
+				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
+				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
+				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
+			];
+			return response()->json($dados, 200);
 		});
 
 	});

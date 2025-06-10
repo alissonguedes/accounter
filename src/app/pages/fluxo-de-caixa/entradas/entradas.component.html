@@ -5,12 +5,157 @@
 	Entradas
 </ng-template>
 
-<ng-container *ngHeader>
-	<ul class="">
-		<li>Fluxo de Caixa: {{ caixa.mes }}</li>
-		<li>a</li>
-		<li>a</li>
-	</ul>
-</ng-container>
+<ng-template ngHeader>
+	<div class="title-header">
+		Fluxo de Caixa: <span> {{ `${caixa.mes}/${caixa.ano}` }}</span>
+	</div>
+	<div class="search-header">
+		<input type="search" class="search" (blur)="caixa.closeSearchInput()">
+		<i class="material-icons">search</i>
+	</div>
+	<div class="btn-group">
+		<button id="btn-search" (click)="caixa.openSearchInput()" class="btn btn-floating btn-flat grey lighten-2 waves-effect">
+			<i class="material-icons black-text">search</i>
+		</button>
+		<button class="btn btn-floating right green waves-effect" (click)="openModal()">
+			<i class="material-icons">add</i>
+		</button>
+	</div>
+</ng-template>
 
-<p>entradas works!</p>
+<table>
+	<thead>
+		<tr>
+			<th class="center-align">#</th>
+			<th class="center-align">Descrição</th>
+			<th class="center-align">Tipo</th>
+			<th class="center-align">Categoria</th>
+			<!-- <th class="">Forma Pagamento</th> -->
+			<th class="center-align">Valor</th>
+			<th class="center-align">Saldo</th>
+		</tr>
+	</thead>
+	<tbody>
+		<ng-container>
+			<tr *ngIf="isLoading; else dataLoaded">
+				<td colspan="6">Carregando...</td>
+			</tr>
+		</ng-container>
+		<ng-template #dataLoaded>
+			<ng-content *ngIf="((entradas$ | async) ?? []).length > 0; else noResults">
+				<tr *ngFor="let e of (entradas$ | async); let id = index">
+					<td class="center-align">{{ id+1 }}</td>
+					<td>{{ e.descricao }}</td>
+					<td>{{ e.tipo }}</td>
+					<td>{{ e.categoria }}</td>
+					<td class="right-align"><span class="left">R$</span> {{ moeda(e.valor) }}</td>
+					<td class="right-align"><span class="left">R$</span> 900,00</td>
+				</tr>
+			</ng-content>
+		</ng-template>
+		<ng-template #noResults>
+			<tr *ngIf="(entradas$ | async)?.length === 0">
+				<td colspan="6">Nenhum resultado encontrado.</td>
+			</tr>
+		</ng-template>
+	</tbody>
+</table>
+
+<form [formGroup]="entradasForm.getForm()" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
+	<div class="row">
+		<div class="col s12 l4">
+			<div #modalForm id="modal-form" class="modal modal-fixed-footer">
+				<app-preloader id="preloader-entrada">
+					<ng-content>
+						<div class="progress modal-progress">
+							<div class="indeterminate"></div>
+						</div>
+					</ng-content>
+				</app-preloader>
+				<div class="modal-content">
+
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field">
+								<label for="descricao">Descrição</label>
+								<input type="text" formControlName="descricao" id="descricao" required>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s6">
+							<div class="input-field">
+								<label for="valor">Valor</label>
+								<input type="tel" formControlName="valor" id="valor" data-mask="decimal" data-align="" required>
+							</div>
+						</div>
+						<div class="col s6">
+							<div class="input-field">
+								<label for="data" class="active">Data</label>
+								<input type="text" formControlName="data" #datepicker id="data" placeholder="dd/mm/aaaa" readonly>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="row">
+				<div class="col s12">
+					<div class="input-field">
+						<label for="tipo" class="active">Tipo</label>
+						<select formControlName="tipo" id="tipo" required>
+							<option value="" selected="selected">Informe o tipo</option>
+						</select>
+					</div>
+				</div>
+			</div> -->
+					<input type="hidden" formControlName="tipo">
+
+					<div class="row">
+						<div class="col s12">
+							<div class="input-field">
+								<label for="categoria" class="active">Categoria</label>
+								<select formControlName="categoria" id="categoria" required>
+									<option value="" selected="selected">Informe a categoria</option>
+									<option *ngFor="let c of (categorias$ | async)" value="{{ c.id }}">{{ c.titulo }}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="row">
+
+				<div class="col s8">
+					<div class="input-field">
+						<label for="formaPagamento" class="active">Forma de pagamento</label>
+						<select formControlName="formaPagamento" id="formaPagamento" required (change)="toggleInputParcelas($event)">
+							<option value="" selected="selected">Informe a forma de pagamento</option>
+							<option value="cartao">Cartão de Crédito</option>
+							<option value="dinheiro">Dinheiro</option>
+							<option value="pix">Pix</option>
+						</select>
+					</div>
+				</div>
+
+				<div id="input-parcelas" class="col s4">
+					<div class="input-field">
+						<label for="parcelas">Parcelas</label>
+						<input type="tel" formControlName="parcelas" id="parcelas">
+					</div>
+				</div>
+
+			</div> -->
+
+				</div>
+				<div class="modal-footer">
+					<button type="reset" class="btn waves-effect white black-text left modal-close">
+						<i class="material-icons left">cancel</i>
+						<span>Cancelar</span>
+					</button>
+					<button type="submit" class="btn waves-effect green" [disabled]="entradasForm.invalid() || entradasForm.submited()">
+						<i class="material-icons left">save</i>
+						<span>Salvar</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

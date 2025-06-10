@@ -8,14 +8,6 @@ declare const document: any;
 export class TitleService {
   private documentTitle = 'Accounter :: Controle Financeiro';
   private titleSubject = new BehaviorSubject<string>('');
-  // title$ = this.titleSubject.asObservable();
-
-  // setTitle(title: string) {
-  // 	setTimeout(() => {
-  // 		this.titleSubject.next(title);
-  // 		document.querySelector('title').innerText = `${this.documentTitle} | ${title}`;
-  // 	});
-  // }
 
   title = signal<TemplateRef<any> | null>(null);
 

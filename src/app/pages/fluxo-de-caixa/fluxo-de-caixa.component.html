@@ -1,51 +1,49 @@
 <ng-template ngTitle>Fluxo de Caixa</ng-template>
+<!-- <ng-template ngHeader>Fluxo de Caixa: <span>{{ mes }}</span></ng-template> -->
 
-<ng-container *ngHeader>
-	Fluxo de Caixa: {{ mes }}
-</ng-container>
-
-
-<div class="row" *ngIf="route === 'caixa'">
-	<div class="col s12 m6 l6">
+<div class="row">
+	<div class="col s12 m6 l3">
 		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa/entradas">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
-					<i class="material-icons right" style="font-size: 100px;">download</i> Entradas
+					<span class="title skeleton skeleton-loading"> Entradas</span>
+					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">download</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold">R$ 566,00</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
 			</div>
 		</div>
 	</div>
-	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa">
+	<div class="col s12 m6 l3">
+		<div class="card animate fadeLeft red white-text" routerLink="/caixa/saidas">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
-					<i class="material-icons right" style="font-size: 100px;">upload</i> Saídas
+					<span class="title skeleton skeleton-loading"> Saídas</span>
+					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">upload</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold">R$ 566,00</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
 			</div>
 		</div>
 	</div>
-	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa">
+	<div class="col s12 m6 l3">
+		<div class="card animate fadeLeft orange white-text" routerLink="/caixa/aplicativos">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
-					<i class="material-icons right" style="font-size: 100px;">download</i> Aplicativos
+					<span class="title skeleton skeleton-loading"> Aplicativos</span>
+					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">download</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold">R$ 566,00</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
 			</div>
 		</div>
 	</div>
-	<div class="col s12 m6 l6">
-		<div class="card animate fadeLeft cyan white-text" routerLink="/caixa">
+	<div class="col s12 m6 l3">
+		<div class="card animate fadeLeft green white-text" routerLink="/caixa/patrimonio">
 			<div class="card-content">
 				<h5 class="card-stats-title uppercase bold no-margin">
-					<i class="material-icons right" style="font-size: 100px;">download</i> Patrimônio
+					<span class="title skeleton skeleton-loading"> Patrimônio </span>
+					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">download</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold">R$ 566,00</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
 			</div>
 		</div>
 	</div>
 </div>
-
-<router-outlet></router-outlet>

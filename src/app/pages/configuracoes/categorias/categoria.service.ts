@@ -8,14 +8,11 @@ import { finalize, Observable } from 'rxjs';
 export class CategoriaService {
   constructor(private http: HttpService) {}
 
-  getCategorias(search?: string): Observable<any> {
-    let find = null;
-    if (search) {
-      find = {
-        search: search,
-      };
-    }
-    return this.http.get('categorias', find);
+  getCategorias(search?: string | null, tipo?: string | null): Observable<any> {
+    let query = {};
+    if (search) query = Object.assign({ search });
+    if (tipo) query = Object.assign(query, { tipo });
+    return this.http.get('categorias', query);
   }
 
   getCategoria(id: number) {

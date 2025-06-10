@@ -28,16 +28,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         switchMap((periodo) => {
-          const inicio = periodo.inicio.toISOString().split('T')[0];
-          const fim = periodo.fim.toISOString().split('T')[0];
-
+          const inicio = periodo.inicio.toISOString().split('T').splice(0, 1).join().split('-').splice(0, 2).join('-');
           this.preloaderService.show('progress-bar');
 
-          return this.http.get(`categorias?inicio=${inicio}&fim=${fim}`);
-          //   return forkJoin({
-          // entradas: this.http.get(`categorias?inicio=${inicio}&fim=${fim}`),
-          // saidas: this.http.get(`categorias?inicio=${inicio}&fim=${fim}`),
-          //   });
+          return forkJoin({
+            entradas: this.http.get(`transactions/entradas?periodo=${inicio}`),
+            saidas: this.http.get(`transactions/saidas?periodo=${inicio}`),
+            patrimonio: this.http.get(`transactions/patrimonio?periodo=${inicio}`),
+          });
         })
       )
       .subscribe((res) => {

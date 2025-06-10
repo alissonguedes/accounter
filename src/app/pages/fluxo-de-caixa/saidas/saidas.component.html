@@ -1,0 +1,57 @@
+<ng-template ngTitle>
+	<button routerLink="/caixa" class="back-button btn-small btn-floating btn-flat transparent waves-effect">
+		<i class="material-icons">arrow_back</i>
+	</button>
+	Saídas
+</ng-template>
+
+<ng-template ngHeader>
+	<div class="title-header">
+		Fluxo de Caixa: <span> {{ `${caixa.mes}/${caixa.ano}` }}</span>
+	</div>
+	<div class="search-header">
+		<input type="search" class="search" (blur)="caixa.closeSearchInput()">
+		<i class="material-icons">search</i>
+	</div>
+	<div class="btn-group">
+		<button id="btn-search" (click)="caixa.openSearchInput()" class="btn btn-floating btn-flat grey lighten-2 waves-effect">
+			<i class="material-icons black-text">search</i>
+		</button>
+		<button class="btn btn-floating right green waves-effect">
+			<i class="material-icons">add</i>
+		</button>
+	</div>
+</ng-template>
+
+<table>
+	<thead>
+		<tr>
+			<th class="">ID</th>
+			<th class="">Tipo</th>
+			<th class="">Categoria</th>
+			<th class="">Descrição</th>
+			<th class="">Forma de Pagamento</th>
+			<th class="center-align">Valor</th>
+			<th class="center-align">Saldo</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let transacao of transacoes; let id = index">
+			<td>{{ id+1 }}</td>
+			<td>Despesas</td>
+			<td>Alugueis</td>
+			<td>Aluguel</td>
+			<td>Cartão de crédito</td>
+			<td class="right-align"><span class="left">R$</span> {{ (transacao.valor / 100 | number: '1.2-2') }}</td>
+			<td class="right-align"><span class="left">R$</span> {{ transacao.valor | number: '1.2-2' }}</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="5" class="right-align">Total:</td>
+			<td class="right-align"><span class="left">R$</span> {{ mostrarTotal | number: '1.2-2' }}</td>
+			<td class="right-align"><span class="left">R$</span> {{ mostrarTotal | number: '1.2-2' }}</td>
+		</tr>
+	</tfoot>
+
+</table>

@@ -1,0 +1,26 @@
+<ng-template ngTitle>
+	<button routerLink="/caixa" class="back-button btn-small btn-floating btn-flat transparent waves-effect">
+		<i class="material-icons">arrow_back</i>
+	</button>
+	Aplicativos
+</ng-template>
+
+<ng-template ngHeader>
+	<div class="title-header">
+		Fluxo de Caixa: <span> {{ `${caixa.mes}/${caixa.ano}` }}</span>
+	</div>
+	<div class="search-header">
+		<input type="search" class="search" (blur)="caixa.closeSearchInput()">
+		<i class="material-icons">search</i>
+	</div>
+	<div class="btn-group">
+		<button id="btn-search" (click)="caixa.openSearchInput()" class="btn btn-floating btn-flat grey lighten-2 waves-effect">
+			<i class="material-icons black-text">search</i>
+		</button>
+		<button class="btn btn-floating right green waves-effect">
+			<i class="material-icons">add</i>
+		</button>
+	</div>
+</ng-template>
+
+<p>aplicativos works!</p>

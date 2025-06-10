@@ -14,7 +14,10 @@ import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.comp
 import { ProjecaoComponent } from './pages/projecao/projecao.component';
 import { PlanejamentoComponent } from './pages/planejamento/planejamento.component';
 import { FluxoDeCaixaComponent } from './pages/fluxo-de-caixa/fluxo-de-caixa.component';
-import { EntradasComponent as FluxoEntradas } from './pages/fluxo-de-caixa/entradas/entradas.component';
+import { EntradasComponent as CaixaoEntradas } from './pages/fluxo-de-caixa/entradas/entradas.component';
+import { SaidasComponent as CaixaSaidas } from './pages/fluxo-de-caixa/saidas/saidas.component';
+import { AplicativosComponent as CaixaAplicativos } from './pages/fluxo-de-caixa/aplicativos/aplicativos.component';
+import { PatrimonioComponent as CaixaPatrimonio } from './pages/fluxo-de-caixa/patrimonio/patrimonio.component';
 import { CategoriasComponent } from './pages/configuracoes/categorias/categorias.component';
 import { SistemaComponent } from './pages/configuracoes/sistema/sistema.component';
 import { CarteirasDigitaisComponent } from './pages/configuracoes/carteiras-digitais/carteiras-digitais.component';
@@ -35,14 +38,11 @@ export const routes: Routes = [
       { path: 'patrimonio', component: PatrimonioComponent },
       { path: 'projecao', component: ProjecaoComponent },
       { path: 'planejamento', component: PlanejamentoComponent },
-      {
-        path: 'caixa',
-        component: FluxoDeCaixaComponent,
-        // children: [
-        //   { path: 'caixa/entradas', component: FluxoEntradas },
-        // ],
-      },
-      { path: 'caixa/entradas', component: FluxoEntradas },
+      { path: 'caixa', component: FluxoDeCaixaComponent },
+      { path: 'caixa/entradas', component: CaixaoEntradas },
+      { path: 'caixa/saidas', component: CaixaSaidas },
+      { path: 'caixa/patrimonio', component: CaixaPatrimonio },
+      { path: 'caixa/aplicativos', component: CaixaAplicativos },
       {
         path: 'configuracoes',
         component: ConfiguracoesComponent,

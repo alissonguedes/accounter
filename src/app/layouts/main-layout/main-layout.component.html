@@ -49,7 +49,9 @@
 
 	<ng-container *ngIf="app.pageHeaderService.header() as template">
 		<div class="page-header">
-			<ng-container *ngTemplateOutlet="template"></ng-container>
+			<div class="header-main fixed-header">
+				<ng-template *ngTemplateOutlet="template"></ng-template>
+			</div>
 		</div>
 	</ng-container>
 
@@ -67,7 +69,7 @@
 		</button>
 	</div>
 
-	<div class="fixed-action-btn" [style]="app.route === 'configuracoes' || app.route !== 'caixa' ? 'display: none' : null">
+	<!-- <div class="fixed-action-btn" [style]="app.route === 'configuracoes' || app.route !== 'caixa' ? 'display: none' : null">
 		<button class="btn-floating btn-large red">
 			<i class="large material-icons">add</i>
 		</button>
@@ -78,7 +80,7 @@
 			<li><button class="btn-floating waves-effect blue" title="Adicionar Patrimônio"> <i class="material-icons">real_estate_agent</i></button></li>
 			<li><button class="btn-floating waves-effect blue" title="Adicionar Patrimônio"> <i class="material-icons">point_of_sale</i></button></li>
 		</ul>
-	</div>
+	</div> -->
 
 	<div class="row">
 		<div class="col s11 m6 l3">
