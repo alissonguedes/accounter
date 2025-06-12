@@ -35,7 +35,8 @@
 						],
 						"scripts": [
 							"node_modules/materialize-css/dist/js/materialize.min.js",
-							"node_modules/apexcharts/dist/apexcharts.min.js"
+							"node_modules/apexcharts/dist/apexcharts.min.js",
+							"public/assets/scripts/mask.js"
 						]
 					},
 					"configurations": {
@@ -99,8 +100,8 @@
 				}
 			}
 		}
-  },
-  "cli": {
-    "analytics": false
-  }
+	},
+	"cli": {
+		"analytics": false
+	}
 }

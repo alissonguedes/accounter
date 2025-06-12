@@ -20,6 +20,7 @@ import { CategoriaService } from '../../configuracoes/categorias/categoria.servi
 import { FluxoDeCaixaComponent } from '../fluxo-de-caixa.component';
 import { TitleDirective } from '../../../directives/title/title.directive';
 import { HeaderDirective } from '../../../directives/page/header.directive';
+import { MaskDirective } from '../../../directives/mask/mask.directive';
 
 import { EntradasModel } from './entradas.model';
 import { EntradasForm } from './entradas-form';
@@ -36,6 +37,7 @@ declare const document: any;
     HeaderDirective,
     RouterLink,
     PreloaderComponent,
+    MaskDirective,
   ],
   templateUrl: './entradas.component.html',
   styleUrl: './entradas.component.css',
@@ -120,9 +122,12 @@ export class EntradasComponent implements OnInit, AfterViewInit {
 
     const val = {
       ...rawForm,
+      valor: Number(rawForm.valor.replace(/\W/g, '')) / 100,
       // compartilhado: rawForm.compartilhado ? '1' : '0',
       // status: rawForm.status ? '1': '0',
     };
+
+    console.log(val);
 
     const entradasValues = [...this.entradas$.value];
 

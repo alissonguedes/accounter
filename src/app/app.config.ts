@@ -169,6 +169,22 @@ export function checkEmailExists() {
   };
 }
 
+/** Função para verificar se o campo é maior que zero */
+export function greaterThanZeroValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    if (value == null || value === '') {
+      // Deixe o Validators.required cuidar desse caso
+      return null;
+    }
+
+    // Verifica se é número e maior que zero
+    const numericValue = Number(value.replace(/\W/g, ''));
+    return numericValue > 0 ? null : { maiorQueZero: true };
+  };
+}
+
 /**
  * Função para exibir o nome dos meses em português
  */

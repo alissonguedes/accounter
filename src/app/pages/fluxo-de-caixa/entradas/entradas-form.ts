@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Validators } from '@angular/forms';
+import { greaterThanZeroValidator } from '../../../app.config';
 
 import { Form } from '../../../shared/form';
 
@@ -15,7 +16,7 @@ export class EntradasForm extends Form {
   form = this.fb.group({
     id: [{ value: '', disabled: true }],
     descricao: ['', [Validators.required]],
-    valor: ['', [Validators.required]],
+    valor: ['', [Validators.required, greaterThanZeroValidator()]],
     data: ['', [Validators.required]],
     tipo: ['receitas', [Validators.required]],
     categoria: ['', [Validators.required]],
