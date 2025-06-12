@@ -26,13 +26,14 @@
 <table>
 	<thead>
 		<tr>
-			<th class="center-align">#</th>
+			<!-- <th class="center-align">#</th> -->
 			<th class="center-align">Descrição</th>
 			<th class="center-align">Tipo</th>
 			<th class="center-align">Categoria</th>
 			<th class="">Data</th>
 			<th class="center-align">Valor</th>
 			<th class="center-align">Saldo</th>
+			<th class="center-align">Ações</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -43,14 +44,25 @@
 		</ng-container>
 		<ng-template #dataLoaded>
 			<ng-content *ngIf="((entradas$ | async) ?? []).length > 0; else noResults">
-				<tr *ngFor="let e of (entradas$ | async); let id = index">
-					<td class="center-align">{{ id+1 }}</td>
-					<td>{{ e.descricao }}</td>
-					<td>{{ e.tipo }}</td>
-					<td>{{ e.categoria }}</td>
-					<td>{{ e.data }}</td>
-					<td class="right-align"><span class="left">R$</span> {{ moeda(e.valor) }}</td>
+				<tr *ngFor="let item of (entradas$ | async)">
+					<!-- <td class="center-align">{{ id+1 }}</td> -->
+					<td>{{ item.descricao }}</td>
+					<td>{{ item.tipo }}</td>
+					<td>{{ item.categoria }}</td>
+					<td>{{ item.data }}</td>
+					<td class="right-align"><span class="left">R$</span> {{ caixa.moeda(item.valor / 100) }}</td>
 					<td class="right-align"><span class="left">R$</span> 900,00</td>
+					<td class="center-align">
+						<button class="btn btn-flat btn-floating transparent btn-small waves-effect modal-trigger" data-target="#modal-categoria" (click)="openModal(item.id)">
+							<i class="material-icons grey-text text-darken-1">edit</i>
+						</button>
+						<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" (click)="dialog(item.id)">
+							<i class="material-icons grey-text text-darken-1">delete</i>
+						</button>
+						<!-- <button class="btn-flat btn-floating transparent btn-small waves-effect btn-status" (click)="updateStatus(item)">
+							<i class="material-icons grey-text text-darken-1">{{ item.status === '1' ? 'visibility' : 'visibility_off' }}</i>
+						</button> -->
+					</td>
 				</tr>
 			</ng-content>
 		</ng-template>

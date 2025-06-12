@@ -8,8 +8,6 @@ import {
   HostListener,
 } from '@angular/core';
 
-declare function decimal(inputElement: HTMLInputElement): void;
-
 @Directive({
   selector: '[appMask]',
 })

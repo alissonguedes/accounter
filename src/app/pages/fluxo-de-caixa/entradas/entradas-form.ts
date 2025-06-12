@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Validators } from '@angular/forms';
-import { greaterThanZeroValidator } from '../../../app.config';
+import { currency, greaterThanZeroValidator } from '../../../app.config';
 
 import { Form } from '../../../shared/form';
 
@@ -11,18 +11,15 @@ declare const document: any;
   providedIn: 'root',
 })
 export class EntradasForm extends Form {
-  private entradaService = inject(EntradasService);
+  private entradasService = inject(EntradasService);
 
   form = this.fb.group({
     id: [{ value: '', disabled: true }],
-    descricao: [String(Math.random() ), [Validators.required]],
-    valor: [
-      String(Math.random() * 1000),
-      [Validators.required, greaterThanZeroValidator()],
-    ],
-    data: ['20/06/2025', [Validators.required]],
-    tipo: ['receitas', [Validators.required]],
-    categoria: ['228', [Validators.required]],
+    descricao: ['', [Validators.required]],
+    valor: ['', [(Validators.required, greaterThanZeroValidator())]],
+    data: ['', [Validators.required]],
+    tipo: ['receita', [Validators.required]],
+    categoria: ['', [Validators.required]],
     // formaPagamento: ['', [Validators.required]],
     // parcelas: ['', [Validators.required]],
   });
@@ -36,9 +33,27 @@ export class EntradasForm extends Form {
         this.preloaderService.hide('preloader-entrada');
         this.enable();
         this.form.get('parcelas')?.disable();
-        this.form.get('tipo')?.setValue('receitas');
+        this.form.get('tipo')?.setValue('receita');
       }, 100);
     }
-    return '';
+    return this.entradasService.getEntrada(id).subscribe((dados: any) => {
+      let fields = {
+        id: dados.id,
+        descricao: dados.descricao,
+        valor: currency(dados.valor / 100),
+        data: dados.data,
+        tipo: dados.tipo,
+        categoria: dados.categoria,
+        // compartilhado: dados.compartilhado === '1',
+        // formaPagamento: ['', [Validators.required]],
+        // parcelas: ['', [Validators.required]],
+      };
+
+      setTimeout(() => {
+        this.setValues(fields);
+        this.enable();
+        this.preloaderService.hide('preloader-entrada');
+      });
+    });
   }
 }

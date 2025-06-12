@@ -665,31 +665,99 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 	});
 
+	// Route::get('/{id?}', function ($id = null) {
+	// 	$search     = request('search') ?? null;
+	// 	$getCartoes = DB::table('tb_cartao_credito')->select(
+	// 		'id',
+	// 		'id_usuario',
+	// 		'id_bandeira',
+	// 		DB::raw('(select bandeira from tb_cartao_credito_bandeira where id = id_bandeira) as bandeira'),
+	// 		DB::raw('(select icone from tb_cartao_credito_bandeira where id = id_bandeira) as bandeira_icone'),
+	// 		'titulo',
+	// 		'titulo_slug',
+	// 		'digito_verificador',
+	// 		'compartilhado',
+	// 		DB::raw('(limite / 100) as limite'),
+	// 		DB::raw('(limite_utilizado / 100) as limite_utilizado'),
+	// 		'status',
+	// 	);
+	// 	if ($id) {
+	// 		return $getCartoes->where('id', $id)->first();
+	// 	} elseif ($search) {
+	// 		return $getCartoes->where('titulo', 'like', urldecode($search) . '%')->get();
+	// 	} else {
+	// 		return $getCartoes->get();
+	// 	}
+
+	// });
 	/** Transações */
 	Route::prefix('/transactions/{transaction}')->group(function () {
 
-		Route::get('/{search?}', function ($transaction, $search = null) {
-			$periodo = request()->periodo;
-			$dados   = DB::table('tb_transacao')->select(
+		Route::get('/{id?}', function ($transaction, $id = null) {
+
+			$search  = request()->search ?? null;
+			$periodo = request()->periodo ?? null;
+
+			$getTransaction = DB::table('tb_transacao')->select(
+				'id',
 				'descricao',
 				'valor',
 				'tipo',
 				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
 				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
-			)->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)->get();
+			);
+			if ($periodo) {
+				$getTransaction = $getTransaction->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo);
+			}
+			if ($id) {
+				return $getTransaction->where('id', $id)->first();
+			} elseif ($search) {
+				return $getTransaction->where('titulo', 'like', urldecode($search) . '%')->get();
+			} else {
+				return $getTransaction->get();
+			}
+			// return response()->json($dados, 200);
+		});
+
+		Route::get('/id/{id}', function ($id) {
+
+			$periodo = request()->periodo;
+			$dados   = DB::table('tb_transacao')->select(
+				'id',
+				'descricao',
+				'valor',
+				'tipo',
+				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
+				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
+			)
+			// ->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)
+				->where('id', $id)->first();
+
 			return response()->json($dados, 200);
 		});
 
 		Route::post('/', function () {
 
+			$periodo                   = request()->periodo;
 			$transaction               = request()->all();
 			$success                   = true;
 			$message                   = 'Transação salva com sucesso!';
 			$transaction['id_usuario'] = 2;
 			// $transaction['status']     = $transaction['status'] ? '1' : '0';
 
-			$id  = DB::table('tb_transacao')->insertGetId($transaction);
-			$cat = DB::table('tb_transacao')->where('id', $id)->where('id_usuario', $transaction['id_usuario'])->first();
+			$id = DB::table('tb_transacao')->insertGetId($transaction);
+
+			$cat = DB::table('tb_transacao')->select(
+				'id',
+				'descricao',
+				'valor',
+				'tipo',
+				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
+				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
+			)
+				->where('id', $id)
+				->where('id_usuario', $transaction['id_usuario'])
+				->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'transaction' => $cat], 201);
 		});

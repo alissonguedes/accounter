@@ -93,11 +93,9 @@ export class EntradasComponent implements OnInit, AfterViewInit {
             .join('-');
 
           this.entradasService.getEntradas(per).subscribe((response: any) => {
-            console.log(response);
             this.entradas$.next(response);
           });
-
-          return '';
+          return per;
         })
       )
       .subscribe();
@@ -153,32 +151,36 @@ export class EntradasComponent implements OnInit, AfterViewInit {
 
   save() {
     this.entradasForm.disable();
-    let rawForm = this.entradasForm.getValues();
-    let id = rawForm.id;
-    let categoria = rawForm.categoria;
-    let data = rawForm.data.split('/').reverse().join('-');
-    delete rawForm.id;
-    delete rawForm.categoria;
-    delete rawForm.data;
+    const rawEntrada = this.entradasForm.getValues();
+    const id = rawEntrada.id;
+    const categoria = rawEntrada.categoria;
+    delete rawEntrada.id;
+    delete rawEntrada.categoria;
 
-    const newEntrada = {
-      ...rawForm,
-      id_categoria: categoria,
-      valor: Number(rawForm.valor.replace(/\W/g, '')) / 100,
-      data: data,
-      // compartilhado: rawForm.compartilhado ? '1' : '0',
-      // status: rawForm.status ? '1': '0',
+    const novaEntrada = {
+      ...rawEntrada,
+      valor: parseInt(rawEntrada.valor.replace(/\W/g, '')),
+      categoria: document.querySelector(
+        `#categoria option[value="${categoria}"]`
+      ).innerText,
     };
 
-    // console.log(newEntrada);
+    // Esta variável envio para o back-end
+    const entrada = {
+      ...rawEntrada,
+      id_categoria: categoria,
+      valor: parseInt(rawEntrada.valor.replace(/\W/g, '')),
+      data: rawEntrada.data.split('/').reverse().join('-'),
+      compartilhado: rawEntrada.compartilhado ? '1' : '0',
+    };
 
     const entradasValues = [...this.entradas$.value];
 
     if (!id) {
-      entradasValues.push(newEntrada);
+      entradasValues.push(novaEntrada);
     } else {
       const index = entradasValues.findIndex((c) => c.id === id);
-      if (index !== -1) entradasValues[index] = newEntrada;
+      if (index !== -1) entradasValues[index] = novaEntrada;
     }
 
     this.entradas$.next(entradasValues);
@@ -186,35 +188,26 @@ export class EntradasComponent implements OnInit, AfterViewInit {
     let modal = M.Modal.getInstance(this.modalForm?.nativeElement);
     modal.close();
 
-    this.entradasService.saveEntrada(newEntrada, id).subscribe((res: any) => {
+    this.entradasService.saveEntrada(entrada, id).subscribe((res: any) => {
       toast(res.message);
-
-      console.log(res.transaction);
 
       const index = this.entradas$.value.findIndex(
         (item) => !item.id || item.id === res.transaction.id
       );
 
-      console.log(index);
-
       if (index !== -1) {
-        const novaEntrada = [...this.entradas$.value];
-        // console.log(novaEntrada[index]);
-        novaEntrada[index] = res.transaction;
-        this.entradas$.next(novaEntrada);
+        entradasValues[index] = res.transaction;
+        this.entradas$.next(entradasValues);
       }
     });
   }
 
-  moeda(value: number) {
-    return currency(value);
-  }
-
   deleteEntrada(id: number) {
-    // // Remove a carteira do estado local
-    // const updatedEntradas = this.carteiras$.value.filter(
-    //   (item) => item.id !== id
-    // );
+    // Remove a carteira do estado local
+    const entradas = this.entradas$.value.filter((item) => item.id !== id);
+
+    console.log(entradas);
+
     // this.carteiras$.next(updatedCarteiras);
     // let modalDialog = this.modalDialog.nativeElement;
     // let modal = M.Modal.getInstance(modalDialog);

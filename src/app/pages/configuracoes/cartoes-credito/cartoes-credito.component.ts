@@ -136,9 +136,10 @@ export class CartoesCreditoComponent implements OnInit {
        * devido à falta do ID.
        * Visualmente, nada será atualizado para o usuário.
        ***********************************************************************/
-      const index = this.cartoes$.value.findIndex(
-        (item) => !item.id || item.id === res.cartao.id
-      );
+      const index = this.cartoes$.value.findIndex((item) => {
+        console.log(item, item.id, res.transaction);
+        return !item.id || item.id === res.cartao.id;
+      });
 
       if (index !== -1) {
         const novoCartao = [...this.cartoes$.value];

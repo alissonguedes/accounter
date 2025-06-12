@@ -9,7 +9,7 @@
 					<span class="title skeleton skeleton-loading"> Entradas</span>
 					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">download</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">R$ {{ moeda(entradas$ | async) }}</h4>
 			</div>
 		</div>
 	</div>
@@ -20,7 +20,7 @@
 					<span class="title skeleton skeleton-loading"> Saídas</span>
 					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">upload</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">R$ {{ moeda(0) }}</h4>
 			</div>
 		</div>
 	</div>
@@ -31,7 +31,7 @@
 					<span class="title skeleton skeleton-loading"> Aplicativos</span>
 					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">download</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">R$ {{ moeda(0) }}</h4>
 			</div>
 		</div>
 	</div>
@@ -42,7 +42,7 @@
 					<span class="title skeleton skeleton-loading"> Patrimônio </span>
 					<i class="material-icons skeleton skeleton-loading" style="font-size: 32px;">download</i>
 				</h5>
-				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">{{ (entradas$ | async).toLocaleString('pt-br', { style: 'currency', currency: 'BRL'}) }}</h4>
+				<h4 class="card-stats-number white-text bold skeleton skeleton-loading">R$ {{ moeda(0) }}</h4>
 			</div>
 		</div>
 	</div>

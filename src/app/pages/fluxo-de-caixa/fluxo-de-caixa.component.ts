@@ -8,6 +8,7 @@ import { ShowCalendar } from '../../layouts/main-layout/show-calendar';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { Subject, forkJoin, BehaviorSubject } from 'rxjs';
 import { PreloaderService } from '../../services/preloader/preloader.service';
+import { slugify, currency } from '../../app.config';
 
 import { EntradasModel } from './entradas/entradas.model';
 
@@ -33,7 +34,14 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   periodo = this.periodoService.periodo$;
-  periodoSelecionado = this.calendar.date.toISOString().split('T').splice(0, 1).join().split('-').splice(0, 2).join('-');
+  periodoSelecionado = this.calendar.date
+    .toISOString()
+    .split('T')
+    .splice(0, 1)
+    .join()
+    .split('-')
+    .splice(0, 2)
+    .join('-');
 
   entradas$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
@@ -89,6 +97,10 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
 
       this.entradas$.next(valorTotal);
     });
+  }
+
+  moeda(value: number) {
+    return currency(value);
   }
 
   openSearchInput() {
