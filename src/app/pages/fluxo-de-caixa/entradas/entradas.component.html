@@ -30,7 +30,7 @@
 			<th class="center-align">Descrição</th>
 			<th class="center-align">Tipo</th>
 			<th class="center-align">Categoria</th>
-			<!-- <th class="">Forma Pagamento</th> -->
+			<th class="">Data</th>
 			<th class="center-align">Valor</th>
 			<th class="center-align">Saldo</th>
 		</tr>
@@ -48,6 +48,7 @@
 					<td>{{ e.descricao }}</td>
 					<td>{{ e.tipo }}</td>
 					<td>{{ e.categoria }}</td>
+					<td>{{ e.data }}</td>
 					<td class="right-align"><span class="left">R$</span> {{ moeda(e.valor) }}</td>
 					<td class="right-align"><span class="left">R$</span> 900,00</td>
 				</tr>
@@ -87,7 +88,7 @@
 						<div class="col s6">
 							<div class="input-field">
 								<label for="valor">Valor</label>
-								<input type="tel" formControlName="valor" id="valor" appMask="decimal" maxlength="20" required>
+								<input type="tel" formControlName="valor" id="valor" appMask="decimal" data-align="left" maxlength="20" required>
 							</div>
 						</div>
 						<div class="col s6">

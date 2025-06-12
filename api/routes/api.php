@@ -669,16 +669,29 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 	Route::prefix('/transactions/{transaction}')->group(function () {
 
 		Route::get('/{search?}', function ($transaction, $search = null) {
-			// return DB::table('tb_transacao')->get();
-			$dados = [
-				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
-				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
-				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
-				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
-				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
-				['tipo' => 'Despesas', 'categoria' => 'Aluguéis', 'descricao' => 'Aluguel', 'formaPagamento' => 'Cartão de crédito', 'valor' => rand(1234, 9999)],
-			];
+			$periodo = request()->periodo;
+			$dados   = DB::table('tb_transacao')->select(
+				'descricao',
+				'valor',
+				'tipo',
+				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
+				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
+			)->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)->get();
 			return response()->json($dados, 200);
+		});
+
+		Route::post('/', function () {
+
+			$transaction               = request()->all();
+			$success                   = true;
+			$message                   = 'Transação salva com sucesso!';
+			$transaction['id_usuario'] = 2;
+			// $transaction['status']     = $transaction['status'] ? '1' : '0';
+
+			$id  = DB::table('tb_transacao')->insertGetId($transaction);
+			$cat = DB::table('tb_transacao')->where('id', $id)->where('id_usuario', $transaction['id_usuario'])->first();
+
+			return response()->json(['success' => $success, 'message' => $message, 'transaction' => $cat], 201);
 		});
 
 	});

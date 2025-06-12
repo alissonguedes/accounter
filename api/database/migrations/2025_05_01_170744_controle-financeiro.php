@@ -135,11 +135,11 @@ return new class extends Migration
 		Schema::create('tb_transacao', function (Blueprint $table) {
 			$table->id();
 			$table->unsignedBigInteger('id_usuario');
-			$table->unsignedBigInteger('id_grupo');
+			$table->unsignedBigInteger('id_grupo')->nullable();
 			$table->unsignedBigInteger('id_categoria');
 			$table->string('descricao', 200);
 			$table->integer('valor');
-			$table->enum('tipo', ['receita', 'despesa']);
+			$table->enum('tipo', ['receitas', 'despesas']);
 			$table->date('data');
 			$table->json('extras')->nullable();
 			$table->boolean('compartilhado')->default(false);

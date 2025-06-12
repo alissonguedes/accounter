@@ -15,11 +15,14 @@ export class EntradasForm extends Form {
 
   form = this.fb.group({
     id: [{ value: '', disabled: true }],
-    descricao: ['', [Validators.required]],
-    valor: ['', [Validators.required, greaterThanZeroValidator()]],
-    data: ['', [Validators.required]],
+    descricao: [String(Math.random() ), [Validators.required]],
+    valor: [
+      String(Math.random() * 1000),
+      [Validators.required, greaterThanZeroValidator()],
+    ],
+    data: ['20/06/2025', [Validators.required]],
     tipo: ['receitas', [Validators.required]],
-    categoria: ['', [Validators.required]],
+    categoria: ['228', [Validators.required]],
     // formaPagamento: ['', [Validators.required]],
     // parcelas: ['', [Validators.required]],
   });

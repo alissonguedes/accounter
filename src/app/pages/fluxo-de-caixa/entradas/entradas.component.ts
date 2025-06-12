@@ -9,7 +9,14 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { debounceTime, distinctUntilChanged, BehaviorSubject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  BehaviorSubject,
+  Subject,
+  forkJoin,
+} from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 import { PreloaderService } from '../../../services/preloader/preloader.service';
 import { PreloaderComponent } from '../../../services/preloader/preloader/preloader.component';
@@ -21,9 +28,11 @@ import { FluxoDeCaixaComponent } from '../fluxo-de-caixa.component';
 import { TitleDirective } from '../../../directives/title/title.directive';
 import { HeaderDirective } from '../../../directives/page/header.directive';
 import { MaskDirective } from '../../../directives/mask/mask.directive';
+import { PeriodoService } from '../../../shared/periodo.service';
 
 import { EntradasModel } from './entradas.model';
 import { EntradasForm } from './entradas-form';
+import { EntradasService } from './entradas.service';
 
 declare const M: any;
 declare const document: any;
@@ -53,18 +62,46 @@ export class EntradasComponent implements OnInit, AfterViewInit {
   public categorias$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   public isLoading = false;
   protected searchControl = new FormControl();
+  private destroy$ = new Subject<void>();
 
   constructor(
     protected caixa: FluxoDeCaixaComponent,
     protected entradasForm: EntradasForm,
+    protected entradasService: EntradasService,
     protected categoriaService: CategoriaService,
+    protected periodoService: PeriodoService,
     protected preloaderService: PreloaderService
   ) {}
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit() {
-    // this.entradasService.getEntradas().subscribe((response: any) => {
-    //   console.log(response);
-    // });
+    this.periodoService.periodo$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((periodo) => {
+          let per = periodo.inicio
+            .toISOString()
+            .split('T')
+            .splice(0, 1)
+            .join()
+            .split('-')
+            .splice(0, 2)
+            .join('-');
+
+          this.entradasService.getEntradas(per).subscribe((response: any) => {
+            console.log(response);
+            this.entradas$.next(response);
+          });
+
+          return '';
+        })
+      )
+      .subscribe();
+
     this.categoriaService
       .getCategorias(null, 'receitas')
       .subscribe((res: any) => {
@@ -118,30 +155,55 @@ export class EntradasComponent implements OnInit, AfterViewInit {
     this.entradasForm.disable();
     let rawForm = this.entradasForm.getValues();
     let id = rawForm.id;
+    let categoria = rawForm.categoria;
+    let data = rawForm.data.split('/').reverse().join('-');
     delete rawForm.id;
+    delete rawForm.categoria;
+    delete rawForm.data;
 
-    const val = {
+    const newEntrada = {
       ...rawForm,
+      id_categoria: categoria,
       valor: Number(rawForm.valor.replace(/\W/g, '')) / 100,
+      data: data,
       // compartilhado: rawForm.compartilhado ? '1' : '0',
       // status: rawForm.status ? '1': '0',
     };
 
-    console.log(val);
+    // console.log(newEntrada);
 
     const entradasValues = [...this.entradas$.value];
 
     if (!id) {
-      entradasValues.push(val);
+      entradasValues.push(newEntrada);
     } else {
       const index = entradasValues.findIndex((c) => c.id === id);
-      if (index !== -1) entradasValues[index] = val;
+      if (index !== -1) entradasValues[index] = newEntrada;
     }
 
     this.entradas$.next(entradasValues);
 
     let modal = M.Modal.getInstance(this.modalForm?.nativeElement);
     modal.close();
+
+    this.entradasService.saveEntrada(newEntrada, id).subscribe((res: any) => {
+      toast(res.message);
+
+      console.log(res.transaction);
+
+      const index = this.entradas$.value.findIndex(
+        (item) => !item.id || item.id === res.transaction.id
+      );
+
+      console.log(index);
+
+      if (index !== -1) {
+        const novaEntrada = [...this.entradas$.value];
+        // console.log(novaEntrada[index]);
+        novaEntrada[index] = res.transaction;
+        this.entradas$.next(novaEntrada);
+      }
+    });
   }
 
   moeda(value: number) {

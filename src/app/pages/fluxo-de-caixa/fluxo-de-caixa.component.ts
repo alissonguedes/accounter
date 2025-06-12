@@ -33,11 +33,12 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   periodo = this.periodoService.periodo$;
+  periodoSelecionado = this.calendar.date.toISOString().split('T').splice(0, 1).join().split('-').splice(0, 2).join('-');
 
   entradas$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
   constructor(
-    protected calendar: ShowCalendar,
+    public calendar: ShowCalendar,
     public periodoService: PeriodoService,
     private entradas: EntradasModel,
     private preloaderService: PreloaderService

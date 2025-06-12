@@ -12,7 +12,6 @@ export class EntradasService {
   getEntradas(periodo: string, search?: string): Observable<any> {
     let query = Object.assign({ periodo });
     if (search) query = Object.assign(query, { search });
-    // console.log(query);
     return this.http.get('transactions/entradas', query);
   }
 
@@ -22,7 +21,7 @@ export class EntradasService {
 
   saveEntrada(values: any, id?: number): Observable<any> {
     if (values.id) return this.http.put(`transactions/entradas/${id}`, values);
-    return this.http.post(`entradas`, values);
+    return this.http.post(`transactions/entradas`, values);
   }
 
   removeEntrada(id: number): Observable<any> {
