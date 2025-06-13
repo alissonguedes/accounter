@@ -17,9 +17,9 @@ export class HttpService {
   preloaderService = inject(PreloaderService);
   private API_TOKEN =
     '$2y$12$TXHNPaAxbimjcD1S5aHaB.IbPAG/Gj46uZkfPxFVwZyTT2zWS/pzK';
-  //   private baseUrl = 'http://localhost/accounter/api/public/api/v2';
+    private baseUrl = 'http://localhost/accounter/api/public/api/v2';
   //   private baseUrl = 'http://192.168.6.151/accounter/api/public/api/v2';
-  private baseUrl = 'https://ibrjp.com.br/accounter/api/public/api/v2';
+//   private baseUrl = 'https://ibrjp.com.br/accounter/api/public/api/v2';
 
   constructor(
     private http: HttpClient,
