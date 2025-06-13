@@ -43,11 +43,13 @@ export class EntradasForm extends Form {
         valor: currency(dados.valor / 100),
         data: dados.data,
         tipo: dados.tipo,
-        categoria: dados.categoria,
+        categoria: dados.id_categoria,
         // compartilhado: dados.compartilhado === '1',
         // formaPagamento: ['', [Validators.required]],
         // parcelas: ['', [Validators.required]],
       };
+
+	  console.log(fields)
 
       setTimeout(() => {
         this.setValues(fields);

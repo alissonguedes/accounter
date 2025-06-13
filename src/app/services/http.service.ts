@@ -17,8 +17,8 @@ export class HttpService {
   preloaderService = inject(PreloaderService);
   private API_TOKEN =
     '$2y$12$TXHNPaAxbimjcD1S5aHaB.IbPAG/Gj46uZkfPxFVwZyTT2zWS/pzK';
-    // private baseUrl = 'http://localhost/accounter/api/public/api/v2';
-  private baseUrl = 'http://192.168.6.151/accounter/api/public/api/v2';
+  private baseUrl = 'http://localhost/accounter/api/public/api/v2';
+  //   private baseUrl = 'http://192.168.6.151/accounter/api/public/api/v2';
 
   constructor(
     private http: HttpClient,
@@ -59,17 +59,21 @@ export class HttpService {
   }
 
   post<T>(endpoint: string, body: any): Observable<T> {
+    console.log(endpoint, this.getHeaders());
     return this.http
       .post<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
+        withCredentials: true,
       })
       .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
 
   put<T>(endpoint: string, body: any): Observable<T> {
+    console.log(endpoint, this.getHeaders());
     return this.http
       .put<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
+        withCredentials: true,
       })
       .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
@@ -78,6 +82,7 @@ export class HttpService {
     return this.http
       .patch<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
+        withCredentials: true,
       })
       .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }
@@ -86,6 +91,7 @@ export class HttpService {
     return this.http
       .delete<T>(`${this.baseUrl}/${endpoint}`, {
         headers: this.getHeaders(),
+        withCredentials: true,
       })
       .pipe(finalize(() => this.preloaderService.hide('progress-bar')));
   }

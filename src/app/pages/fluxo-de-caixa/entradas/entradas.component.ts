@@ -15,8 +15,17 @@ import {
   BehaviorSubject,
   Subject,
   forkJoin,
+  of,
 } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import {
+  switchMap,
+  takeUntil,
+  map,
+  tap,
+  catchError,
+  finalize,
+} from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http'; // Para melhor tratamento de erros HTTP
 
 import { PreloaderService } from '../../../services/preloader/preloader.service';
 import { PreloaderComponent } from '../../../services/preloader/preloader/preloader.component';
@@ -30,12 +39,20 @@ import { HeaderDirective } from '../../../directives/page/header.directive';
 import { MaskDirective } from '../../../directives/mask/mask.directive';
 import { PeriodoService } from '../../../shared/periodo.service';
 
+import { ShowCalendar } from '../../../layouts/main-layout/show-calendar';
 import { EntradasModel } from './entradas.model';
 import { EntradasForm } from './entradas-form';
 import { EntradasService } from './entradas.service';
 
 declare const M: any;
 declare const document: any;
+
+// Assumindo que você tem uma interface para Entradas
+interface Entrada {
+  id: number;
+  valor: number; // Supondo que o valor vem em centavos
+  // ... outras propriedades
+}
 
 @Component({
   selector: 'app-entradas',
@@ -64,11 +81,17 @@ export class EntradasComponent implements OnInit, AfterViewInit {
   protected searchControl = new FormControl();
   private destroy$ = new Subject<void>();
 
+  valorTotal = 0;
+  mediaDia = 0;
+  mesAnterior = 0;
+  mesAnteriorTotal = 0;
+
   constructor(
     protected caixa: FluxoDeCaixaComponent,
     protected entradasForm: EntradasForm,
     protected entradasService: EntradasService,
     protected categoriaService: CategoriaService,
+    protected calendar: ShowCalendar,
     protected periodoService: PeriodoService,
     protected preloaderService: PreloaderService
   ) {}
@@ -92,9 +115,7 @@ export class EntradasComponent implements OnInit, AfterViewInit {
             .splice(0, 2)
             .join('-');
 
-          this.entradasService.getEntradas(per).subscribe((response: any) => {
-            this.entradas$.next(response);
-          });
+          this.getEntradas(per);
           return per;
         })
       )
@@ -104,6 +125,104 @@ export class EntradasComponent implements OnInit, AfterViewInit {
       .getCategorias(null, 'receitas')
       .subscribe((res: any) => {
         this.categorias$.next(res);
+      });
+
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(100),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$),
+        switchMap((searchTerm: any) => {
+          this.preloaderService.show('progress-bar');
+          return this.entradasService.getEntradas(
+            this.caixa.periodoSelecionado,
+            searchTerm
+          );
+        })
+      )
+      .subscribe((searchTerm) => {
+        this.entradas$.next(searchTerm);
+      });
+  }
+
+  private calcularValorTotal(entradas: Entrada[]): number {
+    if (!entradas || entradas.length === 0) {
+      return 0;
+    }
+
+    return entradas.reduce((acc, entry) => acc + entry.valor / 100, 0);
+  }
+
+  private getEntradas(periodoStr?: string, search?: string) {
+    this.isLoading = true;
+    if (!periodoStr) {
+      console.warn('Período não fornecido para getEntradas.');
+      return;
+    }
+
+    const partesPeriodo = periodoStr.split('-');
+    if (partesPeriodo.length !== 2) {
+      console.error(
+        'Formato de período inválido. Esperado YYYY-MM.',
+        periodoStr
+      );
+      return;
+    }
+
+    const anoAtual = parseInt(partesPeriodo[0], 10);
+    const mesAtual = parseInt(partesPeriodo[1], 10); // Mês base 1 (1 = Janeiro)
+
+    const mesAnteriorStr = this.calendar.getMesAnteriorFormatado(
+      anoAtual,
+      mesAtual
+    );
+    const ultimoDiaMesAtual = this.calendar.getUltimoDiaDoMes(
+      anoAtual,
+      mesAtual
+    );
+
+    forkJoin({
+      entradasAtuais: this.entradasService.getEntradas(periodoStr, search),
+      entradasMesAnterior: this.entradasService.getEntradas(mesAnteriorStr),
+    })
+      .pipe(
+        tap(() => this.preloaderService.show('progress-bar')),
+        finalize(() => {
+          this.preloaderService.hide('progress-bar');
+          this.isLoading = false;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error(
+            'Erro ao carregar entradas ou dados do mês anterior:',
+            error
+          );
+          toast('Erro ao carregar dados. Tente novamente.');
+          return of({ entradasAtuais: [], entradasMesAnterior: [] });
+        }),
+        map(({ entradasAtuais, entradasMesAnterior }) => {
+          const valorTotalAtual = this.calcularValorTotal(entradasAtuais);
+          const valorTotalMesAnterior =
+            this.calcularValorTotal(entradasMesAnterior);
+
+          return {
+            entradas: entradasAtuais,
+            valorTotal: valorTotalAtual,
+            mediaDia: valorTotalAtual / ultimoDiaMesAtual,
+            mesAnteriorTotal: valorTotalMesAnterior,
+          };
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (data) => {
+          this.entradas$.next(data.entradas);
+          this.valorTotal = data.valorTotal;
+          this.mediaDia = Number(data.mediaDia.toFixed(2));
+          this.mesAnteriorTotal = data.mesAnteriorTotal;
+        },
+        error: (err) => {
+          console.error('Erro final no subscribe:', err);
+        },
       });
   }
 
@@ -136,17 +255,40 @@ export class EntradasComponent implements OnInit, AfterViewInit {
     this.entradasForm.getForm().get('data')?.setValue(value);
   }
 
-  getResumo() {
-    // this.entradasService.getEntradas().subscribe((response: any) => {
-    //   console.log(response);
-    // });
-  }
-
   toggleInputParcelas(event?: any): any {
     let input = this.entradasForm.getForm().get('parcelas');
     let value = event.target.value;
     if (value !== 'cartao') input?.disable();
     else input?.enable();
+  }
+
+  private getEntradasAtuaisERecalcularTotais(
+    periodoStr: string,
+    search?: string
+  ) {
+    // Garante que o período e o search sejam passados para a API de entradas atuais
+    this.entradasService
+      .getEntradas(periodoStr, search)
+      .pipe(
+        tap(() => this.preloaderService.show('progress-bar')),
+        finalize(() => this.preloaderService.hide('progress-bar')),
+        catchError((error: HttpErrorResponse) => {
+          console.error('Erro ao carregar entradas atuais:', error);
+          toast('Erro ao recarregar dados. Tente novamente.');
+          return of([]);
+        })
+      )
+      .subscribe((response: Entrada[]) => {
+        this.entradas$.next(response);
+        this.valorTotal = this.calcularValorTotal(response);
+        const ultimoDiaMesAtual = this.calendar.getUltimoDiaDoMes(
+          parseInt(periodoStr.split('-')[0]),
+          parseInt(periodoStr.split('-')[1])
+        );
+        this.mediaDia = Number(
+          (this.valorTotal / ultimoDiaMesAtual).toFixed(2)
+        );
+      });
   }
 
   save() {
@@ -157,14 +299,6 @@ export class EntradasComponent implements OnInit, AfterViewInit {
     delete rawEntrada.id;
     delete rawEntrada.categoria;
 
-    const novaEntrada = {
-      ...rawEntrada,
-      valor: parseInt(rawEntrada.valor.replace(/\W/g, '')),
-      categoria: document.querySelector(
-        `#categoria option[value="${categoria}"]`
-      ).innerText,
-    };
-
     // Esta variável envio para o back-end
     const entrada = {
       ...rawEntrada,
@@ -174,54 +308,59 @@ export class EntradasComponent implements OnInit, AfterViewInit {
       compartilhado: rawEntrada.compartilhado ? '1' : '0',
     };
 
-    const entradasValues = [...this.entradas$.value];
-
-    if (!id) {
-      entradasValues.push(novaEntrada);
-    } else {
-      const index = entradasValues.findIndex((c) => c.id === id);
-      if (index !== -1) entradasValues[index] = novaEntrada;
-    }
-
-    this.entradas$.next(entradasValues);
-
     let modal = M.Modal.getInstance(this.modalForm?.nativeElement);
-    modal.close();
 
-    this.entradasService.saveEntrada(entrada, id).subscribe((res: any) => {
-      toast(res.message);
-
-      const index = this.entradas$.value.findIndex(
-        (item) => !item.id || item.id === res.transaction.id
-      );
-
-      if (index !== -1) {
-        entradasValues[index] = res.transaction;
-        this.entradas$.next(entradasValues);
-      }
-    });
+    this.preloaderService.show('progress-bar');
+    this.entradasService
+      .saveEntrada(entrada, id)
+      .pipe(
+        finalize(() => {
+          this.preloaderService.hide('progress-bar');
+          this.entradasForm.enable();
+          modal.close();
+        }),
+        catchError((error: HttpErrorResponse) => {
+          toast('Erro ao salvar no servidor. Tente novamente.');
+          console.error('Erro ao salvar entrada:', error);
+          return of(null);
+        })
+      )
+      .subscribe((res: any) => {
+        if (res) {
+          toast(res.message);
+          // Chama o método para recarregar apenas as entradas do mês atual, mantendo o filtro de busca
+          this.getEntradasAtuaisERecalcularTotais(
+            this.caixa.periodoSelecionado,
+            this.searchControl.value
+          );
+        }
+      });
   }
 
   deleteEntrada(id: number) {
-    // Remove a carteira do estado local
-    const entradas = this.entradas$.value.filter((item) => item.id !== id);
+    let modalDialog = this.modalDialog.nativeElement;
+    let modal = M.Modal.getInstance(modalDialog);
+    modal.close();
 
-    console.log(entradas);
-
-    // this.carteiras$.next(updatedCarteiras);
-    // let modalDialog = this.modalDialog.nativeElement;
-    // let modal = M.Modal.getInstance(modalDialog);
-    // modal.close();
-    // // Exclui a carteira no backend
-    // this.carteiraService.removeCarteira(id).subscribe(
-    //   (ok: any) => {
-    // 	toast(ok.message);
-    //   },
-    //   (err: any) => {
-    // 	alert('Erro ao excluir no servidor');
-    // 	this.getCarteiras(this.searchControl.value); // Recarrega os dados do servidor caso falhe
-    //   }
-    // );
+    this.entradasService
+      .removeEntrada(id)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          toast('Erro ao excluir no servidor.');
+          console.error('Erro ao excluir entrada:', err);
+          return of(null);
+        })
+      )
+      .subscribe((ok: any) => {
+        if (ok) {
+          toast(ok.message);
+          // Chama o método para recarregar apenas as entradas do mês atual, mantendo o filtro de busca
+          this.getEntradasAtuaisERecalcularTotais(
+            this.caixa.periodoSelecionado,
+            this.searchControl.value
+          );
+        }
+      });
   }
 
   openModal(id?: number) {

@@ -10,7 +10,7 @@
 		Fluxo de Caixa: <span> {{ `${caixa.mes}/${caixa.ano}` }}</span>
 	</div>
 	<div class="search-header">
-		<input type="search" class="search" (blur)="caixa.closeSearchInput()">
+		<input type="search" class="search" (blur)="caixa.closeSearchInput()" [formControl]="searchControl">
 		<i class="material-icons">search</i>
 	</div>
 	<div class="btn-group">
@@ -32,7 +32,7 @@
 			<th class="center-align">Categoria</th>
 			<th class="">Data</th>
 			<th class="center-align">Valor</th>
-			<th class="center-align">Saldo</th>
+			<!-- <th class="center-align">Saldo</th> -->
 			<th class="center-align">Ações</th>
 		</tr>
 	</thead>
@@ -51,7 +51,7 @@
 					<td>{{ item.categoria }}</td>
 					<td>{{ item.data }}</td>
 					<td class="right-align"><span class="left">R$</span> {{ caixa.moeda(item.valor / 100) }}</td>
-					<td class="right-align"><span class="left">R$</span> 900,00</td>
+					<!-- <td class="right-align"><span class="left">R$</span> 900,00</td> -->
 					<td class="center-align">
 						<button class="btn btn-flat btn-floating transparent btn-small waves-effect modal-trigger" data-target="#modal-categoria" (click)="openModal(item.id)">
 							<i class="material-icons grey-text text-darken-1">edit</i>
@@ -73,6 +73,26 @@
 		</ng-template>
 	</tbody>
 </table>
+
+<div class="row">
+	<div class="col s10 m6 l4">
+		<div #modalDialog id="modal-dialog" class="modal modal-fixed-footer">
+			<div class="modal-content">
+				<h4>Atenção</h4>
+				<p>Esta ação removerá o cartão selecionado.</p>
+				<p>Essa operação é irreversível. Deseja continuar mesmo assim?</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn white grey-text modal-close left">
+					<span>Não</span>
+				</button>
+				<button class="btn red white-text right btn-confirm waves-effect">
+					<span>Sim</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <form [formGroup]="entradasForm.getForm()" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
 	<div class="row">
@@ -172,3 +192,47 @@
 		</div>
 	</div>
 </form>
+
+<footer class="page-footer footer-fixed grey-text text-darken-3" style="background-color: #f4f4f4;">
+	<div class="">
+		<div class="container center-align">
+			<div class="row">
+				<div class="col s12">
+					<span class="breadcrumb">Total das entradas: {{ caixa.moeda(valorTotal) }}</span>
+					<span class="breadcrumb">Valor médio por dia: {{ caixa.moeda(mediaDia) }}</span>
+					<span class="breadcrumb">Mês anterior: {{ caixa.moeda(mesAnteriorTotal) }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+
+<style>
+	footer .breadcrumb {
+		font-size: 15px;
+		font-weight: bold;
+	}
+
+	footer .breadcrumb:before {
+		content: "";
+		/* vertical-align: baseline; */
+		display: inline-block;
+		font-family: "Material Icons";
+		font-weight: normal;
+		font-style: normal;
+		font-weight: bold;
+		font-size: 15px;
+		margin: 0 10px 0px 5px;
+		-webkit-font-smoothing: antialiased;
+		border-style: solid;
+		border-color: transparent transparent transparent rgba(0, 0, 0, 0.2);
+		border-width: 1px;
+		height: 23px;
+	}
+
+	footer .breadcrumb:before,
+	footer .breadcrumb:last-child {
+		color: rgba(0, 0, 0, 0.5);
+	}
+</style>

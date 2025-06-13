@@ -20,7 +20,7 @@ export class EntradasService {
   }
 
   saveEntrada(values: any, id?: number): Observable<any> {
-    if (values.id) return this.http.put(`transactions/entradas/${id}`, values);
+    if (id) return this.http.put(`transactions/entradas/${id}`, values);
     return this.http.post(`transactions/entradas`, values);
   }
 

@@ -1,11 +1,33 @@
+td, th {
+	padding: 5px 10px;
+}
+
+th {
+	line-height: 33px;
+}
+
+.page-footer {
+	padding-top: 0;
+}
+
+.footer-fixed {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding-left: 300px;
+	z-index: 995;
+}
+
 .skeleton {
 	--card-bg: #ffffff;
 	border-radius: 4px;
 	position: relative;
 	overflow: hidden;
-	z-index: 9;
+	z-index: 1;
 	transition: background 150ms;
 	background-color: inherit;
+	min-height: 25px;
 }
 
 .skeleton.skeleton-loading {
@@ -115,7 +137,7 @@ header {
 	z-index: 997;
 }
 
-.navbar-list{
+.navbar-list {
 	height: inherit;
 	line-height: inherit;
 }
@@ -586,6 +608,7 @@ body:has(#login-page) #preloader {
 .modal .modal-footer {
 	padding: 10px 24px;
 	height: auto;
+	z-index: 1;
 }
 
 .modal.open {
@@ -823,6 +846,7 @@ textarea.materialize-textarea[readonly=readonly] {
 	left: 0;
 	height: inherit;
 	line-height: inherit;
+	z-index: 2;
 }
 
 .breadcrumb {

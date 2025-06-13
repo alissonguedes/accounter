@@ -27,8 +27,8 @@ declare const window: any;
   encapsulation: ViewEncapsulation.None,
 })
 export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
-  mes: string = '';
-  ano: number = this.calendar.getSelectedYear();
+  mes: number | string = '';
+  ano: number | string = this.calendar.getSelectedYear();
   route = window.location.href.split('/').splice(-1).join();
 
   private destroy$ = new Subject<void>();
@@ -55,31 +55,17 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         switchMap((periodo) => {
-          let m = parseInt(
-            periodo.inicio
-              .toISOString()
-              .split('T')
-              .splice(0, 1)
-              .join()
-              .split('-')
-              .splice(1, 1)
-              .join()
-          );
+          let mes = periodo.inicio.toISOString().substring(5, 7);
+          let ano = periodo.inicio.toISOString().substring(0, 4);
+
+          this.mes = this.calendar.getSelectedMonth()[Number(mes) - 1];
+          this.ano = ano;
+          this.periodoSelecionado = `${ano}-${mes}`;
 
           this.preloaderService.show('progress-bar');
-          this.mes = this.calendar.getSelectedMonth()[m - 1];
-          this.getResumo(
-            periodo.inicio
-              .toISOString()
-              .split('T')
-              .splice(0, 1)
-              .join()
-              .split('-')
-              .splice(0, 2)
-              .join('-')
-          );
+          this.getResumo(this.periodoSelecionado);
 
-          return this.mes;
+          return this.periodoSelecionado;
         })
       )
       .subscribe();

@@ -665,32 +665,9 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 
 	});
 
-	// Route::get('/{id?}', function ($id = null) {
-	// 	$search     = request('search') ?? null;
-	// 	$getCartoes = DB::table('tb_cartao_credito')->select(
-	// 		'id',
-	// 		'id_usuario',
-	// 		'id_bandeira',
-	// 		DB::raw('(select bandeira from tb_cartao_credito_bandeira where id = id_bandeira) as bandeira'),
-	// 		DB::raw('(select icone from tb_cartao_credito_bandeira where id = id_bandeira) as bandeira_icone'),
-	// 		'titulo',
-	// 		'titulo_slug',
-	// 		'digito_verificador',
-	// 		'compartilhado',
-	// 		DB::raw('(limite / 100) as limite'),
-	// 		DB::raw('(limite_utilizado / 100) as limite_utilizado'),
-	// 		'status',
-	// 	);
-	// 	if ($id) {
-	// 		return $getCartoes->where('id', $id)->first();
-	// 	} elseif ($search) {
-	// 		return $getCartoes->where('titulo', 'like', urldecode($search) . '%')->get();
-	// 	} else {
-	// 		return $getCartoes->get();
-	// 	}
-
-	// });
-	/** Transações */
+	/**
+	 * Transações
+	 */
 	Route::prefix('/transactions/{transaction}')->group(function () {
 
 		Route::get('/{id?}', function ($transaction, $id = null) {
@@ -703,43 +680,31 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				'descricao',
 				'valor',
 				'tipo',
+				'id_categoria',
 				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
 				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
 			);
+
 			if ($periodo) {
 				$getTransaction = $getTransaction->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo);
 			}
+
+			$getTransaction = $getTransaction->orderBy('data', 'asc')->orderBy('descricao', 'asc');
+
 			if ($id) {
 				return $getTransaction->where('id', $id)->first();
 			} elseif ($search) {
-				return $getTransaction->where('titulo', 'like', urldecode($search) . '%')->get();
+				return $getTransaction->where('descricao', 'like', urldecode($search) . '%')->get();
 			} else {
 				return $getTransaction->get();
 			}
-			// return response()->json($dados, 200);
-		});
 
-		Route::get('/id/{id}', function ($id) {
-
-			$periodo = request()->periodo;
-			$dados   = DB::table('tb_transacao')->select(
-				'id',
-				'descricao',
-				'valor',
-				'tipo',
-				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
-				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
-			)
-			// ->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)
-				->where('id', $id)->first();
-
-			return response()->json($dados, 200);
 		});
 
 		Route::post('/', function () {
 
-			$periodo                   = request()->periodo;
-			$transaction               = request()->all();
+			$transaction = request()->all();
+			// $periodo                   = request()->periodo;
 			$success                   = true;
 			$message                   = 'Transação salva com sucesso!';
 			$transaction['id_usuario'] = 2;
@@ -752,14 +717,53 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 				'descricao',
 				'valor',
 				'tipo',
+				'id_categoria',
 				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
 				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
 			)
 				->where('id', $id)
 				->where('id_usuario', $transaction['id_usuario'])
-				->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)->first();
+			// ->where(DB::raw('DATE_FORMAT(data, "%Y-%m")'), $periodo)
+				->first();
 
 			return response()->json(['success' => $success, 'message' => $message, 'transaction' => $cat], 201);
+		});
+
+		Route::put('/{id}', function ($transaction, $id) {
+
+			$transaction               = request()->all();
+			$success                   = true;
+			$message                   = 'Transação atualizada com sucesso!';
+			$transaction['id_usuario'] = 2;
+			// $transaction['compartilhado'] = $transaction['compartilhado'] ? '1' : '0';
+
+			DB::table('tb_transacao')->where('id', $id)->update($transaction);
+			$db_transacao = DB::table('tb_transacao')->select('id',
+				'id',
+				'descricao',
+				'valor',
+				'tipo',
+				DB::raw('DATE_FORMAT(data, "%d/%m/%Y") AS data'),
+				DB::raw('(SELECT titulo FROM tb_categoria WHERE id = id_categoria) AS categoria'),
+			)->where('id', $id)->first();
+
+			return response()->json(['success' => $success, 'message' => $message, 'transaction' => $db_transacao], 200);
+
+		});
+
+		Route::delete('/{id}', function () {
+			$id          = request('id');
+			$transaction = DB::table('tb_transacao')->where('id', $id)->delete();
+
+			if ($transaction) {
+				$success = true;
+				$message = 'Transação removida com sucesso!';
+			} else {
+				$success = false;
+				$message = 'Erro ao tentar remover o item [' . $id . ']!';
+			}
+
+			return response()->json(['success' => $success, 'message' => $message], 200);
 		});
 
 	});
@@ -776,3 +780,11 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 //         return $request->user();
 //     });
 // });
+
+// $request = Request::create('/api/v2/transactions/entradas/6', 'PUT', ['descricao' => 'Teste', 'valor' => 150, 'tipo' => 'receita', 'id_categoria' => 1, 'data' => '2025-06-23']);
+// $request->headers->set('x-webhook-token', '$2y$12$TXHNPaAxbimjcD1S5aHaB.IbPAG/Gj46uZkfPxFVwZyTT2zWS/pzK');
+// $request->headers->set('Content-Type', 'application/json');
+// $request->headers->set('Accept', 'application/json');
+
+// $response = Route::dispatch($request);
+// $response->getContent();

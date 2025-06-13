@@ -21,7 +21,7 @@ export class PreloaderService {
       const count = this.tasks.get(id)! + 1;
       this.tasks.set(id, count);
       signal.set(true);
-	  let skeleton = document.querySelectorAll('.skeleton');
+      let skeleton = document.querySelectorAll('.skeleton');
       skeleton.forEach((s: any) => s.classList.add('skeleton-loading'));
     }
   }
@@ -32,8 +32,10 @@ export class PreloaderService {
       const count = Math.max(this.tasks.get(id)! - 1, 0);
       this.tasks.set(id, count);
       if (count === 0) signal.set(false);
-      let skeleton = document.querySelectorAll('.skeleton');
-      skeleton.forEach((s: any) => s.classList.remove('skeleton-loading'));
+      setTimeout(() => {
+        let skeleton = document.querySelectorAll('.skeleton');
+        skeleton.forEach((s: any) => s.classList.remove('skeleton-loading'));
+      }, 300);
     }
   }
 

@@ -106,4 +106,26 @@ export class ShowCalendar {
     let modal = M.Modal.getInstance(document.querySelector('#modal-periodo'));
     modal.close();
   }
+
+  public getUltimoDiaDoMes(ano: number, mes: number): number {
+    // Cria uma data para o primeiro dia do *próximo* mês e subtrai um dia para obter o último dia do mês atual.
+    // Mês é zero-based para o construtor Date (m-1)
+    // `new Date(ano, mes, 0)` também funciona para obter o último dia do mês anterior (mês-1)
+    return new Date(ano, mes, 0).getDate();
+  }
+
+  public getMesAnteriorFormatado(ano: number, mes: number): string {
+    // Ajusta para o mês anterior
+    let anoMesAnterior = ano;
+    let mesAnteriorNum = mes - 1; // Ajusta para o mês anterior (se for janeiro, vai para 0)
+
+    if (mesAnteriorNum === 0) {
+      mesAnteriorNum = 12; // Se era janeiro, vai para dezembro
+      anoMesAnterior--; // E o ano anterior
+    }
+
+    // Formata para 'YYYY-MM'
+    const mesFormatado = mesAnteriorNum.toString().padStart(2, '0');
+    return `${anoMesAnterior}-${mesFormatado}`;
+  }
 }
