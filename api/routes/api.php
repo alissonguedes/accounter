@@ -129,7 +129,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$categoria               = request()->all();
 			$success                 = true;
 			$message                 = 'Categoria salva com sucesso!';
-			$categoria['id_usuario'] = 2;
+			// $categoria['id_usuario'] = 2;
 			$categoria['status']     = $categoria['status'] ? '1' : '0';
 
 			$id  = DB::table('tb_categoria')->insertGetId($categoria);
@@ -143,7 +143,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$categoria               = request()->all();
 			$success                 = true;
 			$message                 = 'Categoria editada com sucesso!';
-			$categoria['id_usuario'] = 2;
+			// $categoria['id_usuario'] = 2;
 			$categoria['status']     = $categoria['status'] ? '1' : '0';
 
 			DB::table('tb_categoria')->where('id', $id)->update($categoria);
@@ -157,7 +157,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$categoria               = request()->all();
 			$success                 = true;
 			$message                 = 'Categoria atualizada com sucesso!';
-			$categoria['id_usuario'] = 2;
+			// $categoria['id_usuario'] = 2;
 
 			// DB::table('tb_categoria')->findOrFail($id);
 
@@ -265,7 +265,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$carteira                  = request()->all();
 			$success                   = true;
 			$message                   = 'Carteira salva com sucesso!';
-			$carteira['id_usuario']    = 2;
+			// $carteira['id_usuario']    = 2;
 			$carteira['saldo_atual']   = $carteira['saldo_atual'] * 100;
 			$carteira['compartilhado'] = $carteira['compartilhado'] ? '1' : '0';
 
@@ -296,7 +296,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$carteira                  = request()->all();
 			$success                   = true;
 			$message                   = 'Carteira salva com sucesso!';
-			$carteira['id_usuario']    = 2;
+			// $carteira['id_usuario']    = 2;
 			$carteira['saldo_atual']   = $carteira['saldo_atual'] * 100;
 			$carteira['compartilhado'] = $carteira['compartilhado'] ? '1' : '0';
 
@@ -327,7 +327,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$carteira               = request()->all();
 			$success                = true;
 			$message                = 'Carteira atualizada com sucesso!';
-			$carteira['id_usuario'] = 2;
+			// $carteira['id_usuario'] = 2;
 
 			$newCarteira = [];
 			DB::table('tb_carteira_digital')->where('id', $id)->update($carteira);
@@ -386,7 +386,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$success                     = true;
 			$message                     = 'Aplicativo adicionado com sucesso!';
 			$aplicativo['id_categoria']  = 228;
-			$aplicativo['id_usuario']    = 2;
+			// $aplicativo['id_usuario']    = 2;
 			$aplicativo['compartilhado'] = $aplicativo['compartilhado'] ? '1' : '0';
 
 			$novoAplicativo = [];
@@ -411,7 +411,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$success                     = true;
 			$message                     = 'Aplicativo atualizado com sucesso!';
 			$aplicativo['id_categoria']  = 228;
-			$aplicativo['id_usuario']    = 2;
+			// $aplicativo['id_usuario']    = 2;
 			$aplicativo['compartilhado'] = $aplicativo['compartilhado'] ? '1' : '0';
 
 			$novoAplicativo = [];
@@ -438,7 +438,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$success                     = true;
 			$message                     = 'Aplicativo atualizado com sucesso!';
 			$aplicativo['id_categoria']  = 228;
-			$aplicativo['id_usuario']    = 2;
+			// $aplicativo['id_usuario']    = 2;
 			$aplicativo['compartilhado'] = $aplicativo['compartilhado'] ? '1' : '0';
 
 			$novoAplicativo = [];
@@ -520,7 +520,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$success                 = true;
 			$message                 = 'Cartão cadastrado com sucesso!';
 			$cartao['titulo_slug']   = Str::slug($cartao['titulo']);
-			$cartao['id_usuario']    = 2;
+			// $cartao['id_usuario']    = 2;
 			$cartao['limite']        = $cartao['limite'] * 100;
 			$cartao['compartilhado'] = $cartao['compartilhado'] ? '1' : '0';
 
@@ -549,7 +549,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$success                 = true;
 			$message                 = 'Cartão atualizado com sucesso!';
 			$cartao['titulo_slug']   = Str::slug($cartao['titulo']);
-			$cartao['id_usuario']    = 2;
+			// $cartao['id_usuario']    = 2;
 			$cartao['limite']        = $cartao['limite'] * 100;
 			$cartao['compartilhado'] = $cartao['compartilhado'] ? '1' : '0';
 
@@ -591,7 +591,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$cartaoAtualArray = (array) $cartaoAtual;
 
 			// Prepara os dados para atualizar
-			$entrada['id_usuario']  = 2;
+			// $entrada['id_usuario']  = 2;
 			$entrada['titulo_slug'] = isset($entrada['titulo']) ? Str::slug($entrada['titulo']) : $cartaoAtualArray['titulo_slug'] ?? null;
 			if (isset($entrada['limite'])) {
 				$entrada['limite'] = $entrada['limite'] * 100;
@@ -707,7 +707,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			// $periodo                   = request()->periodo;
 			$success                   = true;
 			$message                   = 'Transação salva com sucesso!';
-			$transaction['id_usuario'] = 2;
+			// $transaction['id_usuario'] = 2;
 			// $transaction['status']     = $transaction['status'] ? '1' : '0';
 
 			$id = DB::table('tb_transacao')->insertGetId($transaction);
@@ -734,7 +734,7 @@ Route::middleware(App\Http\Middleware\VerifyToken::class)->prefix('v2')->group(f
 			$transaction               = request()->all();
 			$success                   = true;
 			$message                   = 'Transação atualizada com sucesso!';
-			$transaction['id_usuario'] = 2;
+			// $transaction['id_usuario'] = 2;
 			// $transaction['compartilhado'] = $transaction['compartilhado'] ? '1' : '0';
 
 			DB::table('tb_transacao')->where('id', $id)->update($transaction);

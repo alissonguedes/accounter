@@ -19,7 +19,7 @@ export class HttpService {
     '$2y$12$TXHNPaAxbimjcD1S5aHaB.IbPAG/Gj46uZkfPxFVwZyTT2zWS/pzK';
   //   private baseUrl = 'http://localhost/accounter/api/public/api/v2';
   //   private baseUrl = 'http://192.168.6.151/accounter/api/public/api/v2';
-  private baseUrl = 'https://alissonguedes.dev.br/accounter/api/public/api/v2';
+  private baseUrl = 'https://ibrjp.com.br/accounter/api/public/api/v2';
 
   constructor(
     private http: HttpClient,
@@ -51,6 +51,8 @@ export class HttpService {
   }
 
   get<T>(endpoint: string, params?: any): Observable<T> {
+    const usuario = localStorage.getItem('id');
+    params = Object.assign(params, { id_usuario: usuario });
     return this.http
       .get<T>(`${this.baseUrl}/${endpoint}`, {
         headers: this.getHeaders(),
@@ -60,7 +62,8 @@ export class HttpService {
   }
 
   post<T>(endpoint: string, body: any): Observable<T> {
-    console.log(endpoint, this.getHeaders());
+    const usuario = localStorage.getItem('id');
+    body = Object.assign(body, { id_usuario: usuario });
     return this.http
       .post<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
@@ -70,7 +73,8 @@ export class HttpService {
   }
 
   put<T>(endpoint: string, body: any): Observable<T> {
-    console.log(endpoint, this.getHeaders());
+    const usuario = localStorage.getItem('id');
+    body = Object.assign(body, { id_usuario: usuario });
     return this.http
       .put<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
@@ -80,6 +84,8 @@ export class HttpService {
   }
 
   patch<T>(endpoint: string, body: any): Observable<T> {
+    const usuario = localStorage.getItem('id');
+    body = Object.assign(body, { id_usuario: usuario });
     return this.http
       .patch<T>(`${this.baseUrl}/${endpoint}`, body, {
         headers: this.getHeaders(),
