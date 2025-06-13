@@ -1,7 +1,7 @@
-import { Toast } from './toast';
+import { toast } from './toast';
 
-describe('Toast', () => {
+describe('toast', () => {
   it('should create an instance', () => {
-    expect(new Toast()).toBeTruthy();
+    expect(toast('teste')).toBeTruthy();
   });
 });

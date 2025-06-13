@@ -29,7 +29,7 @@ export class LoginComponent extends Form implements OnInit {
 
   ngOnInit() {
     if (this.auth.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['dashboard']);
     }
   }
 
@@ -48,7 +48,7 @@ export class LoginComponent extends Form implements OnInit {
           localStorage.setItem('username', user.name);
           localStorage.setItem('email', user.email);
           this.token.setToken(response.access_token);
-          location.href = '/dashboard';
+          location.href = 'dashboard';
         },
         (error: any) => {
           this.preloaderService.hide('login-spinner');

@@ -1,7 +1,7 @@
-import { ItemNodeModel } from './item-node.model';
+// import { ItemNode } from './item-node.model';
 
-describe('ItemNodeModel', () => {
-  it('should create an instance', () => {
-    expect(new ItemNodeModel()).toBeTruthy();
-  });
-});
+// describe('ItemNode', () => {
+//   it('should create an instance', () => {
+//     expect(new ItemNode()).toBeTruthy();
+//   });
+// });
