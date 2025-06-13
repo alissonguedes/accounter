@@ -82,6 +82,9 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
       }
 
       this.entradas$.next(valorTotal);
+
+	  console.log(valorTotal);
+
     });
   }
 
