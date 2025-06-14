@@ -25,15 +25,14 @@ export class EntradasForm extends Form {
   });
 
   submitForm(id?: any) {
-    this.preloaderService.show('preloader-entrada');
+    this.preloaderService.show();
     this.disable();
 
     if (!id) {
       return setTimeout(() => {
-        this.preloaderService.hide('preloader-entrada');
-        this.enable();
-        this.form.get('parcelas')?.disable();
+        this.preloaderService.hide();
         this.form.get('tipo')?.setValue('receita');
+        this.enable();
       }, 100);
     }
     return this.entradasService.getEntrada(id).subscribe((dados: any) => {
@@ -49,12 +48,12 @@ export class EntradasForm extends Form {
         // parcelas: ['', [Validators.required]],
       };
 
-	  console.log(fields)
+      console.log(fields);
 
       setTimeout(() => {
         this.setValues(fields);
         this.enable();
-        this.preloaderService.hide('preloader-entrada');
+        this.preloaderService.hide();
       });
     });
   }

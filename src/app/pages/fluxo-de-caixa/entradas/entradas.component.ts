@@ -28,7 +28,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http'; // Para melhor tratamento de erros HTTP
 
 import { PreloaderService } from '../../../services/preloader/preloader.service';
-import { PreloaderComponent } from '../../../services/preloader/preloader/preloader.component';
+
 import { slugify, currency } from '../../../app.config';
 import { toast } from '../../../shared/toast';
 
@@ -62,7 +62,6 @@ interface Entrada {
     TitleDirective,
     HeaderDirective,
     RouterLink,
-    PreloaderComponent,
     MaskDirective,
   ],
   templateUrl: './entradas.component.html',
@@ -106,15 +105,7 @@ export class EntradasComponent implements OnInit, AfterViewInit {
       .pipe(
         takeUntil(this.destroy$),
         switchMap((periodo) => {
-          let per = periodo.inicio
-            .toISOString()
-            .split('T')
-            .splice(0, 1)
-            .join()
-            .split('-')
-            .splice(0, 2)
-            .join('-');
-
+          let per = periodo.inicio.toISOString().substring(0, 7);
           this.getEntradas(per);
           return per;
         })
@@ -133,7 +124,6 @@ export class EntradasComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         takeUntil(this.destroy$),
         switchMap((searchTerm: any) => {
-          this.preloaderService.show('progress-bar');
           return this.entradasService.getEntradas(
             this.caixa.periodoSelecionado,
             searchTerm
@@ -186,9 +176,8 @@ export class EntradasComponent implements OnInit, AfterViewInit {
       entradasMesAnterior: this.entradasService.getEntradas(mesAnteriorStr),
     })
       .pipe(
-        tap(() => this.preloaderService.show('progress-bar')),
+        takeUntil(this.destroy$),
         finalize(() => {
-          this.preloaderService.hide('progress-bar');
           this.isLoading = false;
         }),
         catchError((error: HttpErrorResponse) => {
@@ -270,8 +259,6 @@ export class EntradasComponent implements OnInit, AfterViewInit {
     this.entradasService
       .getEntradas(periodoStr, search)
       .pipe(
-        tap(() => this.preloaderService.show('progress-bar')),
-        finalize(() => this.preloaderService.hide('progress-bar')),
         catchError((error: HttpErrorResponse) => {
           console.error('Erro ao carregar entradas atuais:', error);
           toast('Erro ao recarregar dados. Tente novamente.');
@@ -310,12 +297,11 @@ export class EntradasComponent implements OnInit, AfterViewInit {
 
     let modal = M.Modal.getInstance(this.modalForm?.nativeElement);
 
-    this.preloaderService.show('progress-bar');
     this.entradasService
       .saveEntrada(entrada, id)
       .pipe(
+        takeUntil(this.destroy$),
         finalize(() => {
-          this.preloaderService.hide('progress-bar');
           this.entradasForm.enable();
           modal.close();
         }),
@@ -338,6 +324,11 @@ export class EntradasComponent implements OnInit, AfterViewInit {
   }
 
   deleteEntrada(id: number) {
+    const originalEntradas = [...this.entradas$.value];
+    const entradas = this.entradas$.value.filter((item) => item.id !== id);
+
+    this.entradas$.next(entradas);
+
     let modalDialog = this.modalDialog.nativeElement;
     let modal = M.Modal.getInstance(modalDialog);
     modal.close();
@@ -345,9 +336,11 @@ export class EntradasComponent implements OnInit, AfterViewInit {
     this.entradasService
       .removeEntrada(id)
       .pipe(
+        takeUntil(this.destroy$),
         catchError((err: HttpErrorResponse) => {
           toast('Erro ao excluir no servidor.');
           console.error('Erro ao excluir entrada:', err);
+          this.entradas$.next(originalEntradas);
           return of(null);
         })
       )
@@ -364,7 +357,7 @@ export class EntradasComponent implements OnInit, AfterViewInit {
   }
 
   openModal(id?: number) {
-    const modalElement = this.modalForm.nativeElement;
+    const modalElement = this.modalForm?.nativeElement;
     let modalOptions = {
       dismissible: false,
       startingTop: '100px',

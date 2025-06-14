@@ -28,8 +28,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         switchMap((periodo) => {
-          const inicio = periodo.inicio.toISOString().split('T').splice(0, 1).join().split('-').splice(0, 2).join('-');
-          this.preloaderService.show('progress-bar');
+          const inicio = periodo.inicio.toISOString().substring(0, 7);
 
           return forkJoin({
             entradas: this.http.get(`transactions/entradas?periodo=${inicio}`),
@@ -38,9 +37,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           });
         })
       )
-      .subscribe((res) => {
-        console.log(res);
-      });
+      .subscribe();
   }
 
   ngOnDestroy() {

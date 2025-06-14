@@ -53,7 +53,7 @@
 					<td class="right-align"><span class="left">R$</span> {{ caixa.moeda(item.valor / 100) }}</td>
 					<!-- <td class="right-align"><span class="left">R$</span> 900,00</td> -->
 					<td class="center-align">
-						<button class="btn btn-flat btn-floating transparent btn-small waves-effect modal-trigger" data-target="#modal-categoria" (click)="openModal(item.id)">
+						<button class="btn btn-flat btn-floating transparent btn-small waves-effect" (click)="openModal(item.id)">
 							<i class="material-icons grey-text text-darken-1">edit</i>
 						</button>
 						<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" (click)="dialog(item.id)">
@@ -98,13 +98,11 @@
 	<div class="row">
 		<div class="col s12 l4">
 			<div #modalForm id="modal-form" class="modal modal-fixed-footer">
-				<app-preloader id="preloader-entrada">
-					<ng-content>
-						<div class="progress modal-progress">
-							<div class="indeterminate"></div>
-						</div>
-					</ng-content>
-				</app-preloader>
+
+				<div id="preloader-entrada" class="progress modal-progress" *ngIf="preloaderService.loading$ | async">
+					<div class="indeterminate"></div>
+				</div>
+
 				<div class="modal-content">
 
 					<div class="row">

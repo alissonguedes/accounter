@@ -34,14 +34,7 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   periodo = this.periodoService.periodo$;
-  periodoSelecionado = this.calendar.date
-    .toISOString()
-    .split('T')
-    .splice(0, 1)
-    .join()
-    .split('-')
-    .splice(0, 2)
-    .join('-');
+  periodoSelecionado = this.calendar.date.toISOString().substring(0, 7);
 
   entradas$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
@@ -62,7 +55,6 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
           this.ano = ano;
           this.periodoSelecionado = `${ano}-${mes}`;
 
-          this.preloaderService.show('progress-bar');
           this.getResumo(this.periodoSelecionado);
 
           return this.periodoSelecionado;
@@ -82,9 +74,6 @@ export class FluxoDeCaixaComponent implements OnInit, OnDestroy {
       }
 
       this.entradas$.next(valorTotal);
-
-	  console.log(valorTotal);
-
     });
   }
 

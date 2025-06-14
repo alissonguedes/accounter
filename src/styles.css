@@ -528,8 +528,8 @@ main .content {
 	display: flex;
 	align-items: center;
 	place-content: center;
-	width: inherit;
 	height: 4px;
+	width: 100%;
 }
 
 body:has(#login-page) #preloader {

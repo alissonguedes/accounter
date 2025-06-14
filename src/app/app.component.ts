@@ -16,7 +16,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { filter } from 'rxjs';
+import { tap, filter, finalize } from 'rxjs';
 import { TitleService } from './services/title/title.service';
 import { PreloaderService } from './services/preloader/preloader.service';
 import { CommonModule } from '@angular/common';
@@ -38,6 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   public title$;
   public pageHeader$;
   public route: any;
+  loading = this.preloaderService.loading$;
 
   constructor(
     private auth: AuthService,
@@ -54,11 +55,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     // Exibe a barra de carregamento
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationStart))
-      .subscribe(() => {
-        this.pageHeaderService.clearHeader();
-        this.preloaderService.show('progress-bar');
-      });
+      .pipe(
+        tap(() => {
+          this.pageHeaderService.clearHeader();
+        }),
+        filter((event) => event instanceof NavigationStart)
+      )
+      .subscribe(() => this.preloaderService.show('progress-bar'));
 
     // Oculta a barra de carregamento
     this.router.events
@@ -71,10 +74,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         )
       )
       .subscribe((route: any) => {
-        setTimeout(() => {
-          this.preloaderService.hide('progress-bar');
-        }, 500);
-
         this.route = route.url.split('/').filter((s: any) => s)[0];
 
         let body = document.querySelector('body');
@@ -106,8 +105,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         var elems = document.querySelectorAll('.fixed-action-btn');
         var instances = M.FloatingActionButton.init(elems);
-        // this.ngAfterViewInit();
-		initApp();
+
+        setTimeout(() => this.preloaderService.hide('progress-bar'), 300);
+        initApp();
       });
   }
 

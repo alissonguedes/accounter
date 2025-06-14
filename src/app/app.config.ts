@@ -16,8 +16,10 @@ import {
   of,
 } from 'rxjs';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from './services/auth/auth.service';
 import { authInterceptor } from './services/auth/auth.interceptor';
+import { preloaderInterceptor } from './shared/preloader.interceptor';
 declare const M: any;
 declare const document: any;
 
@@ -28,7 +30,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withInterceptors([authInterceptor, preloaderInterceptor])
+    ),
   ],
 };
 
