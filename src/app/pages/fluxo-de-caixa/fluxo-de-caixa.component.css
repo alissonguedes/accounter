@@ -87,3 +87,31 @@ table:not(.datepicker-table) tr td {
 .datepicker-calendar-container .datepicker-calendar {
 	padding-bottom: 20px;
 }
+
+
+footer .breadcrumb {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+footer .breadcrumb:before {
+	content: "";
+	/* vertical-align: baseline; */
+	display: inline-block;
+	font-family: "Material Icons";
+	font-weight: normal;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 15px;
+	margin: 0 10px 0px 5px;
+	-webkit-font-smoothing: antialiased;
+	border-style: solid;
+	border-color: transparent transparent transparent rgba(0, 0, 0, 0.2);
+	border-width: 1px;
+	height: 23px;
+}
+
+footer .breadcrumb:before,
+footer .breadcrumb:last-child {
+	color: rgba(0, 0, 0, 0.5);
+}

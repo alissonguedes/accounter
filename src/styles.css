@@ -40,14 +40,6 @@ html {
 	font-family: 'Inter';
 }
 
-td, th {
-	padding: 5px 10px;
-}
-
-th {
-	line-height: 33px;
-}
-
 .page-footer {
 	padding-top: 0;
 }
@@ -77,7 +69,8 @@ th {
 }
 
 
-.skeleton.skeleton-loading::before, .skeleton::after {
+.skeleton.skeleton-loading::before,
+.skeleton::after {
 	content: '';
 	position: absolute;
 	z-index: 100;
@@ -233,10 +226,12 @@ header {
 	line-height: inherit;
 }
 
-nav .sidenav-trigger,
-nav .sidenav-trigger i {
-	height: 64px;
-	line-height: 64px;
+nav a.sidenav-trigger,
+nav a.sidenav-trigger i,
+nav a#btn-menu,
+nav a#btn-menu i {
+	height: 60px;
+	line-height: 60px;
 }
 
 .navbar-main {
@@ -303,18 +298,21 @@ nav .sidenav-trigger i {
 	margin: auto;
 }
 
-.sidenav-main li.user-view button {
+.sidenav-main li.user-view>a,
+.sidenav-main li.user-view>button {
 	text-transform: none;
 	border: none;
+	padding: 0;
 }
 
 .sidenav-main li>a,
 .sidenav-main li>button {
-	display: block;
+	font-family: 'Inter';
 	font-size: 14px;
-	font-weight: 500;
-	height: 48px;
+	font-weight: 700;
+	display: block;
 	width: 100%;
+	height: 48px;
 	line-height: 48px;
 	padding: 0 32px;
 	border-radius: 24px;
@@ -324,9 +322,32 @@ nav .sidenav-trigger i {
 	line-height: 48px;
 	background: inherit;
 	text-transform: uppercase;
-	font-weight: bold;
-	font-family: 'Inter';
-	color: #000;
+}
+
+.sidenav-main li.active a,
+.sidenav-main li.active button {
+	background-color: var(--blue-grey);
+	border-color: transparent;
+}
+
+.sidenav-main li.active button {
+	background-color: var(--blue-lighten-2);
+	border-color: transparent;
+	color: #fff;
+}
+
+.sidenav-main li:not(.user-view) {
+	margin: 10px 20px;
+	background-color: transparent;
+}
+
+.sidenav-main li:not(.user-view) a,
+.sidenav-main li:not(.user-view) button {
+	background-color: transparent;
+	border-radius: 24px;
+	text-transform: uppercase;
+	border-color: #3c50b6;
+	color: #fff;
 }
 
 @media only screen and (min-width: 1px) {
@@ -335,9 +356,9 @@ nav .sidenav-trigger i {
 	nav .nav-wrapper i,
 	nav a.sidenav-trigger,
 	nav a.sidenav-trigger i {
-		height: inherit;
+		/* height: inherit;
 		line-height: inherit;
-		margin: 0;
+		margin: 0; */
 	}
 
 	nav a#btn-menu {
@@ -354,71 +375,6 @@ nav .sidenav-trigger i {
 		display: flex;
 		place-content: center;
 	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.sidenav-main .user-view {
-	position: relative;
-	padding: 32px 32px 0;
-	margin-bottom: 8px;
-}
-
-.sidenav-main li:not(.user-view) {
-	margin: 10px 20px;
-	background-color: transparent;
-}
-
-.sidenav-main li>a,
-.sidenav-main li>button {
-	display: block;
-	font-size: 14px;
-	font-weight: 500;
-	height: 48px;
-	line-height: normal;
-	width: 100%;
-	padding: 0 32px;
-	border-radius: 24px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #000;
-	background: inherit;
-	text-transform: uppercase;
-	font-weight: 500;
-}
-
-.sidenav-main li:not(.user-view) a,
-.sidenav-main li:not(.user-view) button {
-	background-color: transparent;
-	border-radius: 24px;
-	text-transform: uppercase;
-	border-color: #3c50b6;
-	color: #fff;
-}
-
-.sidenav-main li.active a,
-.sidenav-main li.active button {
-	background-color: var(--blue-grey);
-	border-color: transparent;
-}
-
-.sidenav-main li.active button {
-	background-color: var(--blue-lighten-2);
-	border-color: transparent;
-	color: #fff;
 }
 
 .sidenav-footer {
@@ -475,7 +431,7 @@ nav .sidenav-trigger i {
 	margin-bottom: 0;
 }
 
-.row>.col>.modal {
+.row>.col>.modal:not(.bottom-sheet) {
 	width: inherit;
 }
 
@@ -489,11 +445,11 @@ nav .sidenav-trigger i {
 	top: 2% !important;
 }
 
-.modal.bottom-sheet {
+/* .modal.bottom-sheet {
 	max-height: 100%;
 	height: 80%;
 	top: auto;
-}
+} */
 
 .modal-header {
 	position: relative;
@@ -542,23 +498,12 @@ main .content {
 .container {
 	width: 100%;
 	max-width: 100%;
-	padding: 15px;
+	padding: 5px;
 }
 
-/* #preloader,
-#preloader-modal,
-.modal-progress {
-	z-index: 997;
-	position: absolute;
-	top: 0;
-	left: 0px;
-	bottom: 0;
-	right: 0;
-	display: flex;
-	align-items: center;
-	place-content: center;
-	background-color: #ffffff;
-} */
+table.responsive-table tbody td:last-child:has(button) {
+	padding: 9px;
+}
 
 .progress.modal-progress {
 	position: absolute;
@@ -637,7 +582,7 @@ body:has(#login-page) #preloader {
 	opacity: 1;
 } */
 
-.modal {
+.modal:not(.bottom-sheet) {
 	opacity: 0;
 	transition:
 		transform 150ms cubic-bezier(0.1, 0, 0.2, 1),
@@ -1136,5 +1081,23 @@ textarea.materialize-textarea[readonly=readonly] {
 	.progress {
 		width: 100% !important;
 		left: 0;
+	}
+
+	.footer-fixed {
+		padding-left: 0
+	}
+
+	.page-footer .container {
+		text-align: right !important;
+		padding: 5px 10px;
+	}
+
+	.page-footer .breadcrumb {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.page-footer .breadcrumb::before {
+		display: none;
 	}
 }

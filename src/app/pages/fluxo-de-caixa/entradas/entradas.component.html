@@ -23,56 +23,53 @@
 	</div>
 </ng-template>
 
-<table>
-	<thead>
-		<tr>
-			<!-- <th class="center-align">#</th> -->
-			<th class="center-align">Descrição</th>
-			<th class="center-align">Tipo</th>
-			<th class="center-align">Categoria</th>
-			<th class="">Data</th>
-			<th class="center-align">Valor</th>
-			<!-- <th class="center-align">Saldo</th> -->
-			<th class="center-align">Ações</th>
-		</tr>
-	</thead>
-	<tbody>
+<div class="row">
+	<div class="col s12">
 		<ng-container>
 			<tr *ngIf="isLoading; else dataLoaded">
 				<td colspan="6">Carregando...</td>
 			</tr>
 		</ng-container>
 		<ng-template #dataLoaded>
-			<ng-content *ngIf="((entradas$ | async) ?? []).length > 0; else noResults">
-				<tr *ngFor="let item of (entradas$ | async)">
-					<!-- <td class="center-align">{{ id+1 }}</td> -->
-					<td>{{ item.descricao }}</td>
-					<td>{{ item.tipo }}</td>
-					<td>{{ item.categoria }}</td>
-					<td>{{ item.data }}</td>
-					<td class="right-align"><span class="left">R$</span> {{ caixa.moeda(item.valor / 100) }}</td>
-					<!-- <td class="right-align"><span class="left">R$</span> 900,00</td> -->
-					<td class="center-align">
-						<button class="btn btn-flat btn-floating transparent btn-small waves-effect" (click)="openModal(item.id)">
-							<i class="material-icons grey-text text-darken-1">edit</i>
-						</button>
-						<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" (click)="dialog(item.id)">
-							<i class="material-icons grey-text text-darken-1">delete</i>
-						</button>
-						<!-- <button class="btn-flat btn-floating transparent btn-small waves-effect btn-status" (click)="updateStatus(item)">
-							<i class="material-icons grey-text text-darken-1">{{ item.status === '1' ? 'visibility' : 'visibility_off' }}</i>
-						</button> -->
-					</td>
-				</tr>
-			</ng-content>
+			<table class="responsive-table">
+				<thead>
+					<tr>
+						<th class="center-align">Descrição</th>
+						<th class="center-align">Tipo</th>
+						<th class="center-align">Categoria</th>
+						<th class="">Data</th>
+						<th class="center-align">Valor</th>
+						<th class="center-align">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<ng-content *ngIf="((entradas$ | async) ?? []).length > 0; else noResults">
+						<tr *ngFor="let item of (entradas$ | async)">
+							<td>{{ item.descricao }}</td>
+							<td>{{ item.tipo }}</td>
+							<td>{{ item.categoria }}</td>
+							<td>{{ item.data }}</td>
+							<td class="right-align"><span class="left">R$</span> {{ caixa.moeda(item.valor / 100) }}</td>
+							<td class="center-align">
+								<button class="btn btn-flat btn-floating transparent btn-small waves-effect" (click)="openModal(item.id)">
+									<i class="material-icons grey-text text-darken-1">edit</i>
+								</button>
+								<button class="btn btn-flat btn-floating transparent btn-small waves-effect btn-delete" (click)="dialog(item.id)">
+									<i class="material-icons grey-text text-darken-1">delete</i>
+								</button>
+							</td>
+						</tr>
+					</ng-content>
+					<ng-template #noResults>
+						<tr *ngIf="(entradas$ | async)?.length === 0">
+							<td colspan="6">Nenhum resultado encontrado.</td>
+						</tr>
+					</ng-template>
+				</tbody>
+			</table>
 		</ng-template>
-		<ng-template #noResults>
-			<tr *ngIf="(entradas$ | async)?.length === 0">
-				<td colspan="6">Nenhum resultado encontrado.</td>
-			</tr>
-		</ng-template>
-	</tbody>
-</table>
+	</div>
+</div>
 
 <div class="row">
 	<div class="col s10 m6 l4">
@@ -96,7 +93,7 @@
 
 <form [formGroup]="entradasForm.getForm()" (ngSubmit)="save()" autocomplete="off" autocapitalize="true">
 	<div class="row">
-		<div class="col s12 l4">
+		<div class="col s11 l4">
 			<div #modalForm id="modal-form" class="modal modal-fixed-footer">
 
 				<div id="preloader-entrada" class="progress modal-progress" *ngIf="preloaderService.loading$ | async">
@@ -196,41 +193,11 @@
 		<div class="container center-align">
 			<div class="row">
 				<div class="col s12">
-					<span class="breadcrumb">Total das entradas: {{ caixa.moeda(valorTotal) }}</span>
-					<span class="breadcrumb">Valor médio por dia: {{ caixa.moeda(mediaDia) }}</span>
-					<span class="breadcrumb">Mês anterior: {{ caixa.moeda(mesAnteriorTotal) }}</span>
+					<span class="breadcrumb"><span>Total das entradas: </span>{{ caixa.moeda(valorTotal) }}</span>
+					<span class="breadcrumb"><span>Valor médio por dia: </span>{{ caixa.moeda(mediaDia) }}</span>
+					<span class="breadcrumb"><span>Mês anterior: </span>{{ caixa.moeda(mesAnteriorTotal) }}</span>
 				</div>
 			</div>
 		</div>
 	</div>
 </footer>
-
-
-<style>
-	footer .breadcrumb {
-		font-size: 15px;
-		font-weight: bold;
-	}
-
-	footer .breadcrumb:before {
-		content: "";
-		/* vertical-align: baseline; */
-		display: inline-block;
-		font-family: "Material Icons";
-		font-weight: normal;
-		font-style: normal;
-		font-weight: bold;
-		font-size: 15px;
-		margin: 0 10px 0px 5px;
-		-webkit-font-smoothing: antialiased;
-		border-style: solid;
-		border-color: transparent transparent transparent rgba(0, 0, 0, 0.2);
-		border-width: 1px;
-		height: 23px;
-	}
-
-	footer .breadcrumb:before,
-	footer .breadcrumb:last-child {
-		color: rgba(0, 0, 0, 0.5);
-	}
-</style>
