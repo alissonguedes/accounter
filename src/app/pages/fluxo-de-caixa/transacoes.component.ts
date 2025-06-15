@@ -71,7 +71,8 @@ export class TransacoesComponent implements OnInit {
         distinctUntilChanged(),
         takeUntil(this.destroy$),
         switchMap((searchTerm: any) => {
-          return this.service(this.caixa.periodoSelecionado, searchTerm);
+          //   return this.service(this.caixa.periodoSelecionado, searchTerm);
+          return '';
         })
       )
       .subscribe();
