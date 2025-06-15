@@ -20,11 +20,8 @@ export class LoginComponent extends Form implements OnInit {
   auth = inject(AuthService);
   token = inject(TokenService);
   form = this.fb.group({
-    email: [
-      'alissonguedes87@gmail.com',
-      [Validators.required, Validators.email],
-    ],
-    password: ['2EZgxw7GoQZlu7s', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   ngOnInit() {
