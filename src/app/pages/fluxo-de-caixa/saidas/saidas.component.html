@@ -10,7 +10,7 @@
 		Fluxo de Caixa: <span> {{ `${caixa.mes}/${caixa.ano}` }}</span>
 	</div>
 	<div class="search-header">
-		<input type="search" class="search" (blur)="caixa.closeSearchInput()">
+		<input type="search" class="search" (blur)="caixa.closeSearchInput()" [formControl]="searchControl">
 		<i class="material-icons">search</i>
 	</div>
 	<div class="btn-group">
@@ -23,7 +23,11 @@
 	</div>
 </ng-template>
 
-<table>
+<div id="modal-form" *ngIf="((transaction$ | async) || []).length> 0">
+	<div class="" *ngFor="let i of (transaction$ | async)">{{ i.descricao }}</div>
+</div>
+
+<!-- <table>
 	<thead>
 		<tr>
 			<th class="">ID</th>
@@ -54,4 +58,4 @@
 		</tr>
 	</tfoot>
 
-</table>
+</table> -->

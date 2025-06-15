@@ -14,6 +14,9 @@ import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.comp
 import { ProjecaoComponent } from './pages/projecao/projecao.component';
 import { PlanejamentoComponent } from './pages/planejamento/planejamento.component';
 import { FluxoDeCaixaComponent } from './pages/fluxo-de-caixa/fluxo-de-caixa.component';
+
+import { TransacoesComponent } from './pages/fluxo-de-caixa/transacoes.component';
+
 import { EntradasComponent as CaixaoEntradas } from './pages/fluxo-de-caixa/entradas/entradas.component';
 import { SaidasComponent as CaixaSaidas } from './pages/fluxo-de-caixa/saidas/saidas.component';
 import { AplicativosComponent as CaixaAplicativos } from './pages/fluxo-de-caixa/aplicativos/aplicativos.component';
@@ -39,10 +42,21 @@ export const routes: Routes = [
       { path: 'projecao', component: ProjecaoComponent },
       { path: 'planejamento', component: PlanejamentoComponent },
       { path: 'caixa', component: FluxoDeCaixaComponent },
-      { path: 'caixa/entradas', component: CaixaoEntradas },
-      { path: 'caixa/saidas', component: CaixaSaidas },
-      { path: 'caixa/patrimonio', component: CaixaPatrimonio },
-      { path: 'caixa/aplicativos', component: CaixaAplicativos },
+      //   { path: 'caixa/entradas', component: CaixaoEntradas },
+      //   { path: 'caixa/saidas', component: CaixaSaidas },
+      //   { path: 'caixa/patrimonio', component: CaixaPatrimonio },
+      //   { path: 'caixa/aplicativos', component: CaixaAplicativos },
+      {
+        path: 'caixa',
+        component: TransacoesComponent,
+        children: [
+          { path: 'entradas', component: CaixaoEntradas },
+          { path: 'saidas', component: CaixaSaidas },
+          { path: 'patrimonio', component: CaixaPatrimonio },
+          { path: 'aplicativos', component: CaixaAplicativos },
+        ],
+      },
+
       {
         path: 'configuracoes',
         component: ConfiguracoesComponent,
